@@ -15,6 +15,8 @@ export default defineConfig({
       { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
       { find: '@store', replacement: path.resolve(__dirname, 'src/store') },
       { find: '@types', replacement: path.resolve(__dirname, 'src/types') },
+      { find: '@modules', replacement: path.resolve(__dirname, 'src/modules') },
+      { find: '@styles', replacement: path.resolve(__dirname, 'src/core/styles') },
       { find: '@use', replacement: path.resolve(__dirname, 'src/core/use') },
       { find: '@utils', replacement: path.resolve(__dirname, 'src/core/utils') },
     ]
@@ -55,4 +57,10 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: ['..']
+    }
+  }
 });

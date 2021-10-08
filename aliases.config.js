@@ -6,14 +6,15 @@ const prettier = require('prettier');
 
 const aliases = {
   '@': '.src',
-  '@core': './core',
-  '@components': './components',
-  '@constants': './constants',
-  '@pages': './pages',
-  '@store': './store',
-  '@types': './types',
-  '@use': './core/use',
-  '@utils': './core/utils',
+  '@core': './src/core',
+  '@components': './src/components',
+  '@constants': './src/constants',
+  '@store': './src/store',
+  '@types': './src/types',
+  '@modules': './src/modules',
+  '@styles': './src/core/styles',
+  '@use': './src/core/use',
+  '@utils': './src/core/utils',
 };
 
 const prettierConfig = {

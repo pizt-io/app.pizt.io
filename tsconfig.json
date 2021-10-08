@@ -21,69 +21,77 @@
         ".src/index.scss",
         ".src/index.css"
       ],
-      "@core/*": ["./core/*"],
+      "@core/*": ["./src/core/*"],
       "@core": [
-        "./core/index.js",
-        "./core/index.json",
-        "./core/index.vue",
-        "./core/index.scss",
-        "./core/index.css"
+        "./src/core/index.js",
+        "./src/core/index.json",
+        "./src/core/index.vue",
+        "./src/core/index.scss",
+        "./src/core/index.css"
       ],
-      "@components/*": ["./components/*"],
+      "@components/*": ["./src/components/*"],
       "@components": [
-        "./components/index.js",
-        "./components/index.json",
-        "./components/index.vue",
-        "./components/index.scss",
-        "./components/index.css"
+        "./src/components/index.js",
+        "./src/components/index.json",
+        "./src/components/index.vue",
+        "./src/components/index.scss",
+        "./src/components/index.css"
       ],
-      "@constants/*": ["./constants/*"],
+      "@constants/*": ["./src/constants/*"],
       "@constants": [
-        "./constants/index.js",
-        "./constants/index.json",
-        "./constants/index.vue",
-        "./constants/index.scss",
-        "./constants/index.css"
+        "./src/constants/index.js",
+        "./src/constants/index.json",
+        "./src/constants/index.vue",
+        "./src/constants/index.scss",
+        "./src/constants/index.css"
       ],
-      "@pages/*": ["./pages/*"],
-      "@pages": [
-        "./pages/index.js",
-        "./pages/index.json",
-        "./pages/index.vue",
-        "./pages/index.scss",
-        "./pages/index.css"
-      ],
-      "@store/*": ["./store/*"],
+      "@store/*": ["./src/store/*"],
       "@store": [
-        "./store/index.js",
-        "./store/index.json",
-        "./store/index.vue",
-        "./store/index.scss",
-        "./store/index.css"
+        "./src/store/index.js",
+        "./src/store/index.json",
+        "./src/store/index.vue",
+        "./src/store/index.scss",
+        "./src/store/index.css"
       ],
-      "@types/*": ["./types/*"],
+      "@types/*": ["./src/types/*"],
       "@types": [
-        "./types/index.js",
-        "./types/index.json",
-        "./types/index.vue",
-        "./types/index.scss",
-        "./types/index.css"
+        "./src/types/index.js",
+        "./src/types/index.json",
+        "./src/types/index.vue",
+        "./src/types/index.scss",
+        "./src/types/index.css"
       ],
-      "@use/*": ["./core/use/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@modules": [
+        "./src/modules/index.js",
+        "./src/modules/index.json",
+        "./src/modules/index.vue",
+        "./src/modules/index.scss",
+        "./src/modules/index.css"
+      ],
+      "@styles/*": ["./src/core/styles/*"],
+      "@styles": [
+        "./src/core/styles/index.js",
+        "./src/core/styles/index.json",
+        "./src/core/styles/index.vue",
+        "./src/core/styles/index.scss",
+        "./src/core/styles/index.css"
+      ],
+      "@use/*": ["./src/core/use/*"],
       "@use": [
-        "./core/use/index.js",
-        "./core/use/index.json",
-        "./core/use/index.vue",
-        "./core/use/index.scss",
-        "./core/use/index.css"
+        "./src/core/use/index.js",
+        "./src/core/use/index.json",
+        "./src/core/use/index.vue",
+        "./src/core/use/index.scss",
+        "./src/core/use/index.css"
       ],
-      "@utils/*": ["./core/utils/*"],
+      "@utils/*": ["./src/core/utils/*"],
       "@utils": [
-        "./core/utils/index.js",
-        "./core/utils/index.json",
-        "./core/utils/index.vue",
-        "./core/utils/index.scss",
-        "./core/utils/index.css"
+        "./src/core/utils/index.js",
+        "./src/core/utils/index.json",
+        "./src/core/utils/index.vue",
+        "./src/core/utils/index.scss",
+        "./src/core/utils/index.css"
       ]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]

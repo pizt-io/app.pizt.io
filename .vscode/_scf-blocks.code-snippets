@@ -1,0 +1,45 @@
+{
+  "scaffold vue file": {
+    "scope": "vue",
+    "prefix": "scf",
+    "body": [
+        "<template>",
+        "  <div>",
+        "    ",
+        "  </div>",
+        "</template>",
+        "",
+        "<script lang=\"ts\">",
+        "import { defineComponent } from 'vue';",
+        "",
+        "export default defineComponent({",
+        "  name: 'Component',",
+        "  setup(props) {",
+        "    ",
+        "  }",
+        "})",
+        "</script>",
+        "",
+        "<style lang=\"scss\" module>",
+        "@import \"@styles/scss/all\";",
+        "",
+        "",
+        "</style>",
+        ""
+    ],
+    "description": ""
+  },
+  "style module tag": {
+    "scope": "vue",
+    "prefix": "style",
+    "body": [
+        "<style lang=\"scss\" module>",
+        "@import \"@styles/scss/all\";",
+        "",
+        "${0}",
+        "</style>",
+        ""
+    ],
+    "description": ""
+  }
+}
