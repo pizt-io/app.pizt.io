@@ -7,18 +7,24 @@
           <div class="h-28 bg-primary-500">
             <Navigator />
           </div>
-          <div class="flex-1 bg-success-500">TransitionPanel</div>
+          <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-success-500">TransitionPanel</div>
+          <div v-else class="flex-1 bg-success-500">AnimationPanel</div>
         </div>
         <div class="flex flex-col flex-1">
-          <div class="h-28 bg-danger-500">Toolbar</div>
-          <div class="flex-1 bg-warning-500">TransitionCanvas</div>
-          <div class="h-9 bg-info-500">TransitionTimeline</div>
+          <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-danger-500">TransitionToolbar</div>
+          <div v-else class="h-28 bg-danger-500">AnimationToolbar</div>
+
+          <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-warning-500">TransitionCanvas</div>
+          <div v-else class="flex-1 bg-warning-500">AnimationCanvas</div>
+
+          <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-info-500">TransitionTimeline</div>
         </div>
         <div class="w-48">
-          <div class="h-full bg-gray-500">CodeGenerator</div>
+          <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-gray-500">CodeGenerator</div>
+          <div v-else class="h-full bg-gray-500">AnimationPanel</div>
         </div>
       </div>
-      <div class="h-48 bg-yellow">AnimationTimeline</div>
+      <div v-if="appMode === APP_MODE.SVG" class="h-48 bg-yellow">AnimationTimeline</div>
     </div>
   </div>
 </template>
