@@ -1,20 +1,20 @@
 <template>
   <div class="h-28 w-full flex bg-primary">
-    <div class="h-28 w-28 cursor-pointer duration-300 hover:bg-secondary"
+    <div class="h-28 w-28 cursor-pointer duration-300 hover:bg-secondary active:bg-secondary-600"
       :class="{
         'bg-secondary': appMode === APP_MODE.MAIN
       }"
-      @click="handleChangeMode(APP_MODE.MAIN)"
+      @click="changeAppMode(APP_MODE.MAIN)"
     >
       Animations
       <br />
       Transitions
     </div>
-    <div class="h-28 w-28 cursor-pointer duration-300 hover:bg-secondary"
+    <div class="h-28 w-28 cursor-pointer duration-300 hover:bg-secondary active:bg-secondary-600"
       :class="{
         'bg-secondary': appMode === APP_MODE.SVG
       }"
-      @click="handleChangeMode(APP_MODE.SVG)"
+      @click="changeAppMode(APP_MODE.SVG)"
     >
       SVG Animator
     </div>
@@ -23,30 +23,18 @@
 
 <script lang="ts">
 import { APP_MODE } from '@core/constants/navigator';
-import { computed, defineComponent } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useAppMode } from '@modules/app/use/useAppMode';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Navigator',
-  setup(props) {
-    const router = useRouter();
-    const route = useRoute();
-
-    const appMode = computed(() => route.query.mode)
-
-    const handleChangeMode = (mode: APP_MODE) => {
-      router.push({
-        query: {
-          mode,
-        }
-      })
-    }
-    if (!appMode.value) handleChangeMode(APP_MODE.MAIN)
+  setup() {
+    const { appMode, changeAppMode } = useAppMode();
 
     return {
       APP_MODE,
       appMode,
-      handleChangeMode,
+      changeAppMode,
     }
   }
 })

@@ -7,31 +7,67 @@
           <div class="h-28 bg-primary-500">
             <Navigator />
           </div>
-          <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-success-500">TransitionPanel</div>
-          <div v-else class="flex-1 bg-success-500">AnimationPanel</div>
+          <transition
+            mode="out-in"
+            enter-active-class="animate__animated animate__slideInLeft"
+            leave-active-class="animate__animated animate__slideOutLeft"
+          >
+            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-success-500">TransitionPanel</div>
+            <div v-else class="flex-1 bg-danger-500">AnimationPanel</div>
+          </transition>
         </div>
         <div class="flex flex-col flex-1">
-          <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-danger-500">TransitionToolbar</div>
-          <div v-else class="h-28 bg-danger-500">AnimationToolbar</div>
+          <transition
+            mode="out-in"
+            enter-active-class="animate__animated animate__flipInX"
+            leave-active-class="animate__animated animate__flipOutX"
+          >
+            <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-danger-500">TransitionToolbar</div>
+            <div v-else class="h-28 bg-warning-500">AnimationToolbar</div>
+          </transition>
 
-          <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-warning-500">TransitionCanvas</div>
-          <div v-else class="flex-1 bg-warning-500">AnimationCanvas</div>
+          <transition
+            mode="out-in"
+            enter-active-class="animate__animated animate__zoomIn"
+            leave-active-class="animate__animated animate__zoomOut"
+          >
+            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-warning-500">TransitionCanvas</div>
+            <div v-else class="flex-1 bg-success-500">AnimationCanvas</div>
+          </transition>
 
-          <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-info-500">TransitionTimeline</div>
+          <transition
+            mode="out-in"
+            enter-active-class="animate__animated animate__flipInX"
+            leave-active-class="animate__animated animate__flipOutX"
+          >
+            <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-info-500">TransitionTimeline</div>
+          </transition>
         </div>
         <div class="w-48">
-          <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-gray-500">CodeGenerator</div>
-          <div v-else class="h-full bg-gray-500">AnimationPanel</div>
+          <transition
+            mode="out-in"
+            enter-active-class="animate__animated animate__slideInRight"
+            leave-active-class="animate__animated animate__slideOutRight"
+          >
+            <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-gray-500">CodeGenerator</div>
+            <div v-else class="h-full bg-info-500">AnimationPanel</div>
+          </transition>
         </div>
       </div>
-      <div v-if="appMode === APP_MODE.SVG" class="h-48 bg-yellow">AnimationTimeline</div>
+      <transition
+        mode="out-in"
+        enter-active-class="animate__animated animate__slideInUp"
+        leave-active-class="animate__animated animate__slideOutDown"
+      >
+        <div v-if="appMode === APP_MODE.SVG" class="h-48 bg-yellow">AnimationTimeline</div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { APP_MODE } from '@core/constants/navigator';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import Header from '@modules/app/components/header/header.vue'
 import LayerTree from '@modules/app/components/tree/layer.vue'
 import Navigator from '@modules/app/components/navigator/navigator.vue'
@@ -44,7 +80,7 @@ import AnimationCanvas from '@modules/app/components/canvas/animation.vue'
 import AnimationPanel from '@modules/app/components/panel/animation.vue'
 import AnimationTimeline from '@modules/app/components/timeline/animation.vue'
 import CodeGenerator from '@modules/app/components/code/generator.vue'
-import { useRoute } from 'vue-router';
+import { useAppMode } from './use/useAppMode';
 
 export default defineComponent({
   name: 'AppPage',
@@ -62,10 +98,8 @@ export default defineComponent({
     AnimationTimeline,
     CodeGenerator,
   },
-  setup(props) {
-    const route = useRoute();
-
-    const appMode = computed(() => route.query.mode)
+  setup() {
+    const { appMode } = useAppMode();
 
     return {
       APP_MODE,
@@ -80,7 +114,9 @@ export default defineComponent({
 
 .layoutWrapper {
   background-color: color(gray, 900);
+  overflow: hidden;
   * {
+    transition: all 0.3s ease-in-out;
     color: white;
   }
 
