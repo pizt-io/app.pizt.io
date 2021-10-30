@@ -19,8 +19,7 @@
     transform: scale(1);
   }
 }
-
-.heartBeat {
+.animated.heartBeat {
   animation-name: heartBeat;
   animation-duration: $--animate-duration * 1.3;
   animation-timing-function: ease-in-out;

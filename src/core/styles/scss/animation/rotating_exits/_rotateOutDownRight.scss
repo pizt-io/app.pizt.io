@@ -8,8 +8,7 @@
     opacity: 0;
   }
 }
-
-.rotateOutDownRight {
+.animated.rotateOutDownRight {
   animation-name: rotateOutDownRight;
   transform-origin: right bottom;
 }

@@ -17,8 +17,7 @@
     transform: translate3d(0, 0, 0);
   }
 }
-
-.lightSpeedInLeft {
+.animated.lightSpeedInLeft {
   animation-name: lightSpeedInLeft;
   animation-timing-function: ease-out;
 }

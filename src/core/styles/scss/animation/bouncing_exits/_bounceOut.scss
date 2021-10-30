@@ -14,8 +14,7 @@
     transform: scale3d(0.3, 0.3, 0.3);
   }
 }
-
-.bounceOut {
+.animated.bounceOut {
   animation-duration: $--animate-duration * 0.75;
   animation-name: bounceOut;
 }

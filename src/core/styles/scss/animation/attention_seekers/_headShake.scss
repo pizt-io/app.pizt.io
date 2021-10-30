@@ -23,8 +23,7 @@
     transform: translateX(0);
   }
 }
-
-.headShake {
+.animated.headShake {
   animation-timing-function: ease-in-out;
   animation-name: headShake;
 }

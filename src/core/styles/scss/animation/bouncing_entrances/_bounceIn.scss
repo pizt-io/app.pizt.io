@@ -35,8 +35,7 @@
     transform: scale3d(1, 1, 1);
   }
 }
-
-.bounceIn {
+.animated.bounceIn {
   animation-duration: $--animate-duration * 0.75;
   animation-name: bounceIn;
 }

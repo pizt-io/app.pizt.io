@@ -19,8 +19,7 @@
     transform: rotate3d(0, 0, 1, 0deg);
   }
 }
-
-.swing {
+.animated.swing {
   transform-origin: top center;
   animation-name: swing;
 }

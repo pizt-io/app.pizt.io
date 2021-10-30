@@ -23,8 +23,7 @@
     transform: perspective(400px);
   }
 }
-
-.flipInY {
+.animated.flipInY {
   backface-visibility: visible !important;
   animation-name: flipInY;
 }

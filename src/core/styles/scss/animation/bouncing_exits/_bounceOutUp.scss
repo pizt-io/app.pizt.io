@@ -14,7 +14,6 @@
     transform: translate3d(0, -2000px, 0) scaleY(3);
   }
 }
-
-.bounceOutUp {
+.animated.bounceOutUp {
   animation-name: bounceOutUp;
 }

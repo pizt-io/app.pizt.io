@@ -9,8 +9,7 @@
     opacity: 1;
   }
 }
-
-.rotateInDownRight {
+.animated.rotateInDownRight {
   animation-name: rotateInDownRight;
   transform-origin: right bottom;
 }

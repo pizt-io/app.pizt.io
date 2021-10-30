@@ -11,8 +11,7 @@
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
 }
-
-.zoomOutDown {
+.animated.zoomOutDown {
   animation-name: zoomOutDown;
   transform-origin: center bottom;
 }

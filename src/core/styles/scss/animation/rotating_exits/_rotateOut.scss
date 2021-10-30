@@ -8,8 +8,7 @@
     opacity: 0;
   }
 }
-
-.rotateOut {
+.animated.rotateOut {
   animation-name: rotateOut;
   transform-origin: center;
 }

@@ -13,8 +13,7 @@
     opacity: 0;
   }
 }
-
-.flipOutY {
+.animated.flipOutY {
   animation-duration: $--animate-duration * 0.75;
   backface-visibility: visible !important;
   animation-name: flipOutY;

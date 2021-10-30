@@ -9,8 +9,7 @@
     transform: scale(0.1) translate3d(-2000px, 0, 0);
   }
 }
-
-.zoomOutLeft {
+.animated.zoomOutLeft {
   animation-name: zoomOutLeft;
   transform-origin: left center;
 }

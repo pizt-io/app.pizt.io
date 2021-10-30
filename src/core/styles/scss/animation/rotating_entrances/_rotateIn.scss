@@ -9,8 +9,7 @@
     opacity: 1;
   }
 }
-
-.rotateIn {
+.animated.rotateIn {
   animation-name: rotateIn;
   transform-origin: center;
 }
