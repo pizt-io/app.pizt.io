@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 import WindiCSS from "vite-plugin-windicss";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
@@ -24,6 +26,9 @@ export default defineConfig({
   plugins: [
     vue(),
     WindiCSS(),
+    Components({
+      resolvers: [ElementPlusResolver()],
+    }),
     VitePWA({
       includeAssets: [
         "favicon.svg",

@@ -29,6 +29,24 @@
     ],
     "description": ""
   },
+  "script tag": {
+    "scope": "vue",
+    "prefix": "script",
+    "body": [
+      "<script lang=\"ts\">",
+      "import { defineComponent } from 'vue';",
+      "",
+      "export default defineComponent({",
+      "  name: 'Component',",
+      "  setup(props) {",
+      "    ${1}",
+      "  }",
+      "})",
+      "</script>",
+      ""
+    ],
+    "description": ""
+  },
   "style module tag": {
     "scope": "vue",
     "prefix": "style",

@@ -17,7 +17,8 @@ module.exports = {
     sourceMap: true,
     baseUrl: ".",
     types: [
-      "jest"
+      "jest",
+      "element-plus/global"
     ],
     paths: {
       '@/*': [
