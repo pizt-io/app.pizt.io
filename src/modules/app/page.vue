@@ -9,8 +9,8 @@
           </div>
           <transition
             mode="out-in"
-            enter-active-class="animate__animated animate__slideInLeft"
-            leave-active-class="animate__animated animate__slideOutLeft"
+            enter-active-class="animated slideInLeft"
+            leave-active-class="animated slideOutLeft"
           >
             <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-success-500">TransitionPanel</div>
             <div v-else class="flex-1 bg-danger-500">AnimationPanel</div>
@@ -19,8 +19,8 @@
         <div class="flex flex-col flex-1">
           <transition
             mode="out-in"
-            enter-active-class="animate__animated animate__flipInX"
-            leave-active-class="animate__animated animate__flipOutX"
+            enter-active-class="animated flipInX"
+            leave-active-class="animated flipOutX"
           >
             <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-danger-500">TransitionToolbar</div>
             <div v-else class="h-28 bg-warning-500">AnimationToolbar</div>
@@ -28,8 +28,8 @@
 
           <transition
             mode="out-in"
-            enter-active-class="animate__animated animate__zoomIn"
-            leave-active-class="animate__animated animate__zoomOut"
+            enter-active-class="animated zoomIn"
+            leave-active-class="animated zoomOut"
           >
             <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-warning-500">TransitionCanvas</div>
             <div v-else class="flex-1 bg-success-500">AnimationCanvas</div>
@@ -37,8 +37,8 @@
 
           <transition
             mode="out-in"
-            enter-active-class="animate__animated animate__flipInX"
-            leave-active-class="animate__animated animate__flipOutX"
+            enter-active-class="animated flipInX"
+            leave-active-class="animated flipOutX"
           >
             <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-info-500">TransitionTimeline</div>
           </transition>
@@ -46,8 +46,8 @@
         <div class="w-48">
           <transition
             mode="out-in"
-            enter-active-class="animate__animated animate__slideInRight"
-            leave-active-class="animate__animated animate__slideOutRight"
+            enter-active-class="animated slideInRight"
+            leave-active-class="animated slideOutRight"
           >
             <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-gray-500">CodeGenerator</div>
             <div v-else class="h-full bg-info-500">AnimationPanel</div>
@@ -56,8 +56,8 @@
       </div>
       <transition
         mode="out-in"
-        enter-active-class="animate__animated animate__slideInUp"
-        leave-active-class="animate__animated animate__slideOutDown"
+        enter-active-class="animated slideInUp"
+        leave-active-class="animated slideOutDown"
       >
         <div v-if="appMode === APP_MODE.SVG" class="h-48 bg-yellow">AnimationTimeline</div>
       </transition>
