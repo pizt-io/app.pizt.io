@@ -1,6 +1,6 @@
 import "virtual:windi.css";
-import "./core/styles/css/all.css";
-import "./core/styles/scss/all.scss";
+
+import "./core/styles/all.scss";
 
 import Root from "./Root.vue";
 

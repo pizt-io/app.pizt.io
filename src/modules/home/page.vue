@@ -14,7 +14,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-@import "@styles/scss/all";
+@import "@styles/all";
 
 .layoutWrapper {
   min-height: 100vh;
