@@ -12,7 +12,9 @@
             enter-active-class="animated slideInLeft"
             leave-active-class="animated slideOutLeft"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-success-500">TransitionPanel</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-dark-600">
+              <TransitionPanel />
+            </div>
             <div v-else class="flex-1 bg-danger-500">AnimationPanel</div>
           </transition>
         </div>
@@ -22,7 +24,9 @@
             enter-active-class="animated flipInX"
             leave-active-class="animated flipOutX"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-danger-500">TransitionToolbar</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-dark-800">
+              <TransitionToolbar />
+            </div>
             <div v-else class="h-28 bg-warning-500">AnimationToolbar</div>
           </transition>
 
@@ -31,7 +35,7 @@
             enter-active-class="animated zoomIn"
             leave-active-class="animated zoomOut"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-warning-500">TransitionCanvas</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-dark-500">TransitionCanvas</div>
             <div v-else class="flex-1 bg-success-500">AnimationCanvas</div>
           </transition>
 
@@ -40,7 +44,7 @@
             enter-active-class="animated flipInX"
             leave-active-class="animated flipOutX"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-info-500">TransitionTimeline</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-dark-500">TransitionTimeline</div>
           </transition>
         </div>
         <div class="w-48">
@@ -49,7 +53,7 @@
             enter-active-class="animated slideInRight"
             leave-active-class="animated slideOutRight"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-gray-500">CodeGenerator</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-dark-600">CodeGenerator</div>
             <div v-else class="h-full bg-info-500">AnimationPanel</div>
           </transition>
         </div>
@@ -71,7 +75,7 @@ import { defineComponent } from 'vue';
 import Header from '@modules/app/components/header/header.vue'
 import LayerTree from '@modules/app/components/tree/layer.vue'
 import Navigator from '@modules/app/components/navigator/navigator.vue'
-import TransitionToolbar from '@modules/app/components/toolbar/animation.vue'
+import TransitionToolbar from '@modules/app/components/toolbar/transition.vue'
 import TransitionCanvas from '@modules/app/components/canvas/transition.vue'
 import TransitionPanel from '@modules/app/components/panel/transition.vue'
 import TransitionTimeline from '@modules/app/components/timeline/transition.vue'

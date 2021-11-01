@@ -48,6 +48,7 @@ for (const alias in aliases) {
     ? [aliasTo]
     : [
       aliasTo + '/index.js',
+      aliasTo + '/index.ts',
       aliasTo + '/index.json',
       aliasTo + '/index.vue',
       aliasTo + '/index.scss',
@@ -59,6 +60,7 @@ for (const alias in aliases) {
     ? [aliasTo]
     : [
       aliasTo + '/index.js',
+      aliasTo + '/index.ts',
       aliasTo + '/index.json',
       aliasTo + '/index.vue',
       aliasTo + '/index.scss',

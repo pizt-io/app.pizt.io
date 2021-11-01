@@ -31,6 +31,7 @@ export default defineConfig({
     }),
     VitePWA({
       includeAssets: [
+        "icons/style.css",
         "favicon.svg",
         "favicon.ico",
         "robots.txt",

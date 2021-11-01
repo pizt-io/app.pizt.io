@@ -4,6 +4,7 @@ import { colors } from "./src/core/config/windi/colors";
 export default defineConfig({
   // Preflight is enabled on-demanded.
   // https://windicss.org/integrations/nuxt.html#preflight-style-resetting
+  important: true,
   preflight: true,
   theme: {
     colors,
