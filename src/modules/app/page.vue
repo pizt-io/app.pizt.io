@@ -15,7 +15,9 @@
             <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-dark-600">
               <TransitionPanel />
             </div>
-            <div v-else class="flex-1 bg-danger-500">AnimationPanel</div>
+            <div v-else class="flex-1 bg-dark-600">
+              <AnimationPanel />
+            </div>
           </transition>
         </div>
         <div class="flex flex-col flex-1">
@@ -27,7 +29,9 @@
             <div v-if="appMode === APP_MODE.MAIN" class="h-28 bg-dark-800">
               <TransitionToolbar />
             </div>
-            <div v-else class="h-28 bg-warning-500">AnimationToolbar</div>
+            <div v-else class="h-28 bg-dark-800">
+              <AnimationToolbar />
+            </div>
           </transition>
 
           <transition
@@ -35,8 +39,20 @@
             enter-active-class="animated zoomIn"
             leave-active-class="animated zoomOut"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="flex-1 bg-dark-500">TransitionCanvas</div>
-            <div v-else class="flex-1 bg-success-500">AnimationCanvas</div>
+            <div
+              v-if="appMode === APP_MODE.MAIN"
+              class="flex-1 relative dark:bg-dark-500 bg-white"
+            >
+              <CanvasBackgroundToggle />
+              <TransitionCanvas />
+            </div>
+            <div
+              v-else
+              class="flex-1 relative dark:bg-dark-500 bg-white"
+            >
+              <CanvasBackgroundToggle />
+              <AnimationCanvas />
+            </div>
           </transition>
 
           <transition
@@ -44,7 +60,9 @@
             enter-active-class="animated flipInX"
             leave-active-class="animated flipOutX"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-dark-500">TransitionTimeline</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="h-9 bg-dark-500">
+              <TransitionTimeline />
+            </div>
           </transition>
         </div>
         <div class="w-48">
@@ -53,8 +71,12 @@
             enter-active-class="animated slideInRight"
             leave-active-class="animated slideOutRight"
           >
-            <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-dark-600">CodeGenerator</div>
-            <div v-else class="h-full bg-info-500">AnimationPanel</div>
+            <div v-if="appMode === APP_MODE.MAIN" class="h-full bg-dark-600">
+              <CodeGenerator />
+            </div>
+            <div v-else class="h-full bg-dark-600">
+              <AnimationPanel />
+            </div>
           </transition>
         </div>
       </div>
@@ -63,7 +85,9 @@
         enter-active-class="animated slideInUp"
         leave-active-class="animated slideOutDown"
       >
-        <div v-if="appMode === APP_MODE.SVG" class="h-48 bg-yellow">AnimationTimeline</div>
+        <div v-if="appMode === APP_MODE.SVG" class="h-48 bg-dark-700">
+          <AnimationTimeline />
+        </div>
       </transition>
     </div>
   </div>
@@ -72,6 +96,9 @@
 <script lang="ts">
 import { APP_MODE } from '@core/constants/navigator';
 import { defineComponent } from 'vue';
+
+import CanvasBackgroundToggle from '@/core/components/CanvasBackgroundToggle.vue';
+
 import Header from '@modules/app/components/header/header.vue'
 import LayerTree from '@modules/app/components/tree/layer.vue'
 import Navigator from '@modules/app/components/navigator/navigator.vue'
@@ -85,10 +112,12 @@ import AnimationPanel from '@modules/app/components/panel/animation.vue'
 import AnimationTimeline from '@modules/app/components/timeline/animation.vue'
 import CodeGenerator from '@modules/app/components/code/generator.vue'
 import { useAppMode } from './use/useAppMode';
+import { useDark } from '@vueuse/core'
 
 export default defineComponent({
   name: 'AppPage',
   components: {
+    CanvasBackgroundToggle,
     Header,
     LayerTree,
     Navigator,
@@ -104,10 +133,12 @@ export default defineComponent({
   },
   setup() {
     const { appMode } = useAppMode();
+    const isDark = useDark()
 
     return {
       APP_MODE,
-      appMode
+      appMode,
+      isDark
     }
   }
 })
