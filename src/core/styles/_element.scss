@@ -1,0 +1,62 @@
+.pz {
+  &-label {
+    display: inline-flex;
+    align-items: center;
+
+    &__inner {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    * {
+      color: color(gray, 200) !important;
+    }
+  }
+  &-input {
+    color: color(gray, 100) !important;
+
+    .el-input__inner {
+      border-radius: 2px !important;
+      border: 1px solid color(gray, 400) !important;
+      background-color: color(gray, 700) !important;
+
+      &:focus {
+        border: 1px solid color(gray, 400) !important;
+      }
+    }
+
+    .el-input-number__decrease,
+    .el-input-number__increase {
+      border-radius: 0 2px 2px 0 !important;
+      border: none !important;
+      border-left: 1px solid color(gray, 400) !important;
+      background-color: color(gray, 700) !important;
+    }
+
+    &.el-input-number.is-controls-right {
+      .el-input__inner {
+        padding-left: 15px !important;
+        padding-right: 40px !important;
+      }
+    }
+
+    .el-checkbox__input{
+      .el-checkbox__inner {
+        @include size(16px);
+
+        border: 2px solid color(gray, 300) !important;
+        background-color: color(gray, 700) !important;
+      }
+      &.is-checked {
+        .el-checkbox__inner {
+          border: 2px solid color(gray, 300) !important;
+          background-color: color(gray, 300) !important;
+
+          &::after {
+            border-color: color(gray, 900) !important;
+          }
+        }
+      }
+    }
+  }
+}

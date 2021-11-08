@@ -1,9 +1,11 @@
-@import './colors';
-@import './effects';
-@import './fonts';
-@import './mixins';
-@import './transitions';
-@import './variables';
+@import 'colors';
+@import 'effects';
+@import 'fonts';
+@import 'mixins';
+@import 'transitions';
+@import 'variables';
+@import 'element';
+@import 'windi';
 
 @import './animation/all.scss';
 
