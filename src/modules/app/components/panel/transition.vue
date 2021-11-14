@@ -64,7 +64,7 @@
         v-model="form.animationIterationCount"
         :disabled="!!form.animationIsInfinite"
         :min="0"
-        :step="0.5"
+        :step="1"
         controls-position="right"
         class="pz-input w-20"
         size="mini"
@@ -110,23 +110,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { State } from '@store/state';
+import { defineComponent, ref, watch } from 'vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'TransitionPanel',
   setup(props) {
+    const store = useStore<State>();
+
     const form = ref({
-      animationName: '',
+      animationName: 'piztAnimation',
       animationIsInfinite: 0,
       animationHasDelay: 0,
-      animationDuration: 0,
+      animationDuration: 3,
       animationDelay: 0,
       animationTimingFunction: '',
-      animationIterationCount: 0,
+      animationIterationCount: 1,
       animationFillMode: 'forwards',
       animationDirection: 'alternate',
       animationPlayState: '',
     })
+
+    watch(
+      () => form.value,
+      () => {
+        store.commit('SET_ANIMATION_SETTINGS', {
+          ...form.value,
+          animationDuration: `${form.value.animationDuration}s`,
+          animationDelay: `${form.value.animationDelay}s`,
+        })
+      },
+      { immediate: true, deep: true }
+    )
 
     return {
       form
