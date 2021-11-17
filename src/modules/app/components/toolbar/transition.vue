@@ -1,25 +1,50 @@
 <template>
   <div class="h-full px-3 flex items-center">
-    <div v-for="transition in transitions" :key="transition.name" class="text-center mx-2">
-      <div class="rounded-full w-16 h-16 flex items-center justify-center cursor-pointer bg-primary hover:bg-secondary active:bg-secondary-600">
+    <div
+      v-for="transition in transitions"
+      :key="transition.animationName"
+      class="text-center mx-2"
+      @click="handleSelectTransition(transition)"
+    >
+      <div
+        class="rounded-full w-16 h-16 flex items-center justify-center cursor-pointer bg-primary hover:bg-secondary active:bg-secondary-600"
+        :class="[transition?.animationName === selectedTransition?.animationName && 'border-4 border-secondary-600']"
+      >
         <img :src="transition.thumbnail">
       </div>
       <div class="text-sm">
-        {{ transition.name }}
+        {{ transition.label }}
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { transitions } from '@/mock/transitions'
+import { State } from '@store/state';
+import { computed, CSSProperties, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'TransitionToolbar',
-  setup(props) {
+  setup(props, { emit }) {
+    const store = useStore<State>();
+
+    const selectedTransition = computed(() => {
+      return store.state.selectedTransition as CSSProperties;
+    });
+
+    const transitions = computed(() => {
+      return store.state.transitions as Array
+    });
+
+    const handleSelectTransition = (transition: CSSProperties) => {
+      store.commit('SET_ANIMATION_SETTINGS', transition)
+    }
+
     return {
-      transitions
+      selectedTransition,
+      transitions,
+      handleSelectTransition,
     }
   }
 })

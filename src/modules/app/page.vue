@@ -65,7 +65,7 @@
             </div>
           </transition>
         </div>
-        <div class="w-48">
+        <div style="height: calc(100vh - 1.25rem)" class="w-80 overflow-y-auto">
           <transition
             mode="out-in"
             enter-active-class="animated slideInRight"
@@ -95,7 +95,7 @@
 
 <script lang="ts">
 import { APP_MODE } from '@core/constants/navigator';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import CanvasBackgroundToggle from '@/core/components/CanvasBackgroundToggle.vue';
 
@@ -138,7 +138,7 @@ export default defineComponent({
     return {
       APP_MODE,
       appMode,
-      isDark
+      isDark,
     }
   }
 })

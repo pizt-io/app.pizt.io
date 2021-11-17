@@ -7,8 +7,6 @@ const DEFAULT_PRETTIER_CONFIG = Object.freeze({
   arrowParens: 'always',
   bracketSpacing: true,
   endOfLine: 'lf',
-  htmlWhitespaceSensitivity: 'strict',
-  jsxSingleQuote: true,
   printWidth: 100,
   proseWrap: 'never',
   quoteProps: 'consistent',
@@ -17,23 +15,39 @@ const DEFAULT_PRETTIER_CONFIG = Object.freeze({
   tabWidth: 2,
 });
 
-const _languageToParser = (lang: 'javascript' | 'css' | 'html' = 'javascript') => {
-  const map: any = {
-    javascript: 'babel',
-    css: 'postcss',
-    html: 'babel',
-  }
-
-  return map[lang];
-}
-
-export const prettyCode = (code: string, language: 'javascript' | 'css' | 'html' = 'javascript') => {
+export const prettyCodeHtml = (code: string) => {
   const pretty = prettier.format(
     code,
     {
       ...DEFAULT_PRETTIER_CONFIG,
-      parser: _languageToParser(language),
-      plugins: [parserBabel, parserHtml, parserCss],
+      parser: 'html',
+      plugins: [parserHtml],
+    },
+  );
+
+  return pretty;
+}
+
+export const prettyCodeCss = (code: string) => {
+  const pretty = prettier.format(
+    code,
+    {
+      ...DEFAULT_PRETTIER_CONFIG,
+      parser: 'css',
+      plugins: [parserCss],
+    },
+  );
+
+  return pretty;
+}
+
+export const prettyCodeJs = (code: string) => {
+  const pretty = prettier.format(
+    code,
+    {
+      ...DEFAULT_PRETTIER_CONFIG,
+      parser: 'babel',
+      plugins: [parserBabel],
     },
   );
 

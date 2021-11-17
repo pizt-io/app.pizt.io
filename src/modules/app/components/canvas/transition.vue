@@ -1,16 +1,18 @@
 <template>
   <div class="w-full h-full flex items-center justify-center">
-    <div ref="styleHolderRef" />
+    <div v-html="parsedStyle" />
     <div
       :key="forceRerenderFlag"
-      :style="animationSettings"
-      class="w-20 h-20 bg-primary"
+      :style="selectedTransition"
+      class="w-32 h-32 bg-primary"
     />
   </div>
 </template>
 
 <script lang="ts">
+import { prettyCodeCss } from '@core/utils/highlightCode';
 import { State } from '@store/state';
+import { keyframes } from '@utils/keyframes';
 import { computed, CSSProperties, defineComponent, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -22,35 +24,22 @@ export default defineComponent({
     const styleHolderRef = ref<HTMLElement | null>(null);
 
     const forceRerenderFlag = ref(0);
-    const animationSettings = computed(() => {
+    const selectedTransition = computed(() => {
       forceRerenderFlag.value++;
 
-      return store.state.animationSettings as CSSProperties
+      return store.state.selectedTransition as CSSProperties
     });
 
-    onMounted(() => {
-      if (styleHolderRef.value) {
-        styleHolderRef.value.innerHTML = `
-        <style>
-          @keyframes piztAnimation {
-            from {
-              transform: scale(0) rotate(0deg);
-              opacity: 0;
-            }
-            to {
-              transform: scale(1) rotate(360deg);
-              opacity: 1;
-            }
-          }
-        </style>
-        `;
-      }
-    })
+    const parsedStyle = computed(() => `
+    <style>${prettyCodeCss(selectedTransition.value.animationKeyframes && keyframes.stringify({
+      [selectedTransition.value.animationName]: selectedTransition.value.animationKeyframes,
+    }))}</style>`);
 
     return {
       styleHolderRef,
-      animationSettings,
+      selectedTransition,
       forceRerenderFlag,
+      parsedStyle,
     };
   }
 })
@@ -58,6 +47,5 @@ export default defineComponent({
 
 <style lang="scss" module>
 @import "@styles/all";
-
 
 </style>
