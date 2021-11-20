@@ -1,11 +1,11 @@
 <template>
   <div class="h-full overflow-y-auto">
-    <h3 class="px-5 pt-5">
+    <h3 class="px-5 pt-5 text-white">
       Generated code
     </h3>
     <div class="m-5">
       <div class="flex items-center justify-between mb-3">
-        <span>HTML</span>
+        <span class="text-white">HTML</span>
         <el-button
           size="mini"
           class="bg-primary hover:bg-primary-600 border-none h-6 min-h-6 px-3 py-1"
@@ -24,7 +24,7 @@
     </div>
     <div class="m-5">
       <div class="flex items-center justify-between mb-3">
-        <span>CSS</span>
+        <span class="text-white">CSS</span>
         <el-button
           size="mini"
           class="bg-primary hover:bg-primary-600 border-none h-6 min-h-6 px-3 py-1"
@@ -43,7 +43,7 @@
     </div>
     <div class="m-5">
       <div class="flex items-center justify-between mb-3">
-        <span>JS</span>
+        <span class="text-white">JS</span>
         <el-button
           size="mini"
           class="bg-primary hover:bg-primary-600 border-none h-6 min-h-6 px-3 py-1"
@@ -108,6 +108,7 @@ export default defineComponent({
                 ? 'infinite'
                 : selectedTransition.value.animationIterationCount
             };
+            animation-timing-function: ${selectedTransition.value.animationTimingFunction};
             animation-fill-mode: ${selectedTransition.value.animationFillMode};
             animation-direction: ${selectedTransition.value.animationDirection};
 

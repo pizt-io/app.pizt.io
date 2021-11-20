@@ -1,35 +1,35 @@
 // From vue-enterprise-template
 // See repo: https://github.com/chrisvfritz/vue-enterprise-boilerplate
-const path = require('path');
-const fs = require('fs');
-const prettier = require('prettier');
+const path = require("path");
+const fs = require("fs");
+const prettier = require("prettier");
 
 const aliases = {
-  '@': '.src',
-  '@core': './src/core',
-  '@components': './src/components',
-  '@constants': './src/constants',
-  '@store': './src/store',
-  '@types': './src/types',
-  '@modules': './src/modules',
-  '@styles': './src/core/styles',
-  '@use': './src/core/use',
-  '@utils': './src/core/utils',
+  "@": "./src",
+  "@core": "./src/core",
+  "@components": "./src/components",
+  "@constants": "./src/constants",
+  "@store": "./src/store",
+  "@types": "./src/types",
+  "@modules": "./src/modules",
+  "@styles": "./src/core/styles",
+  "@use": "./src/core/use",
+  "@utils": "./src/core/utils",
 };
 
 const prettierConfig = {
-  arrowParens: 'always',
+  arrowParens: "always",
   bracketSpacing: true,
-  endOfLine: 'lf',
-  htmlWhitespaceSensitivity: 'strict',
+  endOfLine: "lf",
+  htmlWhitespaceSensitivity: "strict",
   jsxSingleQuote: true,
   printWidth: 100,
-  proseWrap: 'never',
-  quoteProps: 'consistent',
+  proseWrap: "never",
+  quoteProps: "consistent",
   semi: false,
   singleQuote: false,
   tabWidth: 2,
-  trailingComma: 'es5',
+  trailingComma: "es5",
   useTabs: false,
   vueIndentScriptAndStyle: false,
 };
@@ -43,36 +43,36 @@ module.exports = {
 for (const alias in aliases) {
   const aliasTo = aliases[alias];
   module.exports.webpack[alias] = resolveSrc(aliasTo);
-  module.exports.tsconfig[alias + '/*'] = [aliasTo + '/*'];
-  module.exports.tsconfig[alias] = aliasTo.includes('/index.')
+  module.exports.tsconfig[alias + "/*"] = [aliasTo + "/*"];
+  module.exports.tsconfig[alias] = aliasTo.includes("/index.")
     ? [aliasTo]
     : [
-      aliasTo + '/index.js',
-      aliasTo + '/index.ts',
-      aliasTo + '/index.json',
-      aliasTo + '/index.vue',
-      aliasTo + '/index.scss',
-      aliasTo + '/index.css',
-    ];
+        aliasTo + "/index.js",
+        aliasTo + "/index.ts",
+        aliasTo + "/index.json",
+        aliasTo + "/index.vue",
+        aliasTo + "/index.scss",
+        aliasTo + "/index.css",
+      ];
 
-  module.exports.jsconfig[alias + '/*'] = [aliasTo + '/*'];
-  module.exports.jsconfig[alias] = aliasTo.includes('/index.')
+  module.exports.jsconfig[alias + "/*"] = [aliasTo + "/*"];
+  module.exports.jsconfig[alias] = aliasTo.includes("/index.")
     ? [aliasTo]
     : [
-      aliasTo + '/index.js',
-      aliasTo + '/index.ts',
-      aliasTo + '/index.json',
-      aliasTo + '/index.vue',
-      aliasTo + '/index.scss',
-      aliasTo + '/index.css',
-    ];
+        aliasTo + "/index.js",
+        aliasTo + "/index.ts",
+        aliasTo + "/index.json",
+        aliasTo + "/index.vue",
+        aliasTo + "/index.scss",
+        aliasTo + "/index.css",
+      ];
 }
 
-const tsconfigTemplate = require('./tsconfig.template');
-const tsconfigPath = path.resolve(__dirname, 'tsconfig.json');
+const tsconfigTemplate = require("./tsconfig.template");
+const tsconfigPath = path.resolve(__dirname, "tsconfig.json");
 
-const jsconfigTemplate = require('./jsconfig.template');
-const jsconfigPath = path.resolve(__dirname, 'jsconfig.json');
+const jsconfigTemplate = require("./jsconfig.template");
+const jsconfigPath = path.resolve(__dirname, "jsconfig.json");
 
 function writeConfigFile(configPath, configTemplate, configFileName) {
   fs.writeFile(
@@ -87,21 +87,23 @@ function writeConfigFile(configPath, configTemplate, configFileName) {
       }),
       {
         ...prettierConfig,
-        parser: 'json',
-      },
+        parser: "json",
+      }
     ),
     (error) => {
       if (error) {
         // eslint-disable-next-line no-console
-        console.error('Error while creating tsconfig.json from aliases.config.js.');
+        console.error(
+          "Error while creating tsconfig.json from aliases.config.js."
+        );
         throw error;
       }
-    },
+    }
   );
 }
 
-writeConfigFile(tsconfigPath, tsconfigTemplate, 'tsconfig');
-writeConfigFile(jsconfigPath, jsconfigTemplate, 'jsconfig');
+writeConfigFile(tsconfigPath, tsconfigTemplate, "tsconfig");
+writeConfigFile(jsconfigPath, jsconfigTemplate, "jsconfig");
 
 function resolveSrc(_path) {
   return path.resolve(__dirname, _path);

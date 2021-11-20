@@ -1,6 +1,28 @@
+$z-index-header: 9999;
+$z-index-navbar: 9999;
+$z-index-sidebar: 10;
+
+$height-sidebar-item: 50px;
+
+$padding-page-base: 2rem;
+
+$font-size-smaller: 0.5rem;
+$font-size-small: 0.75rem;
+$font-size-medium: 0.85rem;
+$font-size-base: 1rem;
+$font-size-large: 1.25rem;
+$font-size-larger: 2rem;
+$font-size-title: 4rem;
+
+$font-weight-primary: 600;
+
 $shadow-light: 1px 1px 3px 0 color(gray, 100);
 $shadow-base: 1px 1px 3px 0 color(gray, 200);
 $shadow-dark: 1px 1px 3px 0 color(gray, 400);
+
+$shadow-input: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+$shadow-navbar: rgba(149, 157, 165, 0.2) 0 8px 24px;
+$shadow-card: rgba(0, 0, 0, 0.1) 0 4px 12px;
 
 $border-thin: 1px solid color(primary, 600);
 $border-base: 2px solid color(primary, 600);
@@ -10,3 +32,9 @@ $duration-base: 300ms;
 $duration-fast: 150ms;
 $duration-slow: 500ms;
 $duration-slower: 1000ms;
+
+$rounded-sm: 0.25rem;
+$rounded: 0.5rem;
+$rounded-lg: 0.75rem;
+$rounded-xl: 1rem;
+$rounded-full: 9999px;

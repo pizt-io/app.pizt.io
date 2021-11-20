@@ -39,6 +39,10 @@
         size="mini"
       />
     </li>
+    <li class="mb-3 flex items-center">
+      <CubicBezier v-model="form.animationTimingFunction" />
+      <!-- <CubicBezier /> -->
+    </li>
     <li>
       <label class="pz-label w-full justify-between">
         <span class="pz-label__inner">
@@ -116,8 +120,15 @@ import { State } from '@store/state';
 import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
+import CubicBezierOld from '@/core/components/CubicBezierOld.vue';
+import CubicBezier from '@/core/components/CubicBezier.vue';
+
 export default defineComponent({
   name: 'TransitionPanel',
+  components: {
+    CubicBezierOld,
+    CubicBezier,
+  },
   setup(props) {
     const store = useStore<State>();
 
@@ -146,6 +157,7 @@ export default defineComponent({
         store.commit('SET_ANIMATION_SETTINGS', {
           ...form.value,
           animationDuration: `${form.value.animationDuration}s`,
+          animationTimingFunction: `cubic-bezier(${form.value.animationTimingFunction || '0.42,0.69,0.69,0.42'})`,
           animationDelay: form.value.animationHasDelay ? `${form.value.animationDelay}s` : 0,
           animationIterationCount: form.value.animationIsInfinite
             ? 'infinite'

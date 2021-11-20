@@ -21,7 +21,7 @@
         "</script>",
         "",
         "<style lang=\"scss\" module>",
-        "@import \"@styles/scss/all\";",
+        "@import \"@styles/all\";",
         "",
         "",
         "</style>",
@@ -52,7 +52,7 @@
     "prefix": "style",
     "body": [
         "<style lang=\"scss\" module>",
-        "@import \"@styles/scss/all\";",
+        "@import \"@styles/all\";",
         "",
         "${0}",
         "</style>",

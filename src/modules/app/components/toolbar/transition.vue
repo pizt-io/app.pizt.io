@@ -12,7 +12,7 @@
       >
         <img :src="transition.thumbnail">
       </div>
-      <div class="text-sm">
+      <div class="text-sm text-white">
         {{ transition.label }}
       </div>
     </div>

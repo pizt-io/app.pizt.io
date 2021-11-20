@@ -2,14 +2,14 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [".src/*"],
+      "@/*": ["./src/*"],
       "@": [
-        ".src/index.js",
-        ".src/index.ts",
-        ".src/index.json",
-        ".src/index.vue",
-        ".src/index.scss",
-        ".src/index.css"
+        "./src/index.js",
+        "./src/index.ts",
+        "./src/index.json",
+        "./src/index.vue",
+        "./src/index.scss",
+        "./src/index.css"
       ],
       "@core/*": ["./src/core/*"],
       "@core": [

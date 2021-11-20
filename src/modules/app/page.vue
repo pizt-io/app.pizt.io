@@ -152,7 +152,6 @@ export default defineComponent({
   overflow: hidden;
   * {
     transition: all 0.3s ease-in-out;
-    color: white;
   }
 
   @include size(100vw, 100vh);
