@@ -4,6 +4,7 @@
     v-model="code"
     line-numbers
     :highlight="highlighter"
+    :readonly="readonly"
     @input="handleInputEditor"
   />
 </template>
@@ -36,6 +37,7 @@ export default defineComponent({
       type: String,
       default: 'javascript',
     },
+    readonly: Boolean,
   },
   setup(props, { emit }) {
     const code = ref('');

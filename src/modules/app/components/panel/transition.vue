@@ -31,13 +31,17 @@
       </label>
       <el-input-number
         v-model="form.animationDelay"
-        :disabled="!!form.animationHasDelay"
+        :disabled="!form.animationHasDelay"
         :min="0"
         :step="0.5"
         controls-position="right"
         class="pz-input w-20"
         size="mini"
       />
+    </li>
+    <li class="mb-3 flex items-center">
+      <CubicBezier v-model="form.animationTimingFunction" />
+      <!-- <CubicBezier /> -->
     </li>
     <li>
       <label class="pz-label w-full justify-between">
@@ -79,6 +83,7 @@
         <el-select
           v-model="form.animationFillMode"
           class="pz-input text-xs w-20"
+          popper-class="pz-select"
           size="mini"
         >
           <el-option label="None" value="none" />
@@ -97,6 +102,7 @@
         <el-select
           v-model="form.animationDirection"
           class="pz-input text-xs w-20"
+          popper-class="pz-select"
           size="mini"
         >
           <el-option label="Normal" value="normal" />
@@ -111,19 +117,30 @@
 
 <script lang="ts">
 import { State } from '@store/state';
-import { defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from 'vuex';
+
+import CubicBezierOld from '@/core/components/CubicBezierOld.vue';
+import CubicBezier from '@/core/components/CubicBezier.vue';
 
 export default defineComponent({
   name: 'TransitionPanel',
+  components: {
+    CubicBezierOld,
+    CubicBezier,
+  },
   setup(props) {
     const store = useStore<State>();
 
+    const selectedTransition = computed(() => {
+      return store.state.selectedTransition as CSSProperties;
+    });
+
     const form = ref({
-      animationName: 'piztAnimation',
+      animationName: selectedTransition.value.animationName,
       animationIsInfinite: 0,
       animationHasDelay: 0,
-      animationDuration: 3,
+      animationDuration: 1,
       animationDelay: 0,
       animationTimingFunction: '',
       animationIterationCount: 1,
@@ -135,10 +152,16 @@ export default defineComponent({
     watch(
       () => form.value,
       () => {
+        form.value.animationName = selectedTransition.value.animationName
+
         store.commit('SET_ANIMATION_SETTINGS', {
           ...form.value,
           animationDuration: `${form.value.animationDuration}s`,
-          animationDelay: `${form.value.animationDelay}s`,
+          animationTimingFunction: `cubic-bezier(${form.value.animationTimingFunction || '0.42,0.69,0.69,0.42'})`,
+          animationDelay: form.value.animationHasDelay ? `${form.value.animationDelay}s` : 0,
+          animationIterationCount: form.value.animationIsInfinite
+            ? 'infinite'
+            : form.value.animationIterationCount
         })
       },
       { immediate: true, deep: true }
