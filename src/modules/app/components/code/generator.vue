@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@core/utils/highlightCode';
+import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@/core/utils/prettier';
 import { useStore } from 'vuex';
 import { State } from '@store/state';
 import { keyframes } from '@core/utils/keyframes';
