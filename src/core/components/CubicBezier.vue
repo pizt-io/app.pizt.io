@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { CanvasElementList, useCanvas } from '@use/useCanvas';
 
 import Interactive from "https://vectorjs.org/interactive.js";
 

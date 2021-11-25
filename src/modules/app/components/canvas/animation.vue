@@ -1,16 +1,35 @@
 <template>
-  <div>
-
+  <div class="w-full h-full flex justify-center items-center">
+    <div :style="{ width: '800px', height: '600px' }" class="bg-white">
+      <SVG :elements="elements" width />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useSVGScaffolder } from '@use/useSVGScaffolder'
+import SVG from '@core/components/SVG.vue';
 
 export default defineComponent({
   name: 'AnimationCanvas',
+  components: {
+    SVG
+  },
   setup(props) {
+    const { ellipse, rect, line } = useSVGScaffolder();
 
+    const elements = ref([
+      ellipse({ x: 150, y: 100 }, { width: 100, height: 50 }, { translateX: 0, translateY: 0},  { fill: '#f04337' }),
+      rect({ x: 250, y: 300 }, { width: 100, height: 50 }, { translateX: 100, translateY: 0},  { fill: '#f04337' }),
+      ellipse({ x: 200, y: 250 }, { width: 70, height: 50 }, { translateX: 100, translateY: 100},  { fill: '#f04337' }),
+      line([{ x: 300, y: 50 }, { x: 450, y: 150 }], { translateX: 0, translateY: 0}, { stroke: '#f04337' }),
+      line([{ x: 600, y: 50 }, { x: 550, y: 150 }], { translateX: 0, translateY: 0}, { stroke: '#f04337' }, true),
+    ])
+
+    return {
+      elements,
+    }
   }
 })
 </script>

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { prettyCodeCss } from '@/core/utils/prettier';
+import { prettyCodeCss } from '@core/utils/prettier';
 import { State } from '@store/state';
 import { keyframes } from '@utils/keyframes';
 import { computed, CSSProperties, defineComponent, onMounted, ref } from 'vue';

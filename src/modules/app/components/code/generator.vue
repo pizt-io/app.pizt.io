@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@/core/utils/prettier';
+import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@core/utils/prettier';
 import { useStore } from 'vuex';
 import { State } from '@store/state';
 import { keyframes } from '@core/utils/keyframes';
@@ -74,7 +74,7 @@ import { ElMessage } from 'element-plus'
 
 import 'element-plus/theme-chalk/el-message.css'
 
-import CodeEditor from '@/core/components/CodeEditor.vue'
+import CodeEditor from '@core/components/CodeEditor.vue'
 
 export default defineComponent({
   name: 'CodeGenerator',
