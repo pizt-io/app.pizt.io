@@ -101,17 +101,19 @@ import CanvasBackgroundToggle from '@core/components/CanvasBackgroundToggle.vue'
 
 import Header from '@modules/app/components/header/header.vue'
 import LayerTree from '@modules/app/components/tree/layer.vue'
-import Navigator from '@modules/app/components/navigator/navigator.vue'
-import TransitionToolbar from '@modules/app/components/toolbar/transition.vue'
-import TransitionCanvas from '@modules/app/components/canvas/transition.vue'
-import TransitionPanel from '@modules/app/components/panel/transition.vue'
-import TransitionTimeline from '@modules/app/components/timeline/transition.vue'
-import AnimationToolbar from '@modules/app/components/toolbar/animation.vue'
-import AnimationCanvas from '@modules/app/components/canvas/animation.vue'
-import AnimationPanel from '@modules/app/components/panel/animation.vue'
-import AnimationTimeline from '@modules/app/components/timeline/animation.vue'
 import CodeGenerator from '@modules/app/components/code/generator.vue'
-import { useAppMode } from './use/useAppMode';
+import Navigator from '@modules/app/components/navigator/navigator.vue'
+
+import TransitionToolbar from '@modules/app/components/transition/toolbar.vue'
+import TransitionCanvas from '@modules/app/components/transition/canvas.vue'
+import TransitionPanel from '@modules/app/components/transition/panel.vue'
+import TransitionTimeline from '@modules/app/components/transition/timeline.vue'
+import AnimationToolbar from '@modules/app/components/animation/toolbar.vue'
+import AnimationCanvas from '@modules/app/components/animation/canvas.vue'
+import AnimationPanel from '@modules/app/components/animation/panel.vue'
+import AnimationTimeline from '@modules/app/components/animation/timeline.vue'
+
+import { useAppMode } from '@modules/app/use/useAppMode';
 import { useDark } from '@vueuse/core'
 
 export default defineComponent({

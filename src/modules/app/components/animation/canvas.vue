@@ -1,20 +1,20 @@
 <template>
   <div class="w-full h-full flex justify-center items-center">
     <div :style="{ width: '800px', height: '600px' }" class="bg-white">
-      <SVG :elements="elements" width />
+      <SVGCanvas :elements="elements" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useSVGScaffolder } from '@use/useSVGScaffolder'
-import SVG from '@core/components/SVG.vue';
+import { useSVGScaffolder } from '@/modules/app/use/svg/useSVGScaffolder'
+import SVGCanvas from '@core/components/SVGCanvas.vue';
 
 export default defineComponent({
   name: 'AnimationCanvas',
   components: {
-    SVG
+    SVGCanvas
   },
   setup(props) {
     const { ellipse, rect, line } = useSVGScaffolder();
