@@ -25,6 +25,28 @@ export enum SVG_ELEMENT_TYPE {
   SVG = "svg",
 }
 
+export enum SVG_PATH_CMD {
+  MOVE_TO = "M",
+  LINE_TO = "L",
+  LINE_TO_HORIZONTALLY = "H",
+  LINE_TO_VERTICALLY = "V",
+  CUBIC_BEZIER = "C",
+  QUADRATIC_BEZIER = "Q",
+  ARC_CURVE = "A",
+  CLOSE_PATH = "Z",
+}
+
+export enum SVG_PATH_ABS_CMD {
+  MOVE_TO = "m",
+  LINE_TO = "l",
+  LINE_TO_HORIZONTALLY = "h",
+  LINE_TO_VERTICALLY = "v",
+  CUBIC_BEZIER = "c",
+  QUADRATIC_BEZIER = "q",
+  ARC_CURVE = "q",
+  CLOSE_PATH = "z",
+}
+
 export const POS_X_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.CIRCLE]: "cx",
   [SVG_ELEMENT_TYPE.ELLIPSE]: "cx",

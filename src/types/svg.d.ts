@@ -10,6 +10,12 @@ declare type SVGTransform = {
   translateY: number;
 };
 
+declare type SVGStyles = {
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: string;
+};
+
 declare type SVGCircle = {
   tag: SVG_ELEMENT_TYPE.CIRCLE;
   attrs: {
@@ -58,6 +64,62 @@ declare type SVGLine = {
   transform: SVGTransform;
 };
 
+declare type SVGPath = {
+  tag: SVG_ELEMENT_TYPE.PATH;
+  attrs: {
+    d: string;
+    fill?: string;
+    stroke?: string;
+    strokeWidth?: string;
+  };
+  boundingBox: null | {
+    height: number;
+    width: number;
+    x: number;
+    y: number;
+  };
+  transform: SVGTransform;
+};
+
+declare type SVGPolygon = {
+  tag: SVG_ELEMENT_TYPE.POLYGON;
+  attrs: {
+    points: string;
+    fill?: string;
+    stroke?: string;
+    strokeWidth?: string;
+  };
+  xMin: number;
+  yMin: number;
+  xMax: number;
+  yMax: number;
+  transform: SVGTransform;
+};
+
+declare type SVGPolyline = {
+  tag: SVG_ELEMENT_TYPE.POLYLINE;
+  attrs: {
+    points: string;
+    fill?: string;
+    stroke?: string;
+    strokeWidth?: string;
+  };
+  xMin: number;
+  yMin: number;
+  xMax: number;
+  yMax: number;
+  transform: SVGTransform;
+};
+
+declare type SVGElement =
+  | SVGCircle
+  | SVGEllipse
+  | SVGRectangle
+  | SVGLine
+  | SVGPath
+  | SVGPolygon
+  | SVGPolyline;
+
 /**
  * @param width Horizontal diameter of the circle
  */
@@ -82,3 +144,10 @@ declare type SVGRectangleSize = {
 declare type SVGLineSize = {
   width: number;
 };
+
+/**
+ * Use for SVG path scaffolder with infinite number of parameters and a close command
+ */
+declare type SVGPathPostions = Array<
+  [number, number] | SVG_PATH_CMD.CLOSE_PATH | SVG_PATH_ABS_CMD.CLOSE_PATH
+>;

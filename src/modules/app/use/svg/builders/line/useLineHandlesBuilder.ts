@@ -5,11 +5,7 @@ import { SVGLine } from "@/types/svg";
 export const useLineHandlesBuilder = (handlerOptions: any) => {
   const build = (el: SVGLine) => {
     const rect = (x: number, y: number) =>
-      h(SVG_ELEMENT_TYPE.RECT, {
-        ...handlerOptions,
-        x: x,
-        y: y,
-      });
+      h(SVG_ELEMENT_TYPE.RECT, { ...handlerOptions, x, y });
 
     return h(SVG_ELEMENT_TYPE.G, {}, [
       rect(
