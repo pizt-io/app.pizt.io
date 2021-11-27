@@ -51,7 +51,7 @@ const _getSVGPathBoundingBox = (path: string) => {
   return boundingBox;
 };
 
-export const useSVGScaffolder = () => {
+export const useSVGMapper = () => {
   /**
    *
    * @param pos Initial position of the shape

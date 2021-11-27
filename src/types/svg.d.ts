@@ -148,6 +148,8 @@ declare type SVGLineSize = {
 /**
  * Use for SVG path scaffolder with infinite number of parameters and a close command
  */
-declare type SVGPathPostions = Array<
-  [number, number] | SVG_PATH_CMD.CLOSE_PATH | SVG_PATH_ABS_CMD.CLOSE_PATH
->;
+declare type SVGPathPostions =
+  | number[]
+  | [[number, number], [number, number], [number, number]]
+  | SVG_PATH_CMD.CLOSE_PATH
+  | SVG_PATH_ABS_CMD.CLOSE_PATH;

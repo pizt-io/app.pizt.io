@@ -11,11 +11,11 @@ import {
   useRadialHandlesBuilder,
   useRectBorderBuilder,
   useRectHandlesBuilder,
-} from "./builders";
-import { usePolygonBorderBuilder } from "./builders/polygon/usePolygonBorderBuilder";
-import { usePolygonHandlesBuilder } from "./builders/polygon/usePolygonHandlesBuilder";
-import { usePolylineBorderBuilder } from "./builders/polyline/usePolylineBorderBuilder";
-import { usePolylineHandlesBuilder } from "./builders/polyline/usePolylineHandlesBuilder";
+  usePolygonBorderBuilder,
+  usePolygonHandlesBuilder,
+  usePolylineBorderBuilder,
+  usePolylineHandlesBuilder,
+} from "./builder";
 
 const borderOptions = Object.freeze({
   fill: "transparent",
@@ -67,10 +67,16 @@ export const useSVGBuilder = (elements: Array<SVGElement>) => {
             },
             [
               h(el.tag, { ...el.attrs }, []),
-              h(SVG_ELEMENT_TYPE.G, {}, [
-                BORDER_BUILDER_MAPPING[el.tag].build(el as any),
-                HANDLES_BUILDER_MAPPING[el.tag].build(el as any),
-              ]),
+              h(
+                SVG_ELEMENT_TYPE.G,
+                {
+                  id: "el-bbox-" + index,
+                },
+                [
+                  BORDER_BUILDER_MAPPING[el.tag].build(el as any),
+                  HANDLES_BUILDER_MAPPING[el.tag].build(el as any),
+                ]
+              ),
             ]
           );
         }),
