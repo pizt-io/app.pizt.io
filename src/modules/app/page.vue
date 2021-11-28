@@ -152,9 +152,6 @@ export default defineComponent({
 .layoutWrapper {
   background-color: color(gray, 900);
   overflow: hidden;
-  * {
-    transition: all 0.3s ease-in-out;
-  }
 
   @include size(100vw, 100vh);
   @include flexBox($direction: column);

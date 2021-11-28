@@ -153,3 +153,15 @@ declare type SVGPathPostions =
   | [[number, number], [number, number], [number, number]]
   | SVG_PATH_CMD.CLOSE_PATH
   | SVG_PATH_ABS_CMD.CLOSE_PATH;
+
+declare type SVGElementDragPayload = {
+  index: number;
+  el: SVGElement;
+  dx: number;
+  dy: number;
+};
+
+declare type SVGElementSelectPayload = {
+  id: string;
+  el: SVGElement;
+};

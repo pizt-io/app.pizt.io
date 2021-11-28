@@ -65,7 +65,12 @@ export const useSVGConverter = () => {
     return elements;
   };
 
+  const convertElementsToData = (elements: Array<SVGElement>): Array<any> => {
+    return [];
+  };
+
   return {
     convertDataToElements,
+    convertElementsToData,
   };
 };

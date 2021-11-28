@@ -1,6 +1,12 @@
-import { SVGElement } from "@/types/svg";
+import {
+  SVGElement,
+  SVGElementDragPayload,
+  SVGElementSelectPayload,
+} from "@/types/svg";
 import { SVG_ELEMENT_TYPE } from "@core/constants/svg";
-import { computed, h } from "vue";
+import { computed, h, ref } from "vue";
+
+import SVGElementComponent from "@core/components/SVGElement.vue";
 
 import {
   useLineBorderBuilder,
@@ -52,31 +58,50 @@ const BORDER_BUILDER_MAPPING = Object.freeze({
 });
 
 export const useSVGBuilder = (elements: Array<SVGElement>) => {
+  const _elements = ref(elements);
+  const _selectedElements = ref<{ [x: string]: SVGElement }>({});
+
+  const handleElementDragged = ({ index, dx, dy }: SVGElementDragPayload) => {
+    _elements.value[index].transform.translateX += dx;
+    _elements.value[index].transform.translateY += dy;
+  };
+
+  const handleElementSelected = ({ id, el }: SVGElementSelectPayload) => {
+    _selectedElements.value = {};
+    // TODO(FEATURE): Haven't support multiple selection yet
+    _selectedElements.value[id] = el;
+  };
+
   const svgVNode = computed(() =>
     h(
       SVG_ELEMENT_TYPE.SVG,
       { xmlns: "http://www.w3.org/2000/svg", width: "100%", height: "100%" },
       [
-        elements.map((el: SVGElement, index: number) => {
+        _elements.value.map((el: SVGElement, index: number) => {
+          const elementId = "el-" + index;
+
           return h(
-            SVG_ELEMENT_TYPE.G,
+            SVGElementComponent,
             {
-              id: "el-" + index,
-              class: "el-" + el.tag,
-              transform: `translate(${el.transform.translateX}, ${el.transform.translateY})`,
+              index,
+              element: el,
+              id: elementId,
+              onDrag: handleElementDragged,
+              onSelect: handleElementSelected,
             },
             [
               h(el.tag, { ...el.attrs }, []),
-              h(
-                SVG_ELEMENT_TYPE.G,
-                {
-                  id: "el-bbox-" + index,
-                },
-                [
-                  BORDER_BUILDER_MAPPING[el.tag].build(el as any),
-                  HANDLES_BUILDER_MAPPING[el.tag].build(el as any),
-                ]
-              ),
+              _selectedElements.value[elementId] &&
+                h(
+                  SVG_ELEMENT_TYPE.G,
+                  {
+                    id: "el-bbox-" + index,
+                  },
+                  [
+                    BORDER_BUILDER_MAPPING[el.tag].build(el as any),
+                    HANDLES_BUILDER_MAPPING[el.tag].build(el as any),
+                  ]
+                ),
             ]
           );
         }),
