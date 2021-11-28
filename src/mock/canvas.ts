@@ -39,7 +39,6 @@ export const canvas = [
     ],
     transform: { translateX: 0, translateY: 0 },
     style: { stroke: "#f04337" },
-    bordered: true,
   },
   {
     type: SVG_ELEMENT_TYPE.PATH,

@@ -145,8 +145,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       stroke: "#f04337",
-    },
-    bordered?: boolean
+    }
   ): SVGLine => ({
     tag: SVG_ELEMENT_TYPE.LINE,
     attrs: {
@@ -156,7 +155,6 @@ export const useSVGMapper = () => {
       y2: pos[1].y,
       ...style,
     },
-    bordered,
     transform,
   });
 

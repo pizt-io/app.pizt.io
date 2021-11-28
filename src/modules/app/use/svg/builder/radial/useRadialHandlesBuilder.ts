@@ -10,9 +10,10 @@ import { SVGEllipse, SVGCircle } from "@/types/svg";
 
 export const useRadialHandlesBuilder = (handlerOptions: any) => {
   const build = (el: SVGEllipse | SVGCircle) => {
-    const rect = (x: number, y: number) =>
+    const rect = (x: number, y: number, cursor: string) =>
       h(SVG_ELEMENT_TYPE.RECT, {
         ...handlerOptions,
+        style: { cursor },
         x:
           x +
           +el.attrs[POS_X_MAPPING[el.tag]] -
@@ -23,21 +24,25 @@ export const useRadialHandlesBuilder = (handlerOptions: any) => {
           +el.attrs[HEIGHT_MAPPING[el.tag]],
       });
 
-    return h(SVG_ELEMENT_TYPE.G, {}, [
-      rect(-handlerOptions.width / 2, -handlerOptions.height / 2),
-      rect(
+    const handlers = [
+      [-handlerOptions.width / 2, -handlerOptions.height / 2],
+      [
         +el.attrs[WIDTH_MAPPING[el.tag]] * 2 - handlerOptions.width / 2,
-        -handlerOptions.height / 2
-      ),
-      rect(
+        -handlerOptions.height / 2,
+      ],
+      [
         +el.attrs[WIDTH_MAPPING[el.tag]] * 2 - handlerOptions.width / 2,
-        +el.attrs[HEIGHT_MAPPING[el.tag]] * 2 - handlerOptions.height / 2
-      ),
-      rect(
+        +el.attrs[HEIGHT_MAPPING[el.tag]] * 2 - handlerOptions.height / 2,
+      ],
+      [
         -handlerOptions.width / 2,
-        +el.attrs[HEIGHT_MAPPING[el.tag]] * 2 - handlerOptions.height / 2
-      ),
-    ]);
+        +el.attrs[HEIGHT_MAPPING[el.tag]] * 2 - handlerOptions.height / 2,
+      ],
+    ].map(([x, y], index: number) =>
+      rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize")
+    );
+
+    return h(SVG_ELEMENT_TYPE.G, {}, handlers);
   };
 
   return { build };

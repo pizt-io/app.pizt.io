@@ -60,7 +60,6 @@ declare type SVGLine = {
     stroke?: string;
     strokeWidth?: string;
   };
-  bordered?: boolean;
   transform: SVGTransform;
 };
 
