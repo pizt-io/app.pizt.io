@@ -19,7 +19,7 @@ declare type SVGStyles = {
 declare type SVGCircle = {
   tag: SVG_ELEMENT_TYPE.CIRCLE;
   attrs: {
-    [x: string]: string | number;
+    [x: string]: string | number | undefined;
     fill?: string;
     stroke?: string;
     strokeWidth?: string;
@@ -30,7 +30,7 @@ declare type SVGCircle = {
 declare type SVGEllipse = {
   tag: SVG_ELEMENT_TYPE.ELLIPSE;
   attrs: {
-    [x: string]: string | number;
+    [x: string]: string | number | undefined;
     fill?: string;
     stroke?: string;
     strokeWidth?: string;
@@ -41,7 +41,7 @@ declare type SVGEllipse = {
 declare type SVGRectangle = {
   tag: SVG_ELEMENT_TYPE.RECT;
   attrs: {
-    [x: string]: string | number;
+    [x: string]: string | number | undefined;
     fill?: string;
     stroke?: string;
     strokeWidth?: string;
@@ -154,10 +154,9 @@ declare type SVGPathPostions =
   | SVG_PATH_ABS_CMD.CLOSE_PATH;
 
 declare type SVGElementDragPayload = {
+  e: MouseEvent;
+  id: string;
   index: number;
-  el: SVGElement;
-  dx: number;
-  dy: number;
 };
 
 declare type SVGElementSelectPayload = {

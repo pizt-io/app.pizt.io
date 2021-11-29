@@ -26,7 +26,7 @@ export default defineComponent({
       default: '0.42,0.69,0.69,0.42'
     },
   },
-  emits: ["input"],
+  emits: ["update:modelValue"],
   setup(props, { emit }) {
     const canvasRef = ref<HTMLCanvasElement | null>(null);
 

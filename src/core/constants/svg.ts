@@ -47,6 +47,8 @@ export enum SVG_PATH_ABS_CMD {
   CLOSE_PATH = "z",
 }
 
+export const SVG_ELEMENT_PREFIX = "svg";
+
 export const POS_X_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.CIRCLE]: "cx",
   [SVG_ELEMENT_TYPE.ELLIPSE]: "cx",

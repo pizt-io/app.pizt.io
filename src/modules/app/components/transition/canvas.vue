@@ -27,7 +27,7 @@ export default defineComponent({
     const selectedTransition = computed(() => {
       forceRerenderFlag.value++;
 
-      return store.state.selectedTransition as CSSProperties
+      return store.state.selectedTransition
     });
 
     const parsedStyle = computed(() => `

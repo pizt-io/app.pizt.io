@@ -70,9 +70,9 @@ export const useSVGMapper = () => {
   ): SVGCircle => ({
     tag: SVG_ELEMENT_TYPE.CIRCLE,
     attrs: {
-      [POS_X_MAPPING[SVG_ELEMENT_TYPE.CIRCLE]]: pos.x,
-      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.CIRCLE]]: pos.y,
-      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.CIRCLE]]: size.width / 2, // Divide to get radius
+      [POS_X_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: pos.x,
+      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: pos.y,
+      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: size.width / 2, // Divide to get radius
       ...style,
     },
     transform,
@@ -96,10 +96,10 @@ export const useSVGMapper = () => {
   ): SVGEllipse => ({
     tag: SVG_ELEMENT_TYPE.ELLIPSE,
     attrs: {
-      [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: pos.x,
-      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: pos.y,
-      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: size.width / 2, // Divide to get radius
-      [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: size.height / 2, // Divide to get radius
+      [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: pos.x,
+      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: pos.y,
+      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: size.width / 2, // Divide to get radius
+      [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: size.height / 2, // Divide to get radius
       ...style,
     },
     transform,
@@ -123,10 +123,10 @@ export const useSVGMapper = () => {
   ): SVGRectangle => ({
     tag: SVG_ELEMENT_TYPE.RECT,
     attrs: {
-      [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]]: pos.x,
-      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]]: pos.y,
-      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]]: size.width,
-      [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]]: size.height,
+      [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: pos.x,
+      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: pos.y,
+      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: size.width,
+      [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: size.height,
       ...style,
     },
     transform,

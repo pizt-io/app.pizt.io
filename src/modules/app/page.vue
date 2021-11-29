@@ -48,7 +48,7 @@
             </div>
             <div
               v-else
-              class="flex-1 relative dark:bg-dark-500 bg-white"
+              class="flex-1 relative bg-dark-500 bg-white"
             >
               <CanvasBackgroundToggle />
               <AnimationCanvas />
@@ -114,7 +114,7 @@ import AnimationPanel from '@modules/app/components/animation/panel.vue'
 import AnimationTimeline from '@modules/app/components/animation/timeline.vue'
 
 import { useAppMode } from '@modules/app/use/useAppMode';
-import { useDark } from '@vueuse/core'
+import { useDark } from '@use/useDark'
 
 export default defineComponent({
   name: 'AppPage',
@@ -135,7 +135,7 @@ export default defineComponent({
   },
   setup() {
     const { appMode } = useAppMode();
-    const isDark = useDark()
+    const { isDark } = useDark()
 
     return {
       APP_MODE,

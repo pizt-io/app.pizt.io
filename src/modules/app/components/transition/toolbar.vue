@@ -34,7 +34,7 @@ export default defineComponent({
     });
 
     const transitions = computed(() => {
-      return store.state.transitions as Array
+      return store.state.transitions as any[]
     });
 
     const handleSelectTransition = (transition: CSSProperties) => {

@@ -13,13 +13,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useDark, useToggle } from '@vueuse/core'
+import { useDark } from '@use/useDark'
 
 export default defineComponent({
   name: 'CanvasBackgroundToggle',
   setup() {
-    const isDark = useDark()
-    const toggleDark = useToggle(isDark)
+    const { isDark, toggleDark } = useDark()
 
     return {
       isDark,

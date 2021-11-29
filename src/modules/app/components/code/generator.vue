@@ -124,7 +124,7 @@ export default defineComponent({
           }
         `
 
-        return prettyCodeCss(result, 'css');
+        return prettyCodeCss(result);
       },
       set: () => {}
     });

@@ -16,27 +16,29 @@ export const useRadialHandlesBuilder = (handlerOptions: any) => {
         style: { cursor },
         x:
           x +
-          +el.attrs[POS_X_MAPPING[el.tag]] -
-          +el.attrs[WIDTH_MAPPING[el.tag]],
+          +(el.attrs[POS_X_MAPPING[el.tag]] || 0) -
+          +(el.attrs[WIDTH_MAPPING[el.tag]] || 0),
         y:
           y +
-          +el.attrs[POS_Y_MAPPING[el.tag]] -
-          +el.attrs[HEIGHT_MAPPING[el.tag]],
+          +(el.attrs[POS_Y_MAPPING[el.tag]] || 0) -
+          +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0),
       });
 
     const handlers = [
       [-handlerOptions.width / 2, -handlerOptions.height / 2],
       [
-        +el.attrs[WIDTH_MAPPING[el.tag]] * 2 - handlerOptions.width / 2,
+        +(el.attrs[WIDTH_MAPPING[el.tag]] || 0) * 2 - handlerOptions.width / 2,
         -handlerOptions.height / 2,
       ],
       [
-        +el.attrs[WIDTH_MAPPING[el.tag]] * 2 - handlerOptions.width / 2,
-        +el.attrs[HEIGHT_MAPPING[el.tag]] * 2 - handlerOptions.height / 2,
+        +(el.attrs[WIDTH_MAPPING[el.tag]] || 0) * 2 - handlerOptions.width / 2,
+        +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) * 2 -
+          handlerOptions.height / 2,
       ],
       [
         -handlerOptions.width / 2,
-        +el.attrs[HEIGHT_MAPPING[el.tag]] * 2 - handlerOptions.height / 2,
+        +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) * 2 -
+          handlerOptions.height / 2,
       ],
     ].map(([x, y], index: number) =>
       rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize")

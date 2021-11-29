@@ -14,10 +14,10 @@ export const useRectBorderBuilder = (borderOptions: any) => {
       SVG_ELEMENT_TYPE.RECT,
       {
         ...borderOptions,
-        x: +el.attrs[POS_X_MAPPING[el.tag]],
-        y: +el.attrs[POS_Y_MAPPING[el.tag]],
-        width: +el.attrs[WIDTH_MAPPING[el.tag]],
-        height: +el.attrs[HEIGHT_MAPPING[el.tag]],
+        x: +(el.attrs[POS_X_MAPPING[el.tag]] || 0),
+        y: +(el.attrs[POS_Y_MAPPING[el.tag]] || 0),
+        width: +(el.attrs[WIDTH_MAPPING[el.tag]] || 0),
+        height: +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0),
       },
       []
     );

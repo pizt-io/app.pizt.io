@@ -130,7 +130,7 @@ export default defineComponent({
     const store = useStore<State>();
 
     const selectedTransition = computed(() => {
-      return store.state.selectedTransition as CSSProperties;
+      return store.state.selectedTransition;
     });
 
     const form = ref({
