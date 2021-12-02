@@ -8,54 +8,8 @@ import { computed, h, ref } from "vue";
 
 import SVGElementComponent from "@modules/app/components/animation/svg/SVGElement.vue";
 
-import {
-  useLineBorderBuilder,
-  useLineHandlesBuilder,
-  usePathBorderBuilder,
-  usePathHandlesBuilder,
-  useRadialBorderBuilder,
-  useRadialHandlesBuilder,
-  useRectBorderBuilder,
-  useRectHandlesBuilder,
-  usePolygonBorderBuilder,
-  usePolygonHandlesBuilder,
-  usePolylineBorderBuilder,
-  usePolylineHandlesBuilder,
-} from "./builder";
-
-const borderOptions = Object.freeze({
-  fill: "transparent",
-  stroke: "#4794ff",
-  strokeWidth: "2",
-});
-
-const handlerOptions = Object.freeze({
-  width: 8,
-  height: 8,
-  fill: "white",
-  stroke: "#52647d",
-  strokeWidth: "2",
-});
-
-const HANDLES_BUILDER_MAPPING = Object.freeze({
-  [SVG_ELEMENT_TYPE.CIRCLE]: useRadialHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.ELLIPSE]: useRadialHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.RECT]: useRectHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.LINE]: useLineHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.PATH]: usePathHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.POLYGON]: usePolygonHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.POLYLINE]: usePolylineHandlesBuilder(handlerOptions),
-});
-
-const BORDER_BUILDER_MAPPING = Object.freeze({
-  [SVG_ELEMENT_TYPE.CIRCLE]: useRadialBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.ELLIPSE]: useRadialBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.RECT]: useRectBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.LINE]: useLineBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.PATH]: usePathBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.POLYGON]: usePolygonBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.POLYLINE]: usePolylineBorderBuilder(borderOptions),
-});
+import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
+import { BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING } from "./mapper";
 
 export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
   const elements = ref<Array<SVGElement>>(initialElementsData);
@@ -64,25 +18,24 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
 
   const isTransforming = ref(false);
 
+  const isSelectingMultiple = ref(false);
+
+  // CANVAS HANDLERS
+
+  const { isHoldingShift } = useSVGCanvasEvents({
+    onKeydownControlA: (e: KeyboardEvent) => {
+      e.preventDefault();
+      elements.value.forEach((el: any) => {
+        selectedElements.value[el.id] = el;
+      });
+      isSelectingMultiple.value = true;
+    },
+  });
+
   const _isClickingOnCanvas = (e: MouseEvent) => {
     const targetElement = e.target as HTMLElement;
 
     return targetElement?.nodeName === SVG_ELEMENT_TYPE.SVG;
-  };
-
-  const _handleMousedownEl = ({ id, el }: SVGElementSelectPayload) => {
-    selectedElements.value = {};
-    // TODO(FEATURE): Haven't support multiple selection yet
-    selectedElements.value[id] = el;
-  };
-
-  const _handleMousemoveEl = ({ e, id, index }: SVGElementDragPayload) => {
-    const el = selectedElements.value[id];
-
-    if (el && !isTransforming.value && isMousedown.value) {
-      elements.value[index].transform.translateX += e.movementX;
-      elements.value[index].transform.translateY += e.movementY;
-    }
   };
 
   const _handleMousedownCanvas = (e: MouseEvent) => {
@@ -90,11 +43,42 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
 
     if (_isClickingOnCanvas(e)) {
       selectedElements.value = {};
+      isSelectingMultiple.value = false;
     }
   };
   const _handleMouseupCanvas = (e: MouseEvent) => {
     if (isMousedown.value) {
       isMousedown.value = false;
+    }
+  };
+
+  // ELEMENT HANDLERS
+
+  const _handleElementSelection = ({ id, el }: SVGElementSelectPayload) => {
+    // Multiple selection
+    if (isHoldingShift.value) {
+      selectedElements.value[id] = el;
+    } else if (isSelectingMultiple.value && selectedElements.value[id]) {
+      // TODO(IMPROVEMENT): handle use case:
+      // If got drag, do nothing
+      // If it's not a drag, select this element and clear the others
+    } else {
+      selectedElements.value = {};
+      selectedElements.value[id] = el;
+    }
+
+    if (Object.keys(selectedElements.value).length > 1) {
+      isSelectingMultiple.value = true;
+    }
+  };
+
+  const _handleElementDrag = ({ e, id, index }: SVGElementDragPayload) => {
+    if (!isTransforming.value && isMousedown.value) {
+      Object.keys(selectedElements.value).forEach((key) => {
+        // Elements are passed into selectedElements by references so we can mutate them through the selectedElements object
+        selectedElements.value[key].transform.translateX += e.movementX;
+        selectedElements.value[key].transform.translateY += e.movementY;
+      });
     }
   };
 
@@ -110,28 +94,26 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
       },
       [
         elements.value.map((el: SVGElement, index: number) => {
-          const elementId = [SVG_ELEMENT_PREFIX, "g", index].join("-");
-
           return h(
             SVGElementComponent,
             {
               index,
               element: el,
-              id: elementId,
-              onMousemove: (event: MouseEvent) =>
-                _handleMousemoveEl({ e: event, id: elementId, index }),
-              onMousedown: () => _handleMousedownEl({ id: elementId, el }),
+              id: el.id,
             },
             [
               h(
                 el.tag,
                 {
                   ...el.attrs,
+                  onMousemove: (event: MouseEvent) =>
+                    _handleElementDrag({ e: event, id: el.id, index }),
+                  onMousedown: () => _handleElementSelection({ id: el.id, el }),
                   id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
                 },
                 []
               ),
-              selectedElements.value[elementId] &&
+              selectedElements.value[el.id] &&
                 h(
                   SVG_ELEMENT_TYPE.G,
                   {
@@ -154,5 +136,6 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     elements,
     selectedElements,
     isMousedown,
+    isHoldingShift,
   };
 };

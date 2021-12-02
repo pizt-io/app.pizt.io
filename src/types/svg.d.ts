@@ -17,6 +17,7 @@ declare type SVGStyles = {
 };
 
 declare type SVGCircle = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.CIRCLE;
   attrs: {
     [x: string]: string | number | undefined;
@@ -28,6 +29,7 @@ declare type SVGCircle = {
 };
 
 declare type SVGEllipse = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.ELLIPSE;
   attrs: {
     [x: string]: string | number | undefined;
@@ -39,6 +41,7 @@ declare type SVGEllipse = {
 };
 
 declare type SVGRectangle = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.RECT;
   attrs: {
     [x: string]: string | number | undefined;
@@ -50,6 +53,7 @@ declare type SVGRectangle = {
 };
 
 declare type SVGLine = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.LINE;
   attrs: {
     x1: string | number;
@@ -64,6 +68,7 @@ declare type SVGLine = {
 };
 
 declare type SVGPath = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.PATH;
   attrs: {
     d: string;
@@ -81,6 +86,7 @@ declare type SVGPath = {
 };
 
 declare type SVGPolygon = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.POLYGON;
   attrs: {
     points: string;
@@ -96,6 +102,7 @@ declare type SVGPolygon = {
 };
 
 declare type SVGPolyline = {
+  id: string;
   tag: SVG_ELEMENT_TYPE.POLYLINE;
   attrs: {
     points: string;

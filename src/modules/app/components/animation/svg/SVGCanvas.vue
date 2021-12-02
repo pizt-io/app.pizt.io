@@ -6,13 +6,13 @@ import { SVGElement } from "@/types/svg"
 export default defineComponent({
   name: 'SVGCanvas',
   props: {
-    elements: {
+    data: {
       type: Array,
       default: () => []
     }
   },
   setup(props) {
-    const { svgVNode } = useSVGBuilder(props.elements as Array<SVGElement>);
+    const { svgVNode } = useSVGBuilder(props.data as Array<SVGElement>);
 
     return () => svgVNode.value;
   }
