@@ -20,14 +20,14 @@
 </template>
 
 <script lang="ts">
-import { State } from '@store/state';
+import { RootState } from '@store/state';
 import { computed, CSSProperties, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'TransitionToolbar',
   setup(props, { emit }) {
-    const store = useStore<State>();
+    const store = useStore<RootState>();
 
     const selectedTransition = computed(() => {
       return store.state.selectedTransition as CSSProperties;

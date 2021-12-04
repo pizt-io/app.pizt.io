@@ -7,4 +7,4 @@ export const state = () => ({
   transitions: transitions,
 });
 
-export type State = ReturnType<typeof state>;
+export type RootState = ReturnType<typeof state>;

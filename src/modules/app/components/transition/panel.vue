@@ -115,7 +115,7 @@
 </template>
 
 <script lang="ts">
-import { State } from '@store/state';
+import { RootState } from '@store/state';
 import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
@@ -127,7 +127,7 @@ export default defineComponent({
     CubicBezier,
   },
   setup(props) {
-    const store = useStore<State>();
+    const store = useStore<RootState>();
 
     const selectedTransition = computed(() => {
       return store.state.selectedTransition;

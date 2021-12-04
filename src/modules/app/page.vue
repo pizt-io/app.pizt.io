@@ -95,7 +95,7 @@
 
 <script lang="ts">
 import { APP_MODE } from '@core/constants/navigator';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onUnmounted, ref } from 'vue';
 
 import CanvasBackgroundToggle from '@core/components/CanvasBackgroundToggle.vue';
 
@@ -115,6 +115,8 @@ import AnimationTimeline from '@modules/app/components/animation/timeline.vue'
 
 import { useAppMode } from '@modules/app/use/useAppMode';
 import { useDark } from '@use/useDark'
+import { useStore } from 'vuex';
+import { appStoreModule } from './store';
 
 export default defineComponent({
   name: 'AppPage',
@@ -135,7 +137,15 @@ export default defineComponent({
   },
   setup() {
     const { appMode } = useAppMode();
-    const { isDark } = useDark()
+    const { isDark } = useDark();
+
+    const store = useStore();
+
+    store.registerModule('app', appStoreModule);
+
+    onUnmounted(() => {
+      store.unregisterModule('app');
+    });
 
     return {
       APP_MODE,

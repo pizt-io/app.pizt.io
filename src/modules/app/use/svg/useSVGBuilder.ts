@@ -82,6 +82,10 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     }
   };
 
+  const _handleElementResize = () => {};
+
+  const _handleElementRotate = () => {};
+
   const svgVNode = computed(() =>
     h(
       SVG_ELEMENT_TYPE.SVG,
