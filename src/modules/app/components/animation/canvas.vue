@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex justify-center items-center">
-    <div :style="{ width: '800px', height: '600px' }" class="bg-white dark:bg-gray-800">
+    <div :style="{ width: '700px', height: '450px' }" class="bg-white dark:bg-gray-800">
       <SVGCanvas ref="canvasRef" :key="forceUpdateCanvasFlag" :data="data" />
     </div>
   </div>
