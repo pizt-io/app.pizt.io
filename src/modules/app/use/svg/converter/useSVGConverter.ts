@@ -5,8 +5,7 @@ import { useSVGMapper, useSVGPathMapper } from "@modules/app/use/svg/mapper";
 import _cloneDeep from "lodash/cloneDeep";
 
 export const useSVGConverter = () => {
-  const { ellipse, circle, rect, line, path, polygon, polyline } =
-    useSVGMapper();
+  const { ellipse, circle, rect, line, path, polygon, polyline } = useSVGMapper();
   const {
     moveTo,
     lineTo,
@@ -39,19 +38,17 @@ export const useSVGConverter = () => {
     [SVG_PATH_CMD.CLOSE_PATH]: closePath,
   });
 
-  const convertDataToElements = (
-    jsonArray: Array<object>
-  ): Array<SVGElement> => {
+  const convertDataToElements = (jsonArray: Array<any>): Array<SVGElement> => {
     const elements = jsonArray.map((el: any) => {
       switch (el.type) {
         // Special case handling for path element
         case SVG_ELEMENT_TYPE.PATH:
           return path(
             el.commands.map((command: { type: string; path: number[] }) =>
-              SVG_PATH_COMMAND_MAPPING[command.type](...command.path)
+              SVG_PATH_COMMAND_MAPPING[command.type](...command.path),
             ),
             el.transform,
-            el.style
+            el.style,
           );
         default:
           const _el = _cloneDeep(el);
@@ -65,6 +62,7 @@ export const useSVGConverter = () => {
     return elements;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const convertElementsToData = (elements: Array<SVGElement>): Array<any> => {
     return [];
   };

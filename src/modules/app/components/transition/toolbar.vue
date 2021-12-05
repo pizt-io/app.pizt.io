@@ -7,10 +7,24 @@
       @click="handleSelectTransition(transition)"
     >
       <div
-        class="rounded-full w-16 h-16 flex items-center justify-center cursor-pointer bg-primary hover:bg-secondary active:bg-secondary-600"
-        :class="[transition?.animationName === selectedTransition?.animationName && 'border-4 border-secondary-600']"
+        class="
+          rounded-full
+          w-16
+          h-16
+          flex
+          items-center
+          justify-center
+          cursor-pointer
+          bg-primary
+          hover:bg-secondary
+          active:bg-secondary-600
+        "
+        :class="[
+          transition?.animationName === selectedTransition?.animationName &&
+            'border-4 border-secondary-600',
+        ]"
       >
-        <img :src="transition.thumbnail">
+        <img :src="transition.thumbnail" />
       </div>
       <div class="text-sm text-white">
         {{ transition.label }}
@@ -20,13 +34,13 @@
 </template>
 
 <script lang="ts">
-import { RootState } from '@store/state';
-import { computed, CSSProperties, defineComponent } from 'vue';
-import { useStore } from 'vuex';
+import { RootState } from "@store/state";
+import { computed, CSSProperties, defineComponent } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
-  name: 'TransitionToolbar',
-  setup(props, { emit }) {
+  name: "TransitionToolbar",
+  setup() {
     const store = useStore<RootState>();
 
     const selectedTransition = computed(() => {
@@ -34,24 +48,22 @@ export default defineComponent({
     });
 
     const transitions = computed(() => {
-      return store.state.transitions as any[]
+      return store.state.transitions as any[];
     });
 
     const handleSelectTransition = (transition: CSSProperties) => {
-      store.commit('SET_ANIMATION_SETTINGS', transition)
-    }
+      store.commit("SET_ANIMATION_SETTINGS", transition);
+    };
 
     return {
       selectedTransition,
       transitions,
       handleSelectTransition,
-    }
-  }
-})
+    };
+  },
+});
 </script>
 
 <style lang="scss" module>
 @import "@styles/all";
-
-
 </style>

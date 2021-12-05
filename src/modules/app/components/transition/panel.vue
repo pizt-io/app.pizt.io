@@ -115,18 +115,18 @@
 </template>
 
 <script lang="ts">
-import { RootState } from '@store/state';
-import { computed, defineComponent, ref, watch } from 'vue';
-import { useStore } from 'vuex';
+import { RootState } from "@store/state";
+import { computed, defineComponent, ref, watch } from "vue";
+import { useStore } from "vuex";
 
-import CubicBezier from '@core/components/CubicBezier.vue';
+import CubicBezier from "@core/components/CubicBezier.vue";
 
 export default defineComponent({
-  name: 'TransitionPanel',
+  name: "TransitionPanel",
   components: {
     CubicBezier,
   },
-  setup(props) {
+  setup() {
     const store = useStore<RootState>();
 
     const selectedTransition = computed(() => {
@@ -139,40 +139,40 @@ export default defineComponent({
       animationHasDelay: 0,
       animationDuration: 1,
       animationDelay: 0,
-      animationTimingFunction: '',
+      animationTimingFunction: "",
       animationIterationCount: 1,
-      animationFillMode: 'forwards',
-      animationDirection: 'alternate',
-      animationPlayState: '',
-    })
+      animationFillMode: "forwards",
+      animationDirection: "alternate",
+      animationPlayState: "",
+    });
 
     watch(
       () => form.value,
       () => {
-        form.value.animationName = selectedTransition.value.animationName
+        form.value.animationName = selectedTransition.value.animationName;
 
-        store.commit('SET_ANIMATION_SETTINGS', {
+        store.commit("SET_ANIMATION_SETTINGS", {
           ...form.value,
           animationDuration: `${form.value.animationDuration}s`,
-          animationTimingFunction: `cubic-bezier(${form.value.animationTimingFunction || '0.42,0.69,0.69,0.42'})`,
+          animationTimingFunction: `cubic-bezier(${
+            form.value.animationTimingFunction || "0.42,0.69,0.69,0.42"
+          })`,
           animationDelay: form.value.animationHasDelay ? `${form.value.animationDelay}s` : 0,
           animationIterationCount: form.value.animationIsInfinite
-            ? 'infinite'
-            : form.value.animationIterationCount
-        })
+            ? "infinite"
+            : form.value.animationIterationCount,
+        });
       },
-      { immediate: true, deep: true }
-    )
+      { immediate: true, deep: true },
+    );
 
     return {
-      form
-    }
-  }
-})
+      form,
+    };
+  },
+});
 </script>
 
 <style lang="scss" module>
 @import "@styles/all";
-
-
 </style>

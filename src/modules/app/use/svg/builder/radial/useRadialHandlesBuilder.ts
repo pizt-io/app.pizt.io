@@ -14,14 +14,8 @@ export const useRadialHandlesBuilder = (handlerOptions: any) => {
       h(SVG_ELEMENT_TYPE.RECT, {
         ...handlerOptions,
         style: { cursor },
-        x:
-          x +
-          +(el.attrs[POS_X_MAPPING[el.tag]] || 0) -
-          +(el.attrs[WIDTH_MAPPING[el.tag]] || 0),
-        y:
-          y +
-          +(el.attrs[POS_Y_MAPPING[el.tag]] || 0) -
-          +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0),
+        x: x + +(el.attrs[POS_X_MAPPING[el.tag]] || 0) - +(el.attrs[WIDTH_MAPPING[el.tag]] || 0),
+        y: y + +(el.attrs[POS_Y_MAPPING[el.tag]] || 0) - +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0),
       });
 
     const handlers = [
@@ -32,17 +26,13 @@ export const useRadialHandlesBuilder = (handlerOptions: any) => {
       ],
       [
         +(el.attrs[WIDTH_MAPPING[el.tag]] || 0) * 2 - handlerOptions.width / 2,
-        +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) * 2 -
-          handlerOptions.height / 2,
+        +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) * 2 - handlerOptions.height / 2,
       ],
       [
         -handlerOptions.width / 2,
-        +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) * 2 -
-          handlerOptions.height / 2,
+        +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) * 2 - handlerOptions.height / 2,
       ],
-    ].map(([x, y], index: number) =>
-      rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize")
-    );
+    ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"));
 
     return h(SVG_ELEMENT_TYPE.G, {}, handlers);
   };

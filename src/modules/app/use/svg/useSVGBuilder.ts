@@ -1,8 +1,4 @@
-import {
-  SVGElement,
-  SVGElementDragPayload,
-  SVGElementSelectPayload,
-} from "@/types/svg";
+import { SVGElement, SVGElementDragPayload, SVGElementSelectPayload } from "@/types/svg";
 import { SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@core/constants/svg";
 import { computed, h, ref } from "vue";
 
@@ -46,7 +42,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
       isSelectingMultiple.value = false;
     }
   };
-  const _handleMouseupCanvas = (e: MouseEvent) => {
+  const _handleMouseupCanvas = () => {
     if (isMousedown.value) {
       isMousedown.value = false;
     }
@@ -57,14 +53,14 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
   const _handleElementSelection = ({ id, el }: SVGElementSelectPayload) => {
     // Multiple selection
     if (isHoldingShift.value) {
-      selectedElements.value[id] = el;
-    } else if (isSelectingMultiple.value && selectedElements.value[id]) {
+      selectedElements.value[id || 0] = el;
+    } else if (isSelectingMultiple.value && selectedElements.value[id || 0]) {
       // TODO(IMPROVEMENT): handle use case:
       // If got drag, do nothing
       // If it's not a drag, select this element and clear the others
     } else {
       selectedElements.value = {};
-      selectedElements.value[id] = el;
+      selectedElements.value[id || 0] = el;
     }
 
     if (Object.keys(selectedElements.value).length > 1) {
@@ -72,7 +68,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     }
   };
 
-  const _handleElementDrag = ({ e, id, index }: SVGElementDragPayload) => {
+  const _handleElementDrag = ({ e }: SVGElementDragPayload) => {
     if (!isTransforming.value && isMousedown.value) {
       Object.keys(selectedElements.value).forEach((key) => {
         // Elements are passed into selectedElements by references so we can mutate them through the selectedElements object
@@ -82,8 +78,10 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _handleElementResize = () => {};
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _handleElementRotate = () => {};
 
   const svgVNode = computed(() =>
@@ -115,9 +113,9 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                   onMousedown: () => _handleElementSelection({ id: el.id, el }),
                   id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
                 },
-                []
+                [],
               ),
-              selectedElements.value[el.id] &&
+              selectedElements.value[el.id || 0] &&
                 h(
                   SVG_ELEMENT_TYPE.G,
                   {
@@ -126,13 +124,13 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                   [
                     BORDER_BUILDER_MAPPING[el.tag].build(el as any),
                     HANDLES_BUILDER_MAPPING[el.tag].build(el as any),
-                  ]
+                  ],
                 ),
-            ]
+            ],
           );
         }),
-      ]
-    )
+      ],
+    ),
   );
 
   return {

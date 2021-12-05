@@ -16,21 +16,13 @@ export const usePathHandlesBuilder = (handlerOptions: any) => {
     const handlers = el.boundingBox
       ? [
           [-handlerOptions.width / 2, -handlerOptions.height / 2],
-          [
-            el.boundingBox.width - handlerOptions.width / 2,
-            -handlerOptions.height / 2,
-          ],
+          [el.boundingBox.width - handlerOptions.width / 2, -handlerOptions.height / 2],
           [
             el.boundingBox.width - handlerOptions.width / 2,
             el.boundingBox.height - handlerOptions.height / 2,
           ],
-          [
-            -handlerOptions.width / 2,
-            el.boundingBox.height - handlerOptions.height / 2,
-          ],
-        ].map(([x, y], index: number) =>
-          rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize")
-        )
+          [-handlerOptions.width / 2, el.boundingBox.height - handlerOptions.height / 2],
+        ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"))
       : [];
 
     return el.boundingBox && h(SVG_ELEMENT_TYPE.G, {}, handlers);

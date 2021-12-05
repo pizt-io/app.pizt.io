@@ -5,16 +5,16 @@
 
 module.exports = {
   compilerOptions: {
-    baseUrl: '.',
+    baseUrl: ".",
     paths: {
-      '~/*': ['./*'],
-      '@/*': ['./*'],
-      '~~/*': ['./*'],
-      '@@/*': ['./*'],
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "~~/*": ["./*"],
+      "@@/*": ["./*"],
     },
     // ...
     // `paths` will be automatically generated using aliases.config.js
     // ...
   },
-  exclude: ['node_modules', 'dist'],
+  exclude: ["node_modules", "dist"],
 };

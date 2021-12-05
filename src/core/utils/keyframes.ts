@@ -1,4 +1,4 @@
-import css from 'css';
+import css from "css";
 
 export const keyframes = {
   stringify: (obj: any): string => {
@@ -11,7 +11,7 @@ export const keyframes = {
         let properties = "";
 
         Object.keys(obj[animationName][keyframe]).forEach((property) => {
-          let value = obj[animationName][keyframe][property];
+          const value = obj[animationName][keyframe][property];
 
           if (Array.isArray(value)) {
             let arrayValue = "";
@@ -34,8 +34,8 @@ export const keyframes = {
       result.push(`@keyframes ${animationName} { ${animation.join(" ")} }`);
     });
 
-    return result.join('');
+    return result.join("");
   },
 
-  parse: (str: string) => css.parse(str)
-}
+  parse: (str: string) => css.parse(str),
+};

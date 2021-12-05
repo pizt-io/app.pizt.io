@@ -88,17 +88,15 @@ function writeConfigFile(configPath, configTemplate, configFileName) {
       {
         ...prettierConfig,
         parser: "json",
-      }
+      },
     ),
     (error) => {
       if (error) {
         // eslint-disable-next-line no-console
-        console.error(
-          "Error while creating tsconfig.json from aliases.config.js."
-        );
+        console.error("Error while creating tsconfig.json from aliases.config.js.");
         throw error;
       }
-    }
+    },
   );
 }
 

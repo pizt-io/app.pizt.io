@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'SandboxPage',
+  name: "SandboxPage",
   components: {},
-  setup(props) {}
-})
+  setup() {},
+});
 </script>

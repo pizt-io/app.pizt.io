@@ -26,17 +26,11 @@ const _getSVGPathBoundingBox = (path: string) => {
   if (document) {
     const appEl = document.getElementById("app");
     if (appEl) {
-      const svgEl = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "svg"
-      );
+      const svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
       svgEl.setAttribute("style", "position: absolute; z-index: -1");
 
-      const pathEl = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path"
-      );
+      const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
       pathEl.setAttribute("d", path);
 
       svgEl.appendChild(pathEl);
@@ -66,7 +60,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       fill: "#f04337",
-    }
+    },
   ): SVGCircle => ({
     tag: SVG_ELEMENT_TYPE.CIRCLE,
     attrs: {
@@ -92,7 +86,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       fill: "#f04337",
-    }
+    },
   ): SVGEllipse => ({
     tag: SVG_ELEMENT_TYPE.ELLIPSE,
     attrs: {
@@ -119,7 +113,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       fill: "#f04337",
-    }
+    },
   ): SVGRectangle => ({
     tag: SVG_ELEMENT_TYPE.RECT,
     attrs: {
@@ -145,7 +139,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       stroke: "#f04337",
-    }
+    },
   ): SVGLine => ({
     tag: SVG_ELEMENT_TYPE.LINE,
     attrs: {
@@ -184,7 +178,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       stroke: "#f04337",
-    }
+    },
   ): SVGPath => {
     const path = commands.join(" ");
     const boundingBox = _getSVGPathBoundingBox(path);
@@ -205,7 +199,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       stroke: "#f04337",
-    }
+    },
   ): SVGPolygon => {
     const xPositions = positions.map((pos) => pos[0]);
     const yPositions = positions.map((pos) => pos[1]);
@@ -229,7 +223,7 @@ export const useSVGMapper = () => {
     transform: SVGTransform,
     style: SVGStyles = {
       stroke: "#f04337",
-    }
+    },
   ): SVGPolyline => {
     const xPositions = positions.map((pos) => pos[0]);
     const yPositions = positions.map((pos) => pos[1]);

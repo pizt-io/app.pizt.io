@@ -13,9 +13,6 @@ export const useRectHandlesBuilder = (handlerOptions: any) => {
     const rect = (x: number, y: number, cursor: string) =>
       h(SVG_ELEMENT_TYPE.RECT, {
         ...handlerOptions,
-        onMousedown: (e: MouseEvent) => {
-          console.log(e);
-        },
         style: { cursor },
         x: x + +(el.attrs[POS_X_MAPPING[el.tag]] || 0),
         y: y + +(el.attrs[POS_Y_MAPPING[el.tag]] || 0),
@@ -35,9 +32,7 @@ export const useRectHandlesBuilder = (handlerOptions: any) => {
         -handlerOptions.width / 2,
         +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0) - handlerOptions.height / 2,
       ],
-    ].map(([x, y], index: number) =>
-      rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize")
-    );
+    ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"));
 
     return h(SVG_ELEMENT_TYPE.G, {}, handlers);
   };

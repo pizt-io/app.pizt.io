@@ -1,8 +1,6 @@
 <template>
   <div class="h-full overflow-y-auto">
-    <h3 class="px-5 pt-5 text-white">
-      Generated code
-    </h3>
+    <h3 class="px-5 pt-5 text-white">Generated code</h3>
     <div class="m-5">
       <div class="flex items-center justify-between mb-3">
         <span class="text-white">HTML</span>
@@ -34,12 +32,7 @@
           <span class="text-dark-900 ml-1">Copy</span>
         </el-button>
       </div>
-      <CodeEditor
-        v-model="generatedCss"
-        language="css"
-        class="bg-gray-800 rounded-lg"
-        readonly
-      />
+      <CodeEditor v-model="generatedCss" language="css" class="bg-gray-800 rounded-lg" readonly />
     </div>
     <div class="m-5">
       <div class="flex items-center justify-between mb-3">
@@ -64,24 +57,24 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
-import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@core/utils/prettier';
-import { useStore } from 'vuex';
-import { RootState } from '@store/state';
-import { keyframes } from '@core/utils/keyframes';
-import { copyToClipboard } from '@core/utils/copy';
-import { ElMessage } from 'element-plus'
+import { computed, defineComponent, ref } from "vue";
+import { prettyCodeCss } from "@core/utils/prettier";
+import { useStore } from "vuex";
+import { RootState } from "@store/state";
+import { keyframes } from "@core/utils/keyframes";
+import { copyToClipboard } from "@core/utils/copy";
+import { ElMessage } from "element-plus";
 
-import 'element-plus/theme-chalk/el-message.css'
+import "element-plus/theme-chalk/el-message.css";
 
-import CodeEditor from '@core/components/CodeEditor.vue'
+import CodeEditor from "@core/components/CodeEditor.vue";
 
 export default defineComponent({
-  name: 'CodeGenerator',
+  name: "CodeGenerator",
   components: {
-    CodeEditor
+    CodeEditor,
   },
-  setup(props) {
+  setup() {
     const store = useStore<RootState>();
 
     const form = ref({
@@ -89,13 +82,15 @@ export default defineComponent({
       generatedJs: ``,
     });
 
-    const selectedTransition = computed(() => store.state.selectedTransition)
+    const selectedTransition = computed(() => store.state.selectedTransition);
 
     const generatedCss = computed({
       get: () => {
-        const parsedKeyframes = selectedTransition.value.animationKeyframes && keyframes.stringify({
-          [selectedTransition.value.animationName]: selectedTransition.value.animationKeyframes,
-        })
+        const parsedKeyframes =
+          selectedTransition.value.animationKeyframes &&
+          keyframes.stringify({
+            [selectedTransition.value.animationName]: selectedTransition.value.animationKeyframes,
+          });
         const result = `
           ${parsedKeyframes}
 
@@ -105,34 +100,34 @@ export default defineComponent({
             animation-delay: ${selectedTransition.value.animationDelay};
             animation-iteration-count: ${
               selectedTransition.value.animationIsInfinite
-                ? 'infinite'
+                ? "infinite"
                 : selectedTransition.value.animationIterationCount
             };
             animation-timing-function: ${selectedTransition.value.animationTimingFunction};
             animation-fill-mode: ${selectedTransition.value.animationFillMode};
             animation-direction: ${selectedTransition.value.animationDirection};
 
-            ${
-              Object.keys(selectedTransition.value?.animationStyles || {})
-                .map(property => `${property}: ${selectedTransition.value.animationStyles[property]};`)
-                .join('')
-            }
+            ${Object.keys(selectedTransition.value?.animationStyles || {})
+              .map(
+                (property) => `${property}: ${selectedTransition.value.animationStyles[property]};`,
+              )
+              .join("")}
 
             background-color: #FFDB15;
             width: 120px;
             height: 120px;
           }
-        `
+        `;
 
         return prettyCodeCss(result);
       },
-      set: () => {}
+      set: () => {},
     });
 
     const handleCopyToClipboard = (text: string) => {
       copyToClipboard(text);
-      ElMessage.success('Copied to clipboard');
-    }
+      ElMessage.success("Copied to clipboard");
+    };
 
     return {
       form,
@@ -140,5 +135,5 @@ export default defineComponent({
       handleCopyToClipboard,
     };
   },
-})
+});
 </script>

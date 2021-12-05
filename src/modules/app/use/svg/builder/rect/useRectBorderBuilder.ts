@@ -19,7 +19,7 @@ export const useRectBorderBuilder = (borderOptions: any) => {
         width: +(el.attrs[WIDTH_MAPPING[el.tag]] || 0),
         height: +(el.attrs[HEIGHT_MAPPING[el.tag]] || 0),
       },
-      []
+      [],
     );
 
   return { build };

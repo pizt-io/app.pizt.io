@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export const dev = {
   /**
    * Equivalent to console.error but in dev mode only

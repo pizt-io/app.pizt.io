@@ -1,29 +1,25 @@
 <template>
   <div :class="$style.cubicBezierContainer">
     <span :class="$style.cubicBezierYAxis">PROGRESSION</span>
-    <div
-      ref="canvasRef"
-      id="canvasCubicBezier"
-      :class="$style.cubicBezierInner"
-    />
+    <div ref="canvasRef" id="canvasCubicBezier" :class="$style.cubicBezierInner" />
     <span :class="$style.cubicBezierXAxis">TIME</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted } from "vue";
 
 import Interactive from "https://vectorjs.org/interactive.js";
 
 export default defineComponent({
   model: {
     prop: "modelValue",
-    event: "update:modelValue"
+    event: "update:modelValue",
   },
   props: {
     modelValue: {
       type: String,
-      default: '0.42,0.69,0.69,0.42'
+      default: "0.42,0.69,0.69,0.42",
     },
   },
   emits: ["update:modelValue"],
@@ -41,34 +37,45 @@ export default defineComponent({
         interactive.height = 160;
 
         let baseLine = interactive.line(0, interactive.height, interactive.width, 0);
-        baseLine.style.stroke = 'var(--color-gray-400)';
+        baseLine.style.stroke = "var(--color-gray-400)";
         baseLine.style.strokeWidth = 1;
 
         for (let index = 0; index < 10; index++) {
-          const _temp = interactive.line(0, index * (interactive.height / (10 - 1)), interactive.width, index * (interactive.height / (10 - 1)));
-          _temp.style.stroke = 'var(--color-gray-400)';
+          const _temp = interactive.line(
+            0,
+            index * (interactive.height / (10 - 1)),
+            interactive.width,
+            index * (interactive.height / (10 - 1)),
+          );
+          _temp.style.stroke = "var(--color-gray-400)";
           _temp.style.strokeWidth = 1;
         }
 
-        const _prev = (props.modelValue || '0.42,0.69,0.69,0.42').split(",");
+        const _prev = (props.modelValue || "0.42,0.69,0.69,0.42").split(",");
         const previousValue = [
-          { x: +_prev[0] * interactive.width, y: (1 - +_prev[1]) * interactive.height },
-          { x: +_prev[2] * interactive.width, y: (1 - +_prev[3]) * interactive.height }
-        ]
+          {
+            x: +_prev[0] * interactive.width,
+            y: (1 - +_prev[1]) * interactive.height,
+          },
+          {
+            x: +_prev[2] * interactive.width,
+            y: (1 - +_prev[3]) * interactive.height,
+          },
+        ];
 
         let handle1 = interactive.control(previousValue[0].x, previousValue[0].y);
         let handlebar1 = interactive.line(0, interactive.height, handle1.x, handle1.y);
-        handlebar1.style.stroke = 'var(--color-gray-600)';
+        handlebar1.style.stroke = "var(--color-gray-600)";
         handlebar1.style.strokeWidth = 3;
 
         let handle2 = interactive.control(previousValue[1].x, previousValue[1].y);
         let handlebar2 = interactive.line(interactive.width, 0, handle2.x, handle2.y);
-        handlebar2.style.stroke = 'var(--color-gray-600)';
+        handlebar2.style.stroke = "var(--color-gray-600)";
         handlebar2.style.strokeWidth = 3;
 
-        let path = interactive.path('');
-        path.style.fill = 'transparent';
-        path.style.stroke = 'var(--color-gray-800)';
+        let path = interactive.path("");
+        path.style.fill = "transparent";
+        path.style.stroke = "var(--color-gray-800)";
         path.style.strokeWidth = 3;
 
         path.update = function () {
@@ -84,10 +91,12 @@ export default defineComponent({
             1 - handle1.y / interactive.height,
             handle2.x / interactive.width,
             1 - handle2.y / interactive.height,
-          ].map(item => item.toFixed(2)).join(',');
+          ]
+            .map((item) => item.toFixed(2))
+            .join(",");
 
-          emit('update:modelValue', _value);
-        }
+          emit("update:modelValue", _value);
+        };
 
         handlebar1.update = function () {
           this.x2 = handle1.x;
@@ -104,12 +113,12 @@ export default defineComponent({
 
         handle1.style.fill = "var(--color-gray-200)";
         handle2.style.fill = "var(--color-gray-200)";
-        handle2.point.r = 4
-        handle2.handle.r = 4
-        handle1.point.r = 4
-        handle1.handle.r = 4
+        handle2.point.r = 4;
+        handle2.handle.r = 4;
+        handle1.point.r = 4;
+        handle1.handle.r = 4;
       }
-    })
+    });
 
     return {
       canvasRef,

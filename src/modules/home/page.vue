@@ -1,7 +1,5 @@
 <template>
-  <div :class="$style.layoutWrapper">
-
-  </div>
+  <div :class="$style.layoutWrapper"></div>
 </template>
 
 <script lang="ts">

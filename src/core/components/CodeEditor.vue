@@ -1,5 +1,5 @@
 <template>
-  <prism-editor
+  <PrismEditor
     class="my-editor"
     v-model="code"
     line-numbers
@@ -11,50 +11,48 @@
 
 <script lang="ts">
 // import Prism Editor
-import { PrismEditor } from 'vue-prism-editor';
-import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles somewhere
-
-import { format, Options } from 'prettier';
+import { PrismEditor } from "vue-prism-editor";
+import "vue-prism-editor/dist/prismeditor.min.css"; // import the styles somewhere
 
 // import highlighting library (you can use any library you want just return html string)
-import Prism from 'prismjs';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-tomorrow.css'; // import syntax highlighting styles
+import Prism from "prismjs";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  model: {
-    value: 'modelValue',
-    event: 'input:modelValue',
-  },
   components: {
     PrismEditor,
+  },
+  model: {
+    value: "modelValue",
+    event: "input:modelValue",
   },
   props: {
     language: {
       type: String,
-      default: 'javascript',
+      default: "javascript",
     },
     readonly: Boolean,
   },
   setup(props, { emit }) {
-    const code = ref('');
+    const code = ref("");
 
     const highlighter = (code: string) => {
       return Prism.highlight(code, Prism.languages[props.language], props.language);
-    }
+    };
 
-    const handleInputEditor = (code: string) => {
-      emit('input:modelValue', code);
-    }
+    const handleInputEditor = (code: Event) => {
+      emit("input:modelValue", code);
+    };
 
     return {
       code,
       highlighter,
       handleInputEditor,
-    }
+    };
   },
 });
 </script>

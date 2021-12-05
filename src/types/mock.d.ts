@@ -1,1 +1,1 @@
-declare module '@/mock/transitions'
+declare module "@/mock/transitions";

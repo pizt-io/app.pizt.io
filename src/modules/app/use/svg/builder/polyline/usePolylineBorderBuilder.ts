@@ -13,7 +13,7 @@ export const usePolylineBorderBuilder = (borderOptions: any) => {
         width: Math.abs(el.xMax - el.xMin),
         height: Math.abs(el.yMax - el.yMin),
       },
-      []
+      [],
     );
   };
 

@@ -1,8 +1,6 @@
 import { ref } from "vue";
 
-export const useSVGCanvasEvents = (
-  listeners: { [x: string]: Function } = {}
-) => {
+export const useSVGCanvasEvents = (listeners: { [x: string]: (...args: any[]) => any } = {}) => {
   const {
     onKeydown = () => {},
     onKeydownControl = () => {},

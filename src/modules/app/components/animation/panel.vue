@@ -1,22 +1,16 @@
 <template>
-  <div>
-
-  </div>
+  <div></div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'AnimationPanel',
-  setup(props) {
-
-  }
-})
+  name: "AnimationPanel",
+  setup() {},
+});
 </script>
 
 <style lang="scss" module>
 @import "@styles/all";
-
-
 </style>

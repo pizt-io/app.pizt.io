@@ -1,8 +1,8 @@
-import { h } from "vue";
-import { SVG_ELEMENT_TYPE } from "@/core/constants/svg";
 import { SVGLine } from "@/types/svg";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const useLineBorderBuilder = (borderOptions: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const build = (el: SVGLine) => {
     return null;
     // return h(

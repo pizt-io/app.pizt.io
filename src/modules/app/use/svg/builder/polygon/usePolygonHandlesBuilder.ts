@@ -8,16 +8,11 @@ export const usePolygonHandlesBuilder = (handlerOptions: any) => {
       h(SVG_ELEMENT_TYPE.RECT, { ...handlerOptions, style: { cursor }, x, y });
 
     const handlers = [
-      [
-        -handlerOptions.width / 2 + el.xMin,
-        -handlerOptions.height / 2 + el.yMin,
-      ],
+      [-handlerOptions.width / 2 + el.xMin, -handlerOptions.height / 2 + el.yMin],
       [el.xMax - handlerOptions.width / 2, el.yMin - handlerOptions.height / 2],
       [el.xMax - handlerOptions.width / 2, el.yMax - handlerOptions.height / 2],
       [el.xMin - handlerOptions.width / 2, el.yMax - handlerOptions.height / 2],
-    ].map(([x, y], index: number) =>
-      rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize")
-    );
+    ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"));
 
     return h(SVG_ELEMENT_TYPE.G, {}, handlers);
   };

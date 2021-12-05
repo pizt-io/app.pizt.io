@@ -15,9 +15,11 @@ import { registerSW } from "virtual:pwa-register";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const updateSW = registerSW({
   onNeedRefresh() {
+    // eslint-disable-next-line no-console
     console.log("Need Refresh");
   },
   onOfflineReady() {
+    // eslint-disable-next-line no-console
     console.log("Offline");
   },
 });

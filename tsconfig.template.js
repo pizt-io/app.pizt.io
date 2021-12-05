@@ -22,12 +22,6 @@ module.exports = {
     },
     lib: ["esnext", "dom", "dom.iterable", "scripthost"],
   },
-  include: [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
-  ],
+  include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
   exclude: ["node_modules", "dist"],
 };

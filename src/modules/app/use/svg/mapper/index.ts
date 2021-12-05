@@ -52,9 +52,4 @@ const BORDER_BUILDER_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.POLYLINE]: usePolylineBorderBuilder(borderOptions),
 });
 
-export {
-  useSVGMapper,
-  useSVGPathMapper,
-  BORDER_BUILDER_MAPPING,
-  HANDLES_BUILDER_MAPPING,
-};
+export { useSVGMapper, useSVGPathMapper, BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING };

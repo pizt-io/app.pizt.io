@@ -1,4 +1,4 @@
 export enum APP_MODE {
-  MAIN = 'main',
-  SVG = 'svg',
+  MAIN = "main",
+  SVG = "svg",
 }

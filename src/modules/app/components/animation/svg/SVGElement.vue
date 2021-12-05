@@ -9,30 +9,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 import { SVG_ELEMENT_PREFIX } from "@core/constants/svg";
 
 export default defineComponent({
-  name: 'SVGElement',
+  name: "SVGElement",
   props: {
     id: {
       type: String,
-      default: ''
+      default: "",
     },
     index: {
       type: Number,
-      default: 0
+      default: 0,
     },
     element: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
-  setup(props, { emit }) {
-
+  setup() {
     return {
       SVG_ELEMENT_PREFIX,
     };
-  }
-})
+  },
+});
 </script>

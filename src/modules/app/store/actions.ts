@@ -17,8 +17,6 @@ export const actions: Actions = {
 
     commit("SET_ELEMENTS", elements);
 
-    console.log("getCanvasElements", elements);
-
     return elements;
   },
   updateCanvasElements: async ({ commit }, elements) => {

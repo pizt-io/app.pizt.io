@@ -10,24 +10,23 @@
 // PERFORMANCE NOTICE:
 // DEVTOOL CAN SOMETIME NOT DETECT CHANGES IN THE COMPONENT DUE TO HUGE AND DEEPLY NESTED DATA CHANGES
 
-import { ComponentPublicInstance, defineComponent, getCurrentInstance, ref, watch } from 'vue';
-import { useStore } from 'vuex';
+import { ComponentPublicInstance, defineComponent, ref, watch } from "vue";
+import { useStore } from "vuex";
 
-import SVGCanvas from '@/modules/app/components/animation/svg/SVGCanvas.vue';
+import SVGCanvas from "@/modules/app/components/animation/svg/SVGCanvas.vue";
 
-import _debounce from 'lodash/debounce';
-import _isEqual from 'lodash/isEqual';
+import _debounce from "lodash/debounce";
+import _isEqual from "lodash/isEqual";
 
 export default defineComponent({
-  name: 'AnimationCanvas',
+  name: "AnimationCanvas",
   components: {
-    SVGCanvas
+    SVGCanvas,
   },
-  setup(props) {
+  setup() {
     const canvasRef = ref<ComponentPublicInstance | null>(null);
 
     const store = useStore();
-    const vm = getCurrentInstance()?.proxy;
 
     const forceUpdateCanvasFlag = ref(0);
 
@@ -37,7 +36,7 @@ export default defineComponent({
 
     const _forceRerenderCanvas = () => {
       forceUpdateCanvasFlag.value++;
-    }
+    };
 
     const _updateCanvasDataFromStore = () => {
       data.value = store.state.app.elements;
@@ -47,11 +46,11 @@ export default defineComponent({
       // api returns data from database to make sure that data is synced
       // if those data are not equal, they're unsynced, notify user
       hasUnsyncedDataFromOtherAccess.value = !_isEqual(data.value, store.state.app.elements);
-    }
+    };
 
     // Fetch data from backend
     const _getCanvasDataOnce = async () => {
-      await store.dispatch('app/getCanvasElements');
+      await store.dispatch("app/getCanvasElements");
 
       _updateCanvasDataFromStore();
       _forceRerenderCanvas();
@@ -59,25 +58,25 @@ export default defineComponent({
     _getCanvasDataOnce();
 
     const _updateCanvasDataToDatabase = async () => {
-      await store.dispatch('app/updateCanvasElements', data.value);
+      await store.dispatch("app/updateCanvasElements", data.value);
 
       _updateCanvasDataFromStore();
-    }
+    };
 
-    const fileSize = ref('');
+    const fileSize = ref("");
     const _calculateFileSize = () => {
       fileSize.value = `${((canvasRef.value?.$el?.innerHTML.length || 0) / 1024).toFixed(2)} Kb`;
     };
 
     watch(
       () => data.value,
-      _debounce(function() {
+      _debounce(function () {
         _updateCanvasDataToDatabase();
         _calculateFileSize();
-        console.log('File size:', fileSize.value);
-
+        // eslint-disable-next-line no-console
+        console.log("File size:", fileSize.value);
       }, 1500),
-      { deep: true }
+      { deep: true },
     );
 
     return {
@@ -86,7 +85,7 @@ export default defineComponent({
       fileSize,
       forceUpdateCanvasFlag,
       hasUnsyncedDataFromOtherAccess,
-    }
-  }
-})
+    };
+  },
+});
 </script>

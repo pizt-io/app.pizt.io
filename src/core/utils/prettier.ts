@@ -4,52 +4,43 @@ import parserHtml from "https://unpkg.com/prettier@2.4.1/esm/parser-html.mjs";
 import parserCss from "https://unpkg.com/prettier@2.4.1/esm/parser-postcss.mjs";
 
 const DEFAULT_PRETTIER_CONFIG = Object.freeze({
-  arrowParens: 'always',
+  arrowParens: "always",
   bracketSpacing: true,
-  endOfLine: 'lf',
+  endOfLine: "lf",
   printWidth: 100,
-  proseWrap: 'never',
-  quoteProps: 'consistent',
+  proseWrap: "never",
+  quoteProps: "consistent",
   semi: true,
   singleQuote: false,
   tabWidth: 2,
 });
 
 export const prettyCodeHtml = (code: string) => {
-  const pretty = prettier.format(
-    code,
-    {
-      ...DEFAULT_PRETTIER_CONFIG,
-      parser: 'html',
-      plugins: [parserHtml],
-    },
-  );
+  const pretty = prettier.format(code, {
+    ...DEFAULT_PRETTIER_CONFIG,
+    parser: "html",
+    plugins: [parserHtml],
+  });
 
   return pretty;
-}
+};
 
 export const prettyCodeCss = (code: string) => {
-  const pretty = prettier.format(
-    code,
-    {
-      ...DEFAULT_PRETTIER_CONFIG,
-      parser: 'css',
-      plugins: [parserCss],
-    },
-  );
+  const pretty = prettier.format(code, {
+    ...DEFAULT_PRETTIER_CONFIG,
+    parser: "css",
+    plugins: [parserCss],
+  });
 
   return pretty;
-}
+};
 
 export const prettyCodeJs = (code: string) => {
-  const pretty = prettier.format(
-    code,
-    {
-      ...DEFAULT_PRETTIER_CONFIG,
-      parser: 'babel',
-      plugins: [parserBabel],
-    },
-  );
+  const pretty = prettier.format(code, {
+    ...DEFAULT_PRETTIER_CONFIG,
+    parser: "babel",
+    plugins: [parserBabel],
+  });
 
   return pretty;
-}
+};

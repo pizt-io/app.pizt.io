@@ -14,7 +14,7 @@ export const usePathBorderBuilder = (borderOptions: any) => {
         width: el.boundingBox.width,
         height: el.boundingBox.height,
       },
-      []
+      [],
     );
 
   return { build };
