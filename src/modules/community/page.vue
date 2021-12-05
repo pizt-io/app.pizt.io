@@ -1,6 +1,6 @@
 <template>
-  <div>
-
+  <div class="w-screen h-screen">
+    <!--  -->
   </div>
 </template>
 
@@ -8,15 +8,8 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'AnimationCanvas',
-  setup(props) {
-
-  }
+  name: 'CommunityPage',
+  components: {},
+  setup(props) {}
 })
 </script>
-
-<style lang="scss" module>
-@import "@styles/all";
-
-
-</style>

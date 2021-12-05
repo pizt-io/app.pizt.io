@@ -65,16 +65,16 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@/core/utils/prettier';
+import { prettyCodeCss, prettyCodeHtml, prettyCodeJs } from '@core/utils/prettier';
 import { useStore } from 'vuex';
-import { State } from '@store/state';
+import { RootState } from '@store/state';
 import { keyframes } from '@core/utils/keyframes';
 import { copyToClipboard } from '@core/utils/copy';
 import { ElMessage } from 'element-plus'
 
 import 'element-plus/theme-chalk/el-message.css'
 
-import CodeEditor from '@/core/components/CodeEditor.vue'
+import CodeEditor from '@core/components/CodeEditor.vue'
 
 export default defineComponent({
   name: 'CodeGenerator',
@@ -82,7 +82,7 @@ export default defineComponent({
     CodeEditor
   },
   setup(props) {
-    const store = useStore<State>();
+    const store = useStore<RootState>();
 
     const form = ref({
       generatedHtml: `<div class="piztAnimation" />`,
@@ -124,7 +124,7 @@ export default defineComponent({
           }
         `
 
-        return prettyCodeCss(result, 'css');
+        return prettyCodeCss(result);
       },
       set: () => {}
     });

@@ -16,31 +16,18 @@ module.exports = {
     allowSyntheticDefaultImports: true,
     sourceMap: true,
     baseUrl: ".",
-    types: [
-      "jest",
-      "element-plus/global"
-    ],
+    types: ["jest", "element-plus/global"],
     paths: {
-      '@/*': [
-        "src/*"
-      ]
+      "@/*": ["src/*"],
     },
-    lib: [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    lib: ["esnext", "dom", "dom.iterable", "scripthost"],
   },
   include: [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
   ],
-  exclude: [
-    "node_modules",
-    "dist",
-  ]
+  exclude: ["node_modules", "dist"],
 };

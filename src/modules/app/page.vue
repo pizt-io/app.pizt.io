@@ -48,7 +48,7 @@
             </div>
             <div
               v-else
-              class="flex-1 relative dark:bg-dark-500 bg-white"
+              class="flex-1 relative bg-dark-500 bg-white"
             >
               <CanvasBackgroundToggle />
               <AnimationCanvas />
@@ -95,24 +95,28 @@
 
 <script lang="ts">
 import { APP_MODE } from '@core/constants/navigator';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onUnmounted, ref } from 'vue';
 
-import CanvasBackgroundToggle from '@/core/components/CanvasBackgroundToggle.vue';
+import CanvasBackgroundToggle from '@core/components/CanvasBackgroundToggle.vue';
 
 import Header from '@modules/app/components/header/header.vue'
 import LayerTree from '@modules/app/components/tree/layer.vue'
-import Navigator from '@modules/app/components/navigator/navigator.vue'
-import TransitionToolbar from '@modules/app/components/toolbar/transition.vue'
-import TransitionCanvas from '@modules/app/components/canvas/transition.vue'
-import TransitionPanel from '@modules/app/components/panel/transition.vue'
-import TransitionTimeline from '@modules/app/components/timeline/transition.vue'
-import AnimationToolbar from '@modules/app/components/toolbar/animation.vue'
-import AnimationCanvas from '@modules/app/components/canvas/animation.vue'
-import AnimationPanel from '@modules/app/components/panel/animation.vue'
-import AnimationTimeline from '@modules/app/components/timeline/animation.vue'
 import CodeGenerator from '@modules/app/components/code/generator.vue'
-import { useAppMode } from './use/useAppMode';
-import { useDark } from '@vueuse/core'
+import Navigator from '@modules/app/components/navigator/navigator.vue'
+
+import TransitionToolbar from '@modules/app/components/transition/toolbar.vue'
+import TransitionCanvas from '@modules/app/components/transition/canvas.vue'
+import TransitionPanel from '@modules/app/components/transition/panel.vue'
+import TransitionTimeline from '@modules/app/components/transition/timeline.vue'
+import AnimationToolbar from '@modules/app/components/animation/toolbar.vue'
+import AnimationCanvas from '@modules/app/components/animation/canvas.vue'
+import AnimationPanel from '@modules/app/components/animation/panel.vue'
+import AnimationTimeline from '@modules/app/components/animation/timeline.vue'
+
+import { useAppMode } from '@modules/app/use/useAppMode';
+import { useDark } from '@use/useDark'
+import { useStore } from 'vuex';
+import { appStoreModule } from './store';
 
 export default defineComponent({
   name: 'AppPage',
@@ -133,7 +137,15 @@ export default defineComponent({
   },
   setup() {
     const { appMode } = useAppMode();
-    const isDark = useDark()
+    const { isDark } = useDark();
+
+    const store = useStore();
+
+    store.registerModule('app', appStoreModule);
+
+    onUnmounted(() => {
+      store.unregisterModule('app');
+    });
 
     return {
       APP_MODE,
@@ -150,9 +162,6 @@ export default defineComponent({
 .layoutWrapper {
   background-color: color(gray, 900);
   overflow: hidden;
-  * {
-    transition: all 0.3s ease-in-out;
-  }
 
   @include size(100vw, 100vh);
   @include flexBox($direction: column);

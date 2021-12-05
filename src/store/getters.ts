@@ -1,6 +1,6 @@
 import { GetterTree } from "vuex";
-import { State } from "./state";
+import { RootState } from "./state";
 
-export type Getters = GetterTree<State, State>;
+export type Getters = GetterTree<RootState, RootState>;
 
 export const getters: Getters = {};

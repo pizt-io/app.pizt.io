@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { CanvasElementList, useCanvas } from '@use/useCanvas';
 
 import Interactive from "https://vectorjs.org/interactive.js";
 
@@ -27,7 +26,7 @@ export default defineComponent({
       default: '0.42,0.69,0.69,0.42'
     },
   },
-  emits: ["input"],
+  emits: ["update:modelValue"],
   setup(props, { emit }) {
     const canvasRef = ref<HTMLCanvasElement | null>(null);
 
