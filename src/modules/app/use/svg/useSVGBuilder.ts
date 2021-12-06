@@ -1,6 +1,6 @@
 import { SVGElement, SVGElementDragPayload, SVGElementSelectPayload } from "@/types/svg";
 import { SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@core/constants/svg";
-import { computed, h, ref } from "vue";
+import { computed, h, inject, Ref, ref } from "vue";
 
 import SVGElementComponent from "@modules/app/components/animation/svg/SVGElement.vue";
 
@@ -8,6 +8,8 @@ import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 import { BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING } from "./mapper";
 
 export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
+  const currentTime = inject("currentTime") as Ref<number>;
+
   const elements = ref<Array<SVGElement>>(initialElementsData);
   const selectedElements = ref<{ [x: string]: SVGElement }>({});
   const isMousedown = ref(false);
@@ -72,8 +74,8 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     if (!isTransforming.value && isMousedown.value) {
       Object.keys(selectedElements.value).forEach((key) => {
         // Elements are passed into selectedElements by references so we can mutate them through the selectedElements object
-        selectedElements.value[key].transform.translateX += e.movementX;
-        selectedElements.value[key].transform.translateY += e.movementY;
+        selectedElements.value[key].stages[currentTime.value].transform.translateX += e.movementX;
+        selectedElements.value[key].stages[currentTime.value].transform.translateY += e.movementY;
       });
     }
   };
@@ -84,8 +86,8 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _handleElementRotate = () => {};
 
-  const svgVNode = computed(() =>
-    h(
+  const svgVNode = computed(() => {
+    return h(
       SVG_ELEMENT_TYPE.SVG,
       {
         xmlns: "http://www.w3.org/2000/svg",
@@ -96,9 +98,13 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
       },
       [
         elements.value.map((el: SVGElement, index: number) => {
+          const elementStage = el.stages[currentTime.value] || el.stages[0];
+          const time = el.stages[currentTime.value] ? currentTime.value : 0;
+
           return h(
             SVGElementComponent,
             {
+              time,
               index,
               element: el,
               id: el._id,
@@ -107,7 +113,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
               h(
                 el.tag,
                 {
-                  ...el.attrs,
+                  ...elementStage.attrs,
                   onMousemove: (event: MouseEvent) =>
                     _handleElementDrag({ e: event, id: el._id, index }),
                   onMousedown: () => _handleElementSelection({ id: el._id, el }),
@@ -122,16 +128,16 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                     id: [SVG_ELEMENT_PREFIX, "bbox", index].join("-"),
                   },
                   [
-                    BORDER_BUILDER_MAPPING[el.tag].build(el as any),
-                    HANDLES_BUILDER_MAPPING[el.tag].build(el as any),
+                    BORDER_BUILDER_MAPPING[el.tag].build(elementStage as any),
+                    HANDLES_BUILDER_MAPPING[el.tag].build(elementStage as any),
                   ],
                 ),
             ],
           );
         }),
       ],
-    ),
-  );
+    );
+  });
 
   return {
     svgVNode,

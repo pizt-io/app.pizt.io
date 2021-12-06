@@ -117,14 +117,20 @@ declare type SVGPolyline = {
   transform: SVGTransform;
 };
 
-declare type SVGElement =
-  | SVGCircle
-  | SVGEllipse
-  | SVGRectangle
-  | SVGLine
-  | SVGPath
-  | SVGPolygon
-  | SVGPolyline;
+declare type SVGElement = {
+  _id?: string;
+  tag: SVG_ELEMENT_TYPE;
+  stages: {
+    [time: number]:
+      | SVGCircle
+      | SVGEllipse
+      | SVGRectangle
+      | SVGLine
+      | SVGPath
+      | SVGPolygon
+      | SVGPolyline;
+  };
+};
 
 /**
  * @param width Horizontal diameter of the circle

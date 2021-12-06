@@ -33,23 +33,31 @@ const handlerOptions = Object.freeze({
 });
 
 const HANDLES_BUILDER_MAPPING = Object.freeze({
-  [SVG_ELEMENT_TYPE.CIRCLE]: useRadialHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.ELLIPSE]: useRadialHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.RECT]: useRectHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.LINE]: useLineHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.PATH]: usePathHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.POLYGON]: usePolygonHandlesBuilder(handlerOptions),
-  [SVG_ELEMENT_TYPE.POLYLINE]: usePolylineHandlesBuilder(handlerOptions),
+  [SVG_ELEMENT_TYPE.CIRCLE as string]: useRadialHandlesBuilder(handlerOptions)(
+    SVG_ELEMENT_TYPE.CIRCLE,
+  ),
+  [SVG_ELEMENT_TYPE.ELLIPSE as string]: useRadialHandlesBuilder(handlerOptions)(
+    SVG_ELEMENT_TYPE.ELLIPSE,
+  ),
+  [SVG_ELEMENT_TYPE.RECT as string]: useRectHandlesBuilder(handlerOptions),
+  [SVG_ELEMENT_TYPE.LINE as string]: useLineHandlesBuilder(handlerOptions),
+  [SVG_ELEMENT_TYPE.PATH as string]: usePathHandlesBuilder(handlerOptions),
+  [SVG_ELEMENT_TYPE.POLYGON as string]: usePolygonHandlesBuilder(handlerOptions),
+  [SVG_ELEMENT_TYPE.POLYLINE as string]: usePolylineHandlesBuilder(handlerOptions),
 });
 
 const BORDER_BUILDER_MAPPING = Object.freeze({
-  [SVG_ELEMENT_TYPE.CIRCLE]: useRadialBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.ELLIPSE]: useRadialBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.RECT]: useRectBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.LINE]: useLineBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.PATH]: usePathBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.POLYGON]: usePolygonBorderBuilder(borderOptions),
-  [SVG_ELEMENT_TYPE.POLYLINE]: usePolylineBorderBuilder(borderOptions),
+  [SVG_ELEMENT_TYPE.CIRCLE as string]: useRadialBorderBuilder(borderOptions)(
+    SVG_ELEMENT_TYPE.CIRCLE,
+  ),
+  [SVG_ELEMENT_TYPE.ELLIPSE as string]: useRadialBorderBuilder(borderOptions)(
+    SVG_ELEMENT_TYPE.ELLIPSE,
+  ),
+  [SVG_ELEMENT_TYPE.RECT as string]: useRectBorderBuilder(borderOptions),
+  [SVG_ELEMENT_TYPE.LINE as string]: useLineBorderBuilder(borderOptions),
+  [SVG_ELEMENT_TYPE.PATH as string]: usePathBorderBuilder(borderOptions),
+  [SVG_ELEMENT_TYPE.POLYGON as string]: usePolygonBorderBuilder(borderOptions),
+  [SVG_ELEMENT_TYPE.POLYLINE as string]: usePolylineBorderBuilder(borderOptions),
 });
 
 export { useSVGMapper, useSVGPathMapper, BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING };

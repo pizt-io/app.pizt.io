@@ -2,7 +2,7 @@
   <g
     :id="id"
     :class="[SVG_ELEMENT_PREFIX, element.tag].join('-')"
-    :transform="`translate(${element.transform.translateX}, ${element.transform.translateY})`"
+    :transform="`translate(${element.stages[time].transform.translateX}, ${element.stages[time].transform.translateY})`"
   >
     <slot />
   </g>
@@ -20,6 +20,10 @@ export default defineComponent({
       default: "",
     },
     index: {
+      type: Number,
+      default: 0,
+    },
+    time: {
       type: Number,
       default: 0,
     },

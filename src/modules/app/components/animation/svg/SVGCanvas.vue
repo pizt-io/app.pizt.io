@@ -10,6 +10,10 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
+    time: {
+      type: Number,
+      default: 0,
+    },
   },
   setup(props) {
     const { svgVNode } = useSVGBuilder(props.data as Array<SVGElement>);

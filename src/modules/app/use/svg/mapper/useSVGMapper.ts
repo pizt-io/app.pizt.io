@@ -18,7 +18,9 @@ import {
   HEIGHT_MAPPING,
   POS_X_MAPPING,
   POS_Y_MAPPING,
+  SVG_PATH_CMD,
 } from "@core/constants/svg";
+import { useSVGPathMapper } from "@modules/app/use/svg/mapper";
 
 const _getSVGPathBoundingBox = (path: string) => {
   let boundingBox = null;
@@ -45,7 +47,7 @@ const _getSVGPathBoundingBox = (path: string) => {
   return boundingBox;
 };
 
-export const useSVGMapper = () => {
+export const useOldSVGMapper = () => {
   /**
    *
    * @param pos Initial position of the shape
@@ -262,6 +264,206 @@ export const useSVGMapper = () => {
         transform,
       };
     };
+
+  return {
+    circle,
+    ellipse,
+    rect,
+    line,
+    path,
+    polygon,
+    polyline,
+  };
+};
+
+export const useSVGMapper = () => {
+  const {
+    moveTo,
+    lineTo,
+    lineToHorizontally,
+    lineToVertically,
+    cubicBezier,
+    quadBezier,
+    arc,
+    closePath,
+  } = useSVGPathMapper();
+
+  const SVG_PATH_COMMAND_MAPPING: any = Object.freeze({
+    [SVG_PATH_CMD.MOVE_TO]: moveTo,
+    [SVG_PATH_CMD.LINE_TO]: lineTo,
+    [SVG_PATH_CMD.LINE_TO_HORIZONTALLY]: lineToHorizontally,
+    [SVG_PATH_CMD.LINE_TO_VERTICALLY]: lineToVertically,
+    [SVG_PATH_CMD.CUBIC_BEZIER]: cubicBezier,
+    [SVG_PATH_CMD.QUADRATIC_BEZIER]: quadBezier,
+    [SVG_PATH_CMD.ARC_CURVE]: arc,
+    [SVG_PATH_CMD.CLOSE_PATH]: closePath,
+  });
+
+  const circle = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      _mappedStages[time] = {
+        attrs: {
+          [POS_X_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: stages[time].pos.x,
+          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: stages[time].pos.y,
+          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: stages[time].size.width / 2, // Divide to get radius
+          ...stages[time].style,
+        },
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.CIRCLE,
+      stages: _mappedStages,
+    };
+  };
+  const ellipse = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      _mappedStages[time] = {
+        attrs: {
+          [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[time].pos.x,
+          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[time].pos.y,
+          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[time].size.width / 2, // Divide to get radius
+          [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[time].size.height / 2, // Divide to get radius
+          ...stages[time].style,
+        },
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.ELLIPSE,
+      stages: _mappedStages,
+    };
+  };
+  const rect = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      _mappedStages[time] = {
+        attrs: {
+          [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[time].pos.x,
+          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[time].pos.y,
+          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[time].size.width,
+          [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[time].size.height,
+          ...stages[time].style,
+        },
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.RECT,
+      stages: _mappedStages,
+    };
+  };
+  const line = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      _mappedStages[time] = {
+        attrs: {
+          x1: stages[time].pos[0].x,
+          y1: stages[time].pos[0].y,
+          x2: stages[time].pos[1].x,
+          y2: stages[time].pos[1].y,
+          ...stages[time].style,
+        },
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.LINE,
+      stages: _mappedStages,
+    };
+  };
+  const path = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      const commands = stages[time].commands.map((command: { type: string; path: number[] }) =>
+        SVG_PATH_COMMAND_MAPPING[command.type](...command.path),
+      );
+      const path = commands.join(" ");
+      const boundingBox = _getSVGPathBoundingBox(path);
+
+      _mappedStages[time] = {
+        attrs: {
+          d: path,
+          ...stages[time].style,
+        },
+        boundingBox,
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.PATH,
+      stages: _mappedStages,
+    };
+  };
+  const polygon = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      const xPositions = stages[time].pos.map((point: any) => point[0]);
+      const yPositions = stages[time].pos.map((point: any) => point[1]);
+
+      _mappedStages[time] = {
+        attrs: {
+          points: stages[time].pos.map((point: number[]) => point.join(",")).join(" "),
+          ...stages[time].style,
+        },
+        xMin: Math.min(...xPositions),
+        yMin: Math.min(...yPositions),
+        xMax: Math.max(...xPositions),
+        yMax: Math.max(...yPositions),
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.POLYGON,
+      stages: _mappedStages,
+    };
+  };
+  const polyline = (id: string) => (stages: { [time: string]: any }) => {
+    const _mappedStages: any = {};
+
+    Object.keys(stages).forEach((time: string) => {
+      const xPositions = stages[time].pos.map((point: any) => point[0]);
+      const yPositions = stages[time].pos.map((point: any) => point[1]);
+
+      _mappedStages[time] = {
+        attrs: {
+          points: stages[time].pos.map((point: number[]) => point.join(",")).join(" "),
+          ...stages[time].style,
+        },
+        xMin: Math.min(...xPositions),
+        yMin: Math.min(...yPositions),
+        xMax: Math.max(...xPositions),
+        yMax: Math.max(...yPositions),
+        transform: stages[time].transform,
+      };
+    });
+
+    return {
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.POLYLINE,
+      stages: _mappedStages,
+    };
+  };
 
   return {
     circle,

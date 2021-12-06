@@ -43,11 +43,11 @@
       >
         <div v-if="appMode === APP_MODE.MAIN" class="relative dark:bg-dark-500 bg-white">
           <CanvasBackgroundToggle />
-          <TransitionCanvas />
+          <TransitionCanvas :time="currentTime" />
         </div>
         <div v-else class="relative bg-dark-500 overflow-auto">
           <CanvasBackgroundToggle />
-          <AnimationCanvas />
+          <AnimationCanvas :time="currentTime" />
         </div>
       </transition>
       <transition
@@ -88,7 +88,7 @@
 
 <script lang="ts">
 import { APP_MODE } from "@core/constants/navigator";
-import { defineComponent, onUnmounted } from "vue";
+import { defineComponent, onUnmounted, provide, ref } from "vue";
 
 import CanvasBackgroundToggle from "@core/components/CanvasBackgroundToggle.vue";
 
@@ -132,6 +132,10 @@ export default defineComponent({
     const { appMode } = useAppMode();
     const { isDark } = useDark();
 
+    const currentTime = ref(0);
+
+    provide("currentTime", currentTime);
+
     const store = useStore();
 
     const _STORE_NAME = "app";
@@ -150,6 +154,7 @@ export default defineComponent({
       APP_MODE,
       appMode,
       isDark,
+      currentTime,
     };
   },
 });
