@@ -134,10 +134,16 @@ export default defineComponent({
 
     const store = useStore();
 
-    store.registerModule("app", appStoreModule);
+    const _STORE_NAME = "app";
+
+    if (!store.hasModule(_STORE_NAME)) {
+      store.registerModule(_STORE_NAME, appStoreModule);
+    }
 
     onUnmounted(() => {
-      store.unregisterModule("app");
+      if (store.hasModule(_STORE_NAME)) {
+        store.unregisterModule(_STORE_NAME);
+      }
     });
 
     return {
@@ -180,6 +186,7 @@ export default defineComponent({
     "header header header"
     "left body right";
   overflow: hidden;
+  background-color: color(dark, 600);
 
   @include size(100vw, 100vh);
 }

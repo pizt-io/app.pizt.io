@@ -43,7 +43,7 @@ export const useSVGConverter = () => {
       switch (el.type) {
         // Special case handling for path element
         case SVG_ELEMENT_TYPE.PATH:
-          return path(
+          return path(el._id)(
             el.commands.map((command: { type: string; path: number[] }) =>
               SVG_PATH_COMMAND_MAPPING[command.type](...command.path),
             ),
@@ -53,9 +53,10 @@ export const useSVGConverter = () => {
         default:
           const _el = _cloneDeep(el);
 
+          delete _el._id;
           delete _el.type;
 
-          return SVG_COMMAND_MAPPING[el.type](...Object.values(_el));
+          return SVG_COMMAND_MAPPING[el.type](el._id)(...Object.values(_el));
       }
     });
 

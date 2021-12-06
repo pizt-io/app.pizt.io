@@ -22,7 +22,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     onKeydownControlA: (e: KeyboardEvent) => {
       e.preventDefault();
       elements.value.forEach((el: any) => {
-        selectedElements.value[el.id] = el;
+        selectedElements.value[el._id] = el;
       });
       isSelectingMultiple.value = true;
     },
@@ -101,7 +101,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
             {
               index,
               element: el,
-              id: el.id,
+              id: el._id,
             },
             [
               h(
@@ -109,13 +109,13 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                 {
                   ...el.attrs,
                   onMousemove: (event: MouseEvent) =>
-                    _handleElementDrag({ e: event, id: el.id, index }),
-                  onMousedown: () => _handleElementSelection({ id: el.id, el }),
+                    _handleElementDrag({ e: event, id: el._id, index }),
+                  onMousedown: () => _handleElementSelection({ id: el._id, el }),
                   id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
                 },
                 [],
               ),
-              selectedElements.value[el.id || 0] &&
+              selectedElements.value[el._id || 0] &&
                 h(
                   SVG_ELEMENT_TYPE.G,
                   {

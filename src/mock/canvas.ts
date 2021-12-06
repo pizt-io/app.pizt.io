@@ -2,6 +2,7 @@ import { SVG_ELEMENT_TYPE, SVG_PATH_CMD } from "@/core/constants/svg";
 
 export const canvas = [
   {
+    _id: "15e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
     pos: { x: 150, y: 100 },
     size: { width: 100, height: 50 },
@@ -9,6 +10,7 @@ export const canvas = [
     style: { fill: "#f04337" },
   },
   {
+    _id: "25e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.RECT,
     pos: { x: 250, y: 300 },
     size: { width: 100, height: 50 },
@@ -16,6 +18,7 @@ export const canvas = [
     style: { fill: "#f04337" },
   },
   {
+    _id: "35e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
     pos: { x: 200, y: 250 },
     size: { width: 100, height: 50 },
@@ -23,6 +26,7 @@ export const canvas = [
     style: { fill: "#f04337" },
   },
   {
+    _id: "45e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.LINE,
     pos: [
       { x: 300, y: 50 },
@@ -32,6 +36,7 @@ export const canvas = [
     style: { stroke: "#f04337" },
   },
   {
+    _id: "55e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.LINE,
     pos: [
       { x: 600, y: 50 },
@@ -41,6 +46,7 @@ export const canvas = [
     style: { stroke: "#f04337" },
   },
   {
+    _id: "65e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.PATH,
     commands: [
       {
@@ -80,6 +86,7 @@ export const canvas = [
     style: { fill: "#f04337" },
   },
   {
+    _id: "75e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.POLYGON,
     pos: [
       [0, 100],
@@ -91,6 +98,7 @@ export const canvas = [
     style: { fill: "#f04337" },
   },
   {
+    _id: "85e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.POLYLINE,
     pos: [
       [0, 100],

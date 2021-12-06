@@ -1,4 +1,3 @@
-import { SVG_ELEMENT_PREFIX } from "@/core/constants/svg";
 import { canvas } from "@/mock/canvas";
 import { ActionTree } from "vuex";
 import { useSVGConverter } from "../use/svg/converter";
@@ -10,10 +9,7 @@ export const actions: Actions = {
   getCanvasElements: async ({ commit }) => {
     const { convertDataToElements } = useSVGConverter();
 
-    const elements = convertDataToElements(canvas).map((el, index) => ({
-      ...el,
-      id: `${SVG_ELEMENT_PREFIX}-g-${index}`,
-    }));
+    const elements = convertDataToElements(canvas);
 
     commit("SET_ELEMENTS", elements);
 

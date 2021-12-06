@@ -54,23 +54,26 @@ export const useSVGMapper = () => {
    * @param style Style of the shape
    * @returns The shape object to be used in the builder
    */
-  const circle = (
-    pos: SVGPoint,
-    size: SVGCircleSize,
-    transform: SVGTransform,
-    style: SVGStyles = {
-      fill: "#f04337",
-    },
-  ): SVGCircle => ({
-    tag: SVG_ELEMENT_TYPE.CIRCLE,
-    attrs: {
-      [POS_X_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: pos.x,
-      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: pos.y,
-      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: size.width / 2, // Divide to get radius
-      ...style,
-    },
-    transform,
-  });
+  const circle =
+    (id: string) =>
+    (
+      pos: SVGPoint,
+      size: SVGCircleSize,
+      transform: SVGTransform,
+      style: SVGStyles = {
+        fill: "#f04337",
+      },
+    ): SVGCircle => ({
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.CIRCLE,
+      attrs: {
+        [POS_X_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: pos.x,
+        [POS_Y_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: pos.y,
+        [WIDTH_MAPPING[SVG_ELEMENT_TYPE.CIRCLE] as string]: size.width / 2, // Divide to get radius
+        ...style,
+      },
+      transform,
+    });
 
   /**
    *
@@ -80,24 +83,27 @@ export const useSVGMapper = () => {
    * @param style Style of the shape
    * @returns The shape object to be used in the builder
    */
-  const ellipse = (
-    pos: SVGPoint,
-    size: SVGEllipseSize,
-    transform: SVGTransform,
-    style: SVGStyles = {
-      fill: "#f04337",
-    },
-  ): SVGEllipse => ({
-    tag: SVG_ELEMENT_TYPE.ELLIPSE,
-    attrs: {
-      [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: pos.x,
-      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: pos.y,
-      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: size.width / 2, // Divide to get radius
-      [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: size.height / 2, // Divide to get radius
-      ...style,
-    },
-    transform,
-  });
+  const ellipse =
+    (id: string) =>
+    (
+      pos: SVGPoint,
+      size: SVGEllipseSize,
+      transform: SVGTransform,
+      style: SVGStyles = {
+        fill: "#f04337",
+      },
+    ): SVGEllipse => ({
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.ELLIPSE,
+      attrs: {
+        [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: pos.x,
+        [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: pos.y,
+        [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: size.width / 2, // Divide to get radius
+        [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: size.height / 2, // Divide to get radius
+        ...style,
+      },
+      transform,
+    });
 
   /**
    *
@@ -107,24 +113,27 @@ export const useSVGMapper = () => {
    * @param style Style of the shape
    * @returns The shape object to be used in the builder
    */
-  const rect = (
-    pos: SVGPoint,
-    size: SVGRectangleSize,
-    transform: SVGTransform,
-    style: SVGStyles = {
-      fill: "#f04337",
-    },
-  ): SVGRectangle => ({
-    tag: SVG_ELEMENT_TYPE.RECT,
-    attrs: {
-      [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: pos.x,
-      [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: pos.y,
-      [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: size.width,
-      [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: size.height,
-      ...style,
-    },
-    transform,
-  });
+  const rect =
+    (id: string) =>
+    (
+      pos: SVGPoint,
+      size: SVGRectangleSize,
+      transform: SVGTransform,
+      style: SVGStyles = {
+        fill: "#f04337",
+      },
+    ): SVGRectangle => ({
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.RECT,
+      attrs: {
+        [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: pos.x,
+        [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: pos.y,
+        [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: size.width,
+        [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: size.height,
+        ...style,
+      },
+      transform,
+    });
 
   /**
    *
@@ -134,23 +143,26 @@ export const useSVGMapper = () => {
    * @param bordered Where the shape display a full border when selected or not
    * @returns The shape object to be used in the builder
    */
-  const line = (
-    pos: [SVGPoint, SVGPoint],
-    transform: SVGTransform,
-    style: SVGStyles = {
-      stroke: "#f04337",
-    },
-  ): SVGLine => ({
-    tag: SVG_ELEMENT_TYPE.LINE,
-    attrs: {
-      x1: pos[0].x,
-      y1: pos[0].y,
-      x2: pos[1].x,
-      y2: pos[1].y,
-      ...style,
-    },
-    transform,
-  });
+  const line =
+    (id: string) =>
+    (
+      pos: [SVGPoint, SVGPoint],
+      transform: SVGTransform,
+      style: SVGStyles = {
+        stroke: "#f04337",
+      },
+    ): SVGLine => ({
+      _id: id,
+      tag: SVG_ELEMENT_TYPE.LINE,
+      attrs: {
+        x1: pos[0].x,
+        y1: pos[0].y,
+        x2: pos[1].x,
+        y2: pos[1].y,
+        ...style,
+      },
+      transform,
+    });
 
   /**
    *
@@ -173,74 +185,83 @@ export const useSVGMapper = () => {
         { fill: "#f04337" }
       )
    */
-  const path = (
-    commands: Array<string>,
-    transform: SVGTransform,
-    style: SVGStyles = {
-      stroke: "#f04337",
-    },
-  ): SVGPath => {
-    const path = commands.join(" ");
-    const boundingBox = _getSVGPathBoundingBox(path);
-
-    return {
-      tag: SVG_ELEMENT_TYPE.PATH,
-      attrs: {
-        d: path,
-        ...style,
+  const path =
+    (id: string) =>
+    (
+      commands: Array<string>,
+      transform: SVGTransform,
+      style: SVGStyles = {
+        stroke: "#f04337",
       },
-      boundingBox,
-      transform,
+    ): SVGPath => {
+      const path = commands.join(" ");
+      const boundingBox = _getSVGPathBoundingBox(path);
+
+      return {
+        _id: id,
+        tag: SVG_ELEMENT_TYPE.PATH,
+        attrs: {
+          d: path,
+          ...style,
+        },
+        boundingBox,
+        transform,
+      };
     };
-  };
 
-  const polygon = (
-    positions: Array<[number, number]>,
-    transform: SVGTransform,
-    style: SVGStyles = {
-      stroke: "#f04337",
-    },
-  ): SVGPolygon => {
-    const xPositions = positions.map((pos) => pos[0]);
-    const yPositions = positions.map((pos) => pos[1]);
-
-    return {
-      tag: SVG_ELEMENT_TYPE.POLYGON,
-      attrs: {
-        points: positions.map((point) => point.join(",")).join(" "),
-        ...style,
+  const polygon =
+    (id: string) =>
+    (
+      positions: Array<[number, number]>,
+      transform: SVGTransform,
+      style: SVGStyles = {
+        stroke: "#f04337",
       },
-      xMin: Math.min(...xPositions),
-      yMin: Math.min(...yPositions),
-      xMax: Math.max(...xPositions),
-      yMax: Math.max(...yPositions),
-      transform,
+    ): SVGPolygon => {
+      const xPositions = positions.map((pos) => pos[0]);
+      const yPositions = positions.map((pos) => pos[1]);
+
+      return {
+        _id: id,
+        tag: SVG_ELEMENT_TYPE.POLYGON,
+        attrs: {
+          points: positions.map((point) => point.join(",")).join(" "),
+          ...style,
+        },
+        xMin: Math.min(...xPositions),
+        yMin: Math.min(...yPositions),
+        xMax: Math.max(...xPositions),
+        yMax: Math.max(...yPositions),
+        transform,
+      };
     };
-  };
 
-  const polyline = (
-    positions: Array<[number, number]>,
-    transform: SVGTransform,
-    style: SVGStyles = {
-      stroke: "#f04337",
-    },
-  ): SVGPolyline => {
-    const xPositions = positions.map((pos) => pos[0]);
-    const yPositions = positions.map((pos) => pos[1]);
-
-    return {
-      tag: SVG_ELEMENT_TYPE.POLYLINE,
-      attrs: {
-        points: positions.map((point) => point.join(",")).join(" "),
-        ...style,
+  const polyline =
+    (id: string) =>
+    (
+      positions: Array<[number, number]>,
+      transform: SVGTransform,
+      style: SVGStyles = {
+        stroke: "#f04337",
       },
-      xMin: Math.min(...xPositions),
-      yMin: Math.min(...yPositions),
-      xMax: Math.max(...xPositions),
-      yMax: Math.max(...yPositions),
-      transform,
+    ): SVGPolyline => {
+      const xPositions = positions.map((pos) => pos[0]);
+      const yPositions = positions.map((pos) => pos[1]);
+
+      return {
+        _id: id,
+        tag: SVG_ELEMENT_TYPE.POLYLINE,
+        attrs: {
+          points: positions.map((point) => point.join(",")).join(" "),
+          ...style,
+        },
+        xMin: Math.min(...xPositions),
+        yMin: Math.min(...yPositions),
+        xMax: Math.max(...xPositions),
+        yMax: Math.max(...yPositions),
+        transform,
+      };
     };
-  };
 
   return {
     circle,
