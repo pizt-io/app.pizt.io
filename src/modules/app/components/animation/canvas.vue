@@ -10,10 +10,8 @@
 // PERFORMANCE NOTICE:
 // DEVTOOL CAN SOMETIME NOT DETECT CHANGES IN THE COMPONENT DUE TO HUGE AND DEEPLY NESTED DATA CHANGES
 
-import { ComponentPublicInstance, defineComponent, ref, watch } from "vue";
+import { ComponentPublicInstance, defineAsyncComponent, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
-
-import SVGCanvas from "@/modules/app/components/animation/svg/SVGCanvas.vue";
 
 import _debounce from "lodash/debounce";
 import _isEqual from "lodash/isEqual";
@@ -21,7 +19,9 @@ import _isEqual from "lodash/isEqual";
 export default defineComponent({
   name: "AnimationCanvas",
   components: {
-    SVGCanvas,
+    SVGCanvas: defineAsyncComponent(
+      () => import("@/modules/app/components/animation/svg/SVGCanvas.vue"),
+    ),
   },
   setup() {
     const canvasRef = ref<ComponentPublicInstance | null>(null);

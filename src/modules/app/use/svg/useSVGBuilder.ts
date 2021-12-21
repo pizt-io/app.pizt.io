@@ -119,7 +119,9 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                   onMousedown: () => _handleElementSelection({ id: el._id, el }),
                   id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
                 },
-                [],
+                [
+                  // Animation tags
+                ],
               ),
               selectedElements.value[el._id || 0] &&
                 h(

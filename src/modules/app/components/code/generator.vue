@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineAsyncComponent, defineComponent, ref } from "vue";
 import { prettyCodeCss } from "@core/utils/prettier";
 import { useStore } from "vuex";
 import { RootState } from "@store/state";
@@ -67,12 +67,10 @@ import { ElMessage } from "element-plus";
 
 import "element-plus/theme-chalk/el-message.css";
 
-import CodeEditor from "@core/components/CodeEditor.vue";
-
 export default defineComponent({
   name: "CodeGenerator",
   components: {
-    CodeEditor,
+    CodeEditor: defineAsyncComponent(() => import("@/core/components/code-editor")),
   },
   setup() {
     const store = useStore<RootState>();

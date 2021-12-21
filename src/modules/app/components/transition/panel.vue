@@ -119,7 +119,7 @@ import { RootState } from "@store/state";
 import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
-import CubicBezier from "@core/components/CubicBezier.vue";
+import CubicBezier from "@/core/components/cubic-bezier";
 
 export default defineComponent({
   name: "TransitionPanel",

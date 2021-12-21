@@ -1,12 +1,19 @@
 <template>
-  <div class="w-full h-full"></div>
+  <div class="w-full h-full">
+    <VueTimelineAnimation />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
 
 export default defineComponent({
   name: "AnimationTimeline",
+  components: {
+    VueTimelineAnimation: defineAsyncComponent(
+      () => import("@/core/components/vue-timeline-animation"),
+    ),
+  },
   setup() {},
 });
 </script>

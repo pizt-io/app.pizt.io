@@ -4,14 +4,15 @@ export const canvas = [
   {
     _id: "15e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
+    keyframes: ["168rf9c8f9c88478f9c88038f", "268rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: { x: 150, y: 100 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337" },
       },
-      2000: {
+      "268rf9c8f9c88478f9c88038f": {
         pos: { x: 150, y: 100 },
         size: { width: 100, height: 50 },
         transform: { translateX: 100, translateY: 200 },
@@ -22,8 +23,9 @@ export const canvas = [
   {
     _id: "25e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.RECT,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: { x: 250, y: 300 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
@@ -34,8 +36,9 @@ export const canvas = [
   {
     _id: "35e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: { x: 200, y: 250 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
@@ -46,8 +49,9 @@ export const canvas = [
   {
     _id: "45e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.LINE,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: [
           { x: 300, y: 50 },
           { x: 450, y: 150 },
@@ -60,8 +64,9 @@ export const canvas = [
   {
     _id: "55e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.LINE,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: [
           { x: 600, y: 50 },
           { x: 550, y: 150 },
@@ -74,8 +79,9 @@ export const canvas = [
   {
     _id: "65e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.PATH,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         commands: [
           {
             type: SVG_PATH_CMD.MOVE_TO,
@@ -118,8 +124,9 @@ export const canvas = [
   {
     _id: "75e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.POLYGON,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: [
           [0, 100],
           [50, 25],
@@ -134,8 +141,9 @@ export const canvas = [
   {
     _id: "85e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.POLYLINE,
+    keyframes: ["168rf9c8f9c88478f9c88038f"],
     stages: {
-      0: {
+      "168rf9c8f9c88478f9c88038f": {
         pos: [
           [0, 100],
           [50, 25],

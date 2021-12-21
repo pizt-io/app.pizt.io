@@ -87,73 +87,45 @@
 </template>
 
 <script lang="ts">
+import { defineAsyncComponent, defineComponent, provide, ref } from "vue";
+
 import { APP_MODE } from "@core/constants/navigator";
-import { defineComponent, onUnmounted, provide, ref } from "vue";
+import { useLazyStore } from "@/core/use/useLazyStore";
 
-import CanvasBackgroundToggle from "@core/components/CanvasBackgroundToggle.vue";
-
-// import Header from "@modules/app/components/header/header.vue";
-// import LayerTree from "@modules/app/components/tree/layer.vue";
-import CodeGenerator from "@modules/app/components/code/generator.vue";
-import Navigator from "@modules/app/components/navigator/navigator.vue";
-
-import TransitionToolbar from "@modules/app/components/transition/toolbar.vue";
-import TransitionCanvas from "@modules/app/components/transition/canvas.vue";
-import TransitionPanel from "@modules/app/components/transition/panel.vue";
-import TransitionTimeline from "@modules/app/components/transition/timeline.vue";
-import AnimationToolbar from "@modules/app/components/animation/toolbar.vue";
-import AnimationCanvas from "@modules/app/components/animation/canvas.vue";
-import AnimationPanel from "@modules/app/components/animation/panel.vue";
-import AnimationTimeline from "@modules/app/components/animation/timeline.vue";
-
-import { useAppMode } from "@modules/app/use/useAppMode";
-import { useDark } from "@use/useDark";
-import { useStore } from "vuex";
+import { useAppMode } from "./use/useAppMode";
 import { appStoreModule } from "./store";
 
 export default defineComponent({
   name: "AppPage",
   components: {
-    CanvasBackgroundToggle,
-    // Header,
-    // LayerTree,
-    Navigator,
-    TransitionToolbar,
-    TransitionCanvas,
-    TransitionPanel,
-    TransitionTimeline,
-    AnimationToolbar,
-    AnimationCanvas,
-    AnimationPanel,
-    AnimationTimeline,
-    CodeGenerator,
+    CanvasBackgroundToggle: defineAsyncComponent(() => import("./components/canvas-toggle-bg.vue")),
+    CodeGenerator: defineAsyncComponent(() => import("./components/code/generator.vue")),
+    // eslint-disable-next-line vue/no-unused-components
+    Header: defineAsyncComponent(() => import("./components/header/header.vue")),
+    // eslint-disable-next-line vue/no-unused-components
+    LayerTree: defineAsyncComponent(() => import("./components/tree/layer.vue")),
+    Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
+    TransitionToolbar: defineAsyncComponent(() => import("./components/transition/toolbar.vue")),
+    TransitionCanvas: defineAsyncComponent(() => import("./components/transition/canvas.vue")),
+    TransitionPanel: defineAsyncComponent(() => import("./components/transition/panel.vue")),
+    TransitionTimeline: defineAsyncComponent(() => import("./components/transition/timeline.vue")),
+    AnimationToolbar: defineAsyncComponent(() => import("./components/animation/toolbar.vue")),
+    AnimationCanvas: defineAsyncComponent(() => import("./components/animation/canvas.vue")),
+    AnimationPanel: defineAsyncComponent(() => import("./components/animation/panel.vue")),
+    AnimationTimeline: defineAsyncComponent(() => import("./components/animation/timeline.vue")),
   },
   setup() {
     const { appMode } = useAppMode();
-    const { isDark } = useDark();
 
-    const currentTime = ref(0);
+    const currentTime = ref("168rf9c8f9c88478f9c88038f");
 
     provide("currentTime", currentTime);
 
-    const store = useStore();
-
-    const _STORE_NAME = "app";
-
-    if (!store.hasModule(_STORE_NAME)) {
-      store.registerModule(_STORE_NAME, appStoreModule);
-    }
-
-    onUnmounted(() => {
-      if (store.hasModule(_STORE_NAME)) {
-        store.unregisterModule(_STORE_NAME);
-      }
-    });
+    useLazyStore("app", appStoreModule);
 
     return {
       APP_MODE,
       appMode,
-      isDark,
       currentTime,
     };
   },

@@ -92,7 +92,7 @@
 import { APP_MODE } from "@core/constants/navigator";
 import { defineComponent, onUnmounted } from "vue";
 
-import CanvasBackgroundToggle from "@core/components/CanvasBackgroundToggle.vue";
+import CanvasBackgroundToggle from "@/modules/app/components/canvas-toggle-bg.vue";
 
 // import Header from "@modules/app/components/header/header.vue";
 // import LayerTree from "@modules/app/components/tree/layer.vue";
