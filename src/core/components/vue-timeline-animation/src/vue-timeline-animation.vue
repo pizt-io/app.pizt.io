@@ -1,31 +1,32 @@
 <template>
   <div class="va-timeline-component">
-    <div class="va-layer__wrapper" :style="{ width: '320px' }">
-      <div class="va-layer__toolbar"></div>
-      <div class="va-layer__container">
+    <div class="va-timeline-component__header">
+      <div class="va-timeline-component__toolbar" :style="{ width: '320px' }"></div>
+      <div class="va-timeline-component__ruler">
+        <i
+          class="va-timeline-component__indicator__caret icon icon-va-eject"
+          :style="{
+            left: currentTime * 100 + '%',
+          }"
+        />
+        <div
+          class="va-timeline-component__indicator__line"
+          :style="{
+            left: currentTime * 100 + '%',
+            height: vaTimelineBodyHeight + 'px',
+          }"
+        ></div>
+      </div>
+    </div>
+    <div ref="vaTimelineBodyRef" class="va-timeline-component__body">
+      <div class="va-layer__wrapper" :style="{ width: '320px' }">
         <draggable v-model="elements" v-bind="dragOptions" v-on="dragEventHandlers" item-key="id">
           <template v-slot:item="{ index }">
             <LayerItem v-model="elements[index]" />
           </template>
         </draggable>
       </div>
-    </div>
-    <div class="va-timeline__wrapper">
-      <div class="va-timeline__ruler">
-        <i
-          class="va-timeline__indicator__caret icon icon-va-eject"
-          :style="{
-            left: currentTime * 100 + '%',
-          }"
-        ></i>
-      </div>
-      <div class="va-timeline__container">
-        <div
-          class="va-timeline__indicator__line"
-          :style="{
-            left: currentTime * 100 + '%',
-          }"
-        ></div>
+      <div class="va-timeline__wrapper">
         <TimelineItem
           v-for="(element, index) in elements"
           v-model="elements[index]"
@@ -69,6 +70,15 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(_props, { emit }) {
+    const vaTimelineBodyRef = ref<null | HTMLDivElement>(null);
+    const vaTimelineBodyHeight = computed(() => {
+      if (vaTimelineBodyRef.value) {
+        return vaTimelineBodyRef.value.clientHeight;
+      }
+
+      return 0;
+    });
+
     const isDragging = ref(false);
     const dragOptions = computed(() => ({
       animation: 200,
@@ -145,6 +155,43 @@ export default defineComponent({
           },
         },
       },
+      {
+        id: "3jhg1kj23jkh4kj67jh",
+        name: "Layer 3",
+        keyframes: [
+          "stage-id-168rf9c8f9c88478f9c88038f",
+          "stage-id-268rf9c8f4c74478f9c88038f",
+          "stage-id-468rf9c8f9c88ỉbf9c48038f",
+          "stage-id-568rf9c8f9c88478f9c88038f",
+        ],
+        expanded: true,
+        stages: {
+          "stage-id-168rf9c8f9c88478f9c88038f": {
+            keyframe: 0,
+            label: "Position",
+            property: "position",
+            value: { x: "150.0", y: "100.0" },
+          },
+          "stage-id-268rf9c8f4c74478f9c88038f": {
+            keyframe: 0.3,
+            label: "Color",
+            property: "color",
+            value: "#cf3c3c",
+          },
+          "stage-id-468rf9c8f9c88ỉbf9c48038f": {
+            keyframe: 0.6,
+            label: "Position",
+            property: "position",
+            value: { x: "300.0", y: "200.0" },
+          },
+          "stage-id-568rf9c8f9c88478f9c88038f": {
+            keyframe: 0.9,
+            label: "Color",
+            property: "color",
+            value: "#3c74cf",
+          },
+        },
+      },
     ]);
 
     watch(
@@ -156,6 +203,8 @@ export default defineComponent({
     );
 
     return {
+      vaTimelineBodyRef,
+      vaTimelineBodyHeight,
       currentTime,
       elements,
       dragOptions,
