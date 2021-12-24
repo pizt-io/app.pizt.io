@@ -3,12 +3,12 @@ $--border-color-base: #363636;
 $--timeline-indicator-color: #c0bd04;
 $--timeline-indicator-z-index: 50;
 
-$--item-bg: #3d3d3d;
+$--item-bg: #181818;
 $--item-color: #bbbbbb;
 $--item-height: 28px;
 $--item-font-size: 0.8rem;
 
-$--item-expanded-bg: #4b4b4b;
+$--item-expanded-bg: #1A1D20;
 $--item-expanded-toggle: #bbbbbb;
 
 $--item-input-color: #c9b12e;
@@ -27,6 +27,7 @@ $--item-input-color-focus: #bbbbbb;
   &__header {
     display: flex;
     height: 32px;
+    border-bottom: 1px solid $--border-color-base;
   }
 
   &__body {
@@ -37,7 +38,12 @@ $--item-input-color-focus: #bbbbbb;
 
   &__toolbar {
     height: 100%;
-    background-color: rgb(255, 50, 50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid $--border-color-base;
   }
 
   &__ruler {
@@ -45,9 +51,9 @@ $--item-input-color-focus: #bbbbbb;
     height: 100%;
     position: relative;
     overflow: visible;
-    background-color: rgb(89, 91, 247);
     margin-right: 10px;
     margin-left: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
   }
 
   &__indicator {
@@ -68,10 +74,58 @@ $--item-input-color-focus: #bbbbbb;
       user-select: none;
       position: absolute;
       z-index: $--timeline-indicator-z-index;
-      top: 32px;
       width: 1px;
       transform: translateX(-50%);
       background-color: $--timeline-indicator-color;
+    }
+  }
+}
+
+.va-toolbar {
+  &__left {
+    color: $--item-color;
+
+    &__current-time {
+      display: inline-flex;
+      align-items: center;
+      color: $--item-input-color;
+      font-size: 1.2rem;
+
+      > span {
+        margin: 0 5px;
+      }
+
+      input {
+        outline: none;
+        cursor: pointer;
+        display: inline-block;
+        width: 65px;
+        background-color: transparent;
+
+        &:focus {
+          color: $--item-input-color-focus;
+          cursor: initial;
+        }
+      }
+
+      &:focus-within {
+        color: $--item-input-color-focus;
+        border-top: 1px dotted rgb(161, 161, 161);
+        border-bottom: 1px dotted rgb(161, 161, 161);
+      }
+    }
+
+  }
+  &__right {
+    color: $--item-color;
+    display: inline-flex;
+    align-items: center;
+
+    .icon {
+      cursor: pointer;
+      &:hover {
+        color: $--item-input-color;
+      }
     }
   }
 }
@@ -106,6 +160,7 @@ $--item-input-color-focus: #bbbbbb;
     }
   }
 }
+
 .va-timeline {
   &__wrapper {
     padding-left: 5px;

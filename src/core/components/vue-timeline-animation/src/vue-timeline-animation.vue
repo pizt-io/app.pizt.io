@@ -1,7 +1,30 @@
 <template>
   <div class="va-timeline-component">
     <div class="va-timeline-component__header">
-      <div class="va-timeline-component__toolbar" :style="{ width: '320px' }"></div>
+      <div class="va-timeline-component__toolbar" :style="{ width: '320px' }">
+        <span class="va-toolbar__left">
+          <span class="va-toolbar__left__current-time">
+            <i class="icon icon-va-clock-o" />
+            <span>(s)</span>
+            <input
+              type="number"
+              :max="timelineDuration / 1000"
+              min="0"
+              step="0.001"
+              :value="((timelineDuration * currentTime) / 1000).toFixed(3)"
+              @change="handleChangeCurrentTime"
+            />
+          </span>
+        </span>
+        <span class="va-toolbar__right">
+          <Tippy trigger="click">
+            <i class="icon icon-va-plus-circle" />
+            <template v-slot:body>
+              <div> Add keyframe </div>
+            </template>
+          </Tippy>
+        </span>
+      </div>
       <div class="va-timeline-component__ruler">
         <i
           class="va-timeline-component__indicator__caret icon icon-va-eject"
@@ -12,8 +35,9 @@
         <div
           class="va-timeline-component__indicator__line"
           :style="{
+            top: '50%',
             left: currentTime * 100 + '%',
-            height: vaTimelineBodyHeight + 'px',
+            height: `calc(${vaTimelineBodyHeight}px + 50%)`,
           }"
         ></div>
       </div>
@@ -41,6 +65,7 @@
 import { computed, defineComponent, ref, watch } from "vue";
 import TimelineItem from "./components/timeline/timeline-item.vue";
 import LayerItem from "./components/layer/layer-item.vue";
+import Tippy from "./components/tippy/tippy.vue";
 
 import draggable from "vuedraggable";
 
@@ -61,7 +86,7 @@ type Element = {
 
 export default defineComponent({
   name: "AnimationTimeline",
-  components: { draggable, TimelineItem, LayerItem },
+  components: { draggable, TimelineItem, LayerItem, Tippy },
   props: {
     modelValue: {
       type: Array,
@@ -95,6 +120,8 @@ export default defineComponent({
         isDragging.value = false;
       },
     };
+
+    const timelineDuration = ref(5000);
 
     const currentTime = ref(0.5);
     const elements = ref<Element[]>([
@@ -202,13 +229,19 @@ export default defineComponent({
       { immediate: true, deep: true },
     );
 
+    const handleChangeCurrentTime = (e: any) => {
+      currentTime.value = (+e.target.value * 1000) / timelineDuration.value;
+    };
+
     return {
       vaTimelineBodyRef,
       vaTimelineBodyHeight,
       currentTime,
+      timelineDuration,
       elements,
       dragOptions,
       dragEventHandlers,
+      handleChangeCurrentTime,
     };
   },
 });
