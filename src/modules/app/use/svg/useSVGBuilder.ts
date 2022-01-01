@@ -1,6 +1,6 @@
-import { SVGElement, SVGElementDragPayload, SVGElementSelectPayload } from "@/types/svg";
+import { SVGElement, SVGElementSelectPayload } from "@/types/svg";
 import { SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@core/constants/svg";
-import { computed, h, inject, Ref, ref } from "vue";
+import { computed, h, inject, onMounted, Ref, ref } from "vue";
 
 import SVGElementComponent from "@modules/app/components/animation/svg/SVGElement.vue";
 
@@ -17,8 +17,6 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
   const isTransforming = ref(false);
 
   const isSelectingMultiple = ref(false);
-
-  // CANVAS HANDLERS
 
   const { isHoldingShift } = useSVGCanvasEvents({
     onKeydownControlA: (e: KeyboardEvent) => {
@@ -40,26 +38,39 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     isMousedown.value = true;
 
     if (_isClickingOnCanvas(e)) {
+      // TODO(BUG): Drag multiple selected elements
       selectedElements.value = {};
       isSelectingMultiple.value = false;
     }
   };
-  const _handleMouseupCanvas = () => {
-    if (isMousedown.value) {
-      isMousedown.value = false;
+
+  const _handleMouseup = () => {
+    isMousedown.value = false;
+  };
+
+  const _handleMousemove = (e: MouseEvent) => {
+    const targetElement = e.target as HTMLElement;
+
+    targetElement?.nodeName === SVG_ELEMENT_TYPE.SVG;
+
+    if (!isTransforming.value && isMousedown.value) {
+      Object.keys(selectedElements.value).forEach((key) => {
+        // Elements are passed into selectedElements by references so we can mutate them through the selectedElements object
+        selectedElements.value[key].stages[currentTime.value].transform.translateX += e.movementX;
+        selectedElements.value[key].stages[currentTime.value].transform.translateY += e.movementY;
+      });
     }
   };
 
-  // ELEMENT HANDLERS
+  onMounted(() => {
+    window.addEventListener("mouseup", _handleMouseup);
+    window.addEventListener("mousemove", _handleMousemove);
+  });
 
   const _handleElementSelection = ({ id, el }: SVGElementSelectPayload) => {
     // Multiple selection
     if (isHoldingShift.value) {
       selectedElements.value[id || 0] = el;
-    } else if (isSelectingMultiple.value && selectedElements.value[id || 0]) {
-      // TODO(IMPROVEMENT): handle use case:
-      // If got drag, do nothing
-      // If it's not a drag, select this element and clear the others
     } else {
       selectedElements.value = {};
       selectedElements.value[id || 0] = el;
@@ -67,16 +78,6 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
 
     if (Object.keys(selectedElements.value).length > 1) {
       isSelectingMultiple.value = true;
-    }
-  };
-
-  const _handleElementDrag = ({ e }: SVGElementDragPayload) => {
-    if (!isTransforming.value && isMousedown.value) {
-      Object.keys(selectedElements.value).forEach((key) => {
-        // Elements are passed into selectedElements by references so we can mutate them through the selectedElements object
-        selectedElements.value[key].stages[currentTime.value].transform.translateX += e.movementX;
-        selectedElements.value[key].stages[currentTime.value].transform.translateY += e.movementY;
-      });
     }
   };
 
@@ -93,7 +94,6 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
         xmlns: "http://www.w3.org/2000/svg",
         width: "100%",
         height: "100%",
-        onMouseup: _handleMouseupCanvas,
         onMousedown: _handleMousedownCanvas,
       },
       [
@@ -114,8 +114,6 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                 el.tag,
                 {
                   ...elementStage.attrs,
-                  onMousemove: (event: MouseEvent) =>
-                    _handleElementDrag({ e: event, id: el._id, index }),
                   onMousedown: () => _handleElementSelection({ id: el._id, el }),
                   id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
                 },

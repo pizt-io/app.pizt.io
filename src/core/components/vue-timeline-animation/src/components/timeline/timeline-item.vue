@@ -6,7 +6,7 @@
         :key="key"
         class="icon icon-va-locate"
         :style="{
-          left: modelValue.stages[key].keyframe * 100 + '%',
+          left: (modelValue.stages[key].time * 100) / duration + '%',
         }"
       />
     </div>
@@ -17,7 +17,7 @@
             class="icon icon-va-locate"
             v-if="modelValue.stages[key].property === property"
             :style="{
-              left: modelValue.stages[key].keyframe * 100 + '%',
+              left: (modelValue.stages[key].time * 100) / duration + '%',
             }"
           />
         </template>
@@ -35,6 +35,10 @@ export default defineComponent({
     modelValue: {
       type: Object,
       default: () => ({}),
+    },
+    duration: {
+      type: Number,
+      default: 5000,
     },
   },
   emits: ["update:modelValue"],

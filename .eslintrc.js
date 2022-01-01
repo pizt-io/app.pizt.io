@@ -47,6 +47,7 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
 
+    "vue/no-v-for-template-key-on-child": "off",
     "vue/component-definition-name-casing": "error",
     "vue/array-bracket-spacing": "error",
     "vue/arrow-spacing": "error",

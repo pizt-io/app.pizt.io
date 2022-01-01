@@ -1,7 +1,10 @@
 $--border-color-base: #363636;
 
+$--timeline-unit-color: #6d6d6d;
+
 $--timeline-indicator-color: #c0bd04;
 $--timeline-indicator-z-index: 50;
+$--timeline-unit-z-index: 49;
 
 $--item-bg: #181818;
 $--item-color: #bbbbbb;
@@ -51,9 +54,30 @@ $--item-input-color-focus: #bbbbbb;
     height: 100%;
     position: relative;
     overflow: visible;
-    margin-right: 10px;
-    margin-left: 5px;
     background-color: rgba(0, 0, 0, 0.2);
+
+    .u {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      width: 1px;
+      background-color: $--timeline-unit-color;
+      z-index: $--timeline-unit-z-index;
+      pointer-events: none;
+      user-select: none;
+    }
+    .t {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      color: $--timeline-unit-color;
+      background-color: $--item-expanded-bg;
+      z-index: $--timeline-unit-z-index;
+      font-size: 0.75rem;
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+    }
   }
 
   &__indicator {
@@ -64,6 +88,7 @@ $--item-input-color-focus: #bbbbbb;
       transform: translate(-50%, 3px) rotate(180deg);
       color: $--timeline-indicator-color;
       cursor: grab;
+      user-select: none;
 
       &:active {
         cursor: grabbing;
@@ -163,7 +188,6 @@ $--item-input-color-focus: #bbbbbb;
 
 .va-timeline {
   &__wrapper {
-    padding-left: 5px;
     flex: 1;
   }
 
@@ -174,7 +198,6 @@ $--item-input-color-focus: #bbbbbb;
     color: $--item-color;
     background-color: $--item-bg;
     position: relative;
-    // overflow: hidden;
     border-bottom: 1px solid $--border-color-base;
 
     .text {
