@@ -127,10 +127,6 @@ export default defineComponent({
 });
 </script>
 
-<style>
-/* @import "https://vectorjs.org/library.css"; */
-</style>
-
 <style lang="scss" module>
 @import "@styles/all";
 

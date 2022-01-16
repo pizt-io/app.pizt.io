@@ -93,7 +93,7 @@
         <TimelineItem
           v-for="(element, index) in elements"
           v-model="elements[index]"
-          :key="element.id"
+          :key="`${element.name}-${index}`"
           :duration="timelineDuration"
         />
       </div>
@@ -134,13 +134,21 @@ export default defineComponent({
   name: "AnimationTimeline",
   components: { draggable, TimelineItem, LayerItem, Tippy },
   props: {
-    modelValue: {
+    duration: {
+      type: Number,
+      default: 5000,
+    },
+    modelElements: {
       type: Array,
       default: () => [],
     },
+    modelCurrentTime: {
+      type: Number,
+      default: 0,
+    },
   },
-  emits: ["update:modelValue"],
-  setup(_props, { emit }) {
+  emits: ["update:modelElements", "update:modelCurrentTime"],
+  setup(props, { emit }) {
     const vaTimelineBodyRef = ref<null | HTMLDivElement>(null);
     const vaTimelineBodyHeight = computed(() => {
       if (vaTimelineBodyRef.value) {
@@ -150,6 +158,7 @@ export default defineComponent({
       return 0;
     });
 
+    const timelineDuration = ref(props.duration);
     const isDragging = ref(false);
     const dragOptions = computed(() => ({
       animation: 200,
@@ -167,113 +176,8 @@ export default defineComponent({
       },
     };
 
-    const timelineDuration = ref(10000);
-
-    const currentTime = ref(2000);
-    const elements = ref<Element[]>([
-      {
-        id: "1jhg1kj23jkh4kj67jh",
-        name: "Layer 1",
-        keyframes: ["stage-id-168rf9c8f9c88478f9c88038f", "stage-id-268rf9c8f9c88478f9c88038f"],
-        expanded: false,
-        stages: {
-          "stage-id-168rf9c8f9c88478f9c88038f": {
-            time: 0,
-            label: "Position",
-            property: "position",
-            value: { x: 150, y: 100 },
-          },
-          "stage-id-268rf9c8f9c88478f9c88038f": {
-            time: 2500,
-            label: "Position",
-            property: "position",
-            value: { x: 200, y: 150 },
-          },
-        },
-      },
-      {
-        id: "2jhg1kj23jkh4kj67jh",
-        name: "Layer 2",
-        keyframes: [
-          "stage-id-168rf9c8f9c88478f9c88038f",
-          "stage-id-268rf9c8f9c74478f9c88038f",
-          "stage-id-468rf9c8f9c88ỉbf9c88038f",
-          "stage-id-568rf9c8f9c88478f9c88038f",
-        ],
-        expanded: true,
-        stages: {
-          "stage-id-168rf9c8f9c88478f9c88038f": {
-            time: 0,
-            label: "Opacity",
-            property: "opacity",
-            value: 0,
-          },
-          "stage-id-268rf9c8f9c74478f9c88038f": {
-            time: 3500,
-            label: "Opacity",
-            property: "opacity",
-            value: 0.9,
-          },
-          "stage-id-468rf9c8f9c88ỉbf9c88038f": {
-            time: 4000,
-            label: "Opacity",
-            property: "opacity",
-            value: 0.5,
-          },
-          "stage-id-568rf9c8f9c88478f9c88038f": {
-            time: 2500,
-            label: "Position",
-            property: "position",
-            value: { x: 200, y: 150 },
-          },
-        },
-      },
-      {
-        id: "3jhg1kj23jkh4kj67jh",
-        name: "Layer 3",
-        keyframes: [
-          "stage-id-168rf9c8f9c88478f9c88038f",
-          "stage-id-268rf9c8f4c74478f9c88038f",
-          "stage-id-468rf9c8f9c88ỉbf9c48038f",
-          "stage-id-568rf9c8f9c88478f9c88038f",
-        ],
-        expanded: true,
-        stages: {
-          "stage-id-168rf9c8f9c88478f9c88038f": {
-            time: 0,
-            label: "Position",
-            property: "position",
-            value: { x: "150.0", y: "100.0" },
-          },
-          "stage-id-268rf9c8f4c74478f9c88038f": {
-            time: 2700,
-            label: "Color",
-            property: "color",
-            value: "#cf3c3c",
-          },
-          "stage-id-468rf9c8f9c88ỉbf9c48038f": {
-            time: 3000,
-            label: "Position",
-            property: "position",
-            value: { x: "300.0", y: "200.0" },
-          },
-          "stage-id-568rf9c8f9c88478f9c88038f": {
-            time: 1500,
-            label: "Color",
-            property: "color",
-            value: "#3c74cf",
-          },
-        },
-      },
-    ]);
-
-    watch(
-      () => elements.value,
-      () => {
-        emit("update:modelValue", elements.value);
-      },
-      { immediate: true, deep: true },
-    );
+    const currentTime = ref(props.modelCurrentTime as number);
+    const elements = ref(props.modelElements as Element[]);
 
     const handleChangeCurrentTime = (e: any) => {
       currentTime.value = +e.target.value * TIMELINE_MAXIMUM_DIVISION_RATE;
@@ -335,6 +239,22 @@ export default defineComponent({
       window.addEventListener("mousemove", _handleMousemoveIndicator);
       window.addEventListener("mouseup", _handleMounseupIndicator);
     });
+
+    watch(
+      currentTime,
+      () => {
+        emit("update:modelCurrentTime", currentTime.value);
+      },
+      { immediate: true },
+    );
+
+    watch(
+      elements,
+      () => {
+        emit("update:modelElements", elements.value);
+      },
+      { immediate: true, deep: true },
+    );
 
     return {
       TIMELINE_MINIMUM_DIVISION_RATE,

@@ -48,6 +48,12 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     isMousedown.value = false;
   };
 
+  /**
+   * Mutate elements positions through transform because element have different way to specify position
+   *
+   * For example: Rectangle have x, y while circle have rx, ry
+   *
+   */
   const _handleMousemove = (e: MouseEvent) => {
     const targetElement = e.target as HTMLElement;
 

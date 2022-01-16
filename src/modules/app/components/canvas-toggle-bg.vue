@@ -1,20 +1,5 @@
 <template>
-  <div
-    class="
-      flex
-      items-center
-      justify-center
-      absolute
-      top-5
-      right-5
-      h-8
-      w-8
-      rounded-full
-      cursor-pointer
-    "
-    :class="[isDark ? 'bg-white' : 'bg-dark-800']"
-    @click="toggleDark"
-  >
+  <div :class="[$style.canvasToggleBg, isDark ? 'bg-white' : 'bg-dark-800']" @click="toggleDark">
     <i class="icon-brightness-contrast" :class="[isDark ? 'text-dark-800' : 'text-white']" />
   </div>
 </template>
@@ -35,3 +20,18 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" module>
+@import "@styles/all";
+
+.canvasToggleBg {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  border-radius: 50%;
+  cursor: pointer;
+
+  @include size(2rem);
+  @include flexCenter();
+}
+</style>

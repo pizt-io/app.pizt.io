@@ -54,6 +54,7 @@ export default defineComponent({
             },
             value: (+position.value.x).toFixed(decimal),
             onInput: handleInputX,
+            onChange: handleInputX,
           }),
           h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "Y"),
           h("input", {
@@ -66,6 +67,7 @@ export default defineComponent({
             },
             value: (+position.value.y).toFixed(decimal),
             onInput: handleInputY,
+            onChange: handleInputY,
           }),
         ],
       );

@@ -1,6 +1,3 @@
-import { useSVGMapper } from "./useSVGMapper";
-import { useSVGPathMapper } from "./useSVGPathMapper";
-
 import { SVG_ELEMENT_TYPE } from "@core/constants/svg";
 
 import {
@@ -17,6 +14,14 @@ import {
   usePolylineBorderBuilder,
   usePolylineHandlesBuilder,
 } from "@modules/app/use/svg/builder";
+
+import { circle } from "./_circle";
+import { ellipse } from "./_ellipse";
+import { line } from "./_line";
+import { polygon } from "./_polygon";
+import { polyline } from "./_polyline";
+import { rect } from "./_rect";
+import { path } from "./_path";
 
 const borderOptions = Object.freeze({
   fill: "none",
@@ -60,4 +65,14 @@ const BORDER_BUILDER_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.POLYLINE as string]: usePolylineBorderBuilder(borderOptions),
 });
 
-export { useSVGMapper, useSVGPathMapper, BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING };
+const SVG_COMMAND_MAPPING = Object.freeze({
+  [SVG_ELEMENT_TYPE.CIRCLE]: circle,
+  [SVG_ELEMENT_TYPE.ELLIPSE]: ellipse,
+  [SVG_ELEMENT_TYPE.LINE]: line,
+  [SVG_ELEMENT_TYPE.POLYGON]: polygon,
+  [SVG_ELEMENT_TYPE.POLYLINE]: polyline,
+  [SVG_ELEMENT_TYPE.RECT]: rect,
+  [SVG_ELEMENT_TYPE.PATH]: path,
+});
+
+export { BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING, SVG_COMMAND_MAPPING };

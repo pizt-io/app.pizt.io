@@ -24,6 +24,7 @@ export default defineComponent({
         },
         value: color.value,
         onInput: handleInput,
+        onChange: handleInput,
       });
   },
 });

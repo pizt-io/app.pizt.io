@@ -17,6 +17,7 @@ export const useTimeline = (
     const stage = Object.values(props.modelValue.stages).find(
       (stage: any) => stage.property === property,
     ) as any;
+
     return stage ? stage.label : "";
   };
 

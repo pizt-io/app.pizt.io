@@ -37,6 +37,7 @@ export default defineComponent({
         },
         value: (+opacity.value).toFixed(decimal),
         onInput: handleInput,
+        onChange: handleInput,
       });
   },
 });

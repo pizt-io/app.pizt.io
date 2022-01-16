@@ -1,6 +1,9 @@
 <template>
   <div class="w-full h-full flex justify-center items-center">
-    <div :style="{ width: '700px', height: '450px' }" class="bg-white dark:bg-gray-800">
+    <div
+      :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
+      class="bg-white dark:bg-gray-800"
+    >
       <SVGCanvas ref="canvasRef" :key="forceUpdateCanvasFlag" :data="data" />
     </div>
   </div>
@@ -28,11 +31,14 @@ export default defineComponent({
 
     const store = useStore();
 
+    const canvasWidth = ref(700);
+    const canvasHeight = ref(450);
+
     const forceUpdateCanvasFlag = ref(0);
 
     const data = ref<any[]>([]);
 
-    const hasUnsyncedDataFromOtherAccess = ref(false);
+    const hasUnsyncedDataFromOtherUser = ref(false);
 
     const _forceRerenderCanvas = () => {
       forceUpdateCanvasFlag.value++;
@@ -45,7 +51,7 @@ export default defineComponent({
       // update to database
       // api returns data from database to make sure that data is synced
       // if those data are not equal, they're unsynced, notify user
-      hasUnsyncedDataFromOtherAccess.value = !_isEqual(data.value, store.state.app.elements);
+      hasUnsyncedDataFromOtherUser.value = !_isEqual(data.value, store.state.app.elements);
     };
 
     // Fetch data from backend
@@ -82,9 +88,11 @@ export default defineComponent({
     return {
       data,
       canvasRef,
+      canvasWidth,
+      canvasHeight,
       fileSize,
       forceUpdateCanvasFlag,
-      hasUnsyncedDataFromOtherAccess,
+      hasUnsyncedDataFromOtherUser,
     };
   },
 });
