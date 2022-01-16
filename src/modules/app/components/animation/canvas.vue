@@ -4,7 +4,7 @@
       :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
       class="bg-white dark:bg-gray-800"
     >
-      <SVGCanvas ref="canvasRef" :key="forceUpdateCanvasFlag" :data="data" />
+      <SVGCanvas ref="canvasRef" :key="forceUpdateCanvasFlag" :data="elements" />
     </div>
   </div>
 </template>
@@ -13,7 +13,14 @@
 // PERFORMANCE NOTICE:
 // DEVTOOL CAN SOMETIME NOT DETECT CHANGES IN THE COMPONENT DUE TO HUGE AND DEEPLY NESTED DATA CHANGES
 
-import { ComponentPublicInstance, defineAsyncComponent, defineComponent, ref, watch } from "vue";
+import {
+  ComponentPublicInstance,
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  ref,
+  watch,
+} from "vue";
 import { useStore } from "vuex";
 
 import _debounce from "lodash/debounce";
@@ -36,7 +43,7 @@ export default defineComponent({
 
     const forceUpdateCanvasFlag = ref(0);
 
-    const data = ref<any[]>([]);
+    const elements = ref<any[]>([]);
 
     const hasUnsyncedDataFromOtherUser = ref(false);
 
@@ -44,19 +51,21 @@ export default defineComponent({
       forceUpdateCanvasFlag.value++;
     };
 
+    const _canvasElements = computed(() => store.getters["app/getCanvasElements"]);
+
     const _updateCanvasDataFromStore = () => {
-      data.value = store.state.app.elements;
+      elements.value = _canvasElements.value;
 
       // data change
       // update to database
       // api returns data from database to make sure that data is synced
       // if those data are not equal, they're unsynced, notify user
-      hasUnsyncedDataFromOtherUser.value = !_isEqual(data.value, store.state.app.elements);
+      hasUnsyncedDataFromOtherUser.value = !_isEqual(elements.value, _canvasElements.value);
     };
 
     // Fetch data from backend
     const _getCanvasDataOnce = async () => {
-      await store.dispatch("app/getCanvasElements");
+      await store.dispatch("app/getElements");
 
       _updateCanvasDataFromStore();
       _forceRerenderCanvas();
@@ -64,7 +73,8 @@ export default defineComponent({
     _getCanvasDataOnce();
 
     const _updateCanvasDataToDatabase = async () => {
-      await store.dispatch("app/updateCanvasElements", data.value);
+      // TODO(BUG): This update the data without convertElementsToData()
+      await store.dispatch("app/updateElements", elements.value);
 
       _updateCanvasDataFromStore();
     };
@@ -75,7 +85,7 @@ export default defineComponent({
     };
 
     watch(
-      () => data.value,
+      () => elements.value,
       _debounce(function () {
         _updateCanvasDataToDatabase();
         _calculateFileSize();
@@ -86,7 +96,7 @@ export default defineComponent({
     );
 
     return {
-      data,
+      elements,
       canvasRef,
       canvasWidth,
       canvasHeight,

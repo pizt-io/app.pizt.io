@@ -117,7 +117,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
             },
             [
               h(
-                el.tag,
+                el.type,
                 {
                   ...elementStage.attrs,
                   onMousedown: () => _handleElementSelection({ id: el._id, el }),
@@ -134,8 +134,8 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
                     id: [SVG_ELEMENT_PREFIX, "bbox", index].join("-"),
                   },
                   [
-                    BORDER_BUILDER_MAPPING[el.tag].build(elementStage as any),
-                    HANDLES_BUILDER_MAPPING[el.tag].build(elementStage as any),
+                    BORDER_BUILDER_MAPPING[el.type].build(elementStage as any),
+                    HANDLES_BUILDER_MAPPING[el.type].build(elementStage as any),
                   ],
                 ),
             ],

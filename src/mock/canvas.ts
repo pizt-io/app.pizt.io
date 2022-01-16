@@ -4,8 +4,6 @@ export const canvas = [
   {
     _id: "15e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
-    keyframes: ["168rf9c8f9c88478f9c88038f", "268rf9c8f9c88478f9c88038f"],
-    changes: ["position"],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -16,8 +14,15 @@ export const canvas = [
       },
       "268rf9c8f9c88478f9c88038f": {
         time: 1000,
-        pos: { x: 150, y: 100 },
+        pos: { x: 150, y: 200 },
         size: { width: 100, height: 50 },
+        transform: { translateX: 100, translateY: 200 },
+        style: { fill: "#f04337" },
+      },
+      "368rf9c8f9c88478f9c88038f": {
+        time: 1500,
+        pos: { x: 150, y: 100 },
+        size: { width: 200, height: 50 },
         transform: { translateX: 100, translateY: 200 },
         style: { fill: "#f04337" },
       },
@@ -26,8 +31,6 @@ export const canvas = [
   {
     _id: "25e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.RECT,
-    keyframes: ["168rf9c8f9c88478f9c88038f", "268rf9c8f67888478f9c88038f"],
-    changes: ["opacity"],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -48,8 +51,6 @@ export const canvas = [
   {
     _id: "35e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
-    keyframes: ["168rf9c8f9c88478f9c88038f", "268rfidhf9c88478f9c88038f"],
-    changes: ["width", "height"],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -70,8 +71,6 @@ export const canvas = [
   {
     _id: "45e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.LINE,
-    keyframes: ["168rf9c8f9c88478f9c88038f"],
-    changes: [],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -87,8 +86,6 @@ export const canvas = [
   {
     _id: "55e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.LINE,
-    keyframes: ["168rf9c8f9c88478f9c88038f"],
-    changes: [],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -104,8 +101,6 @@ export const canvas = [
   {
     _id: "65e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.PATH,
-    keyframes: ["168rf9c8f9c88478f9c88038f"],
-    changes: [],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -151,8 +146,6 @@ export const canvas = [
   {
     _id: "75e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.POLYGON,
-    keyframes: ["168rf9c8f9c88478f9c88038f"],
-    changes: [],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -170,8 +163,6 @@ export const canvas = [
   {
     _id: "85e9f9c8f9c8f9c8f9c8f9c8f",
     type: SVG_ELEMENT_TYPE.POLYLINE,
-    keyframes: ["168rf9c8f9c88478f9c88038f"],
-    changes: [],
     stages: {
       "168rf9c8f9c88478f9c88038f": {
         time: 0,
@@ -183,114 +174,6 @@ export const canvas = [
         ],
         transform: { translateX: 600, translateY: 300 },
         style: { fill: "none", stroke: "#f04337" },
-      },
-    },
-  },
-];
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const canvasMappedForSvg = [
-  {
-    _id: "15e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "ellipse",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { cx: 150, cy: 100, rx: 50, ry: 25, fill: "#f04337" },
-        transform: { translateX: 0, translateY: 0 },
-      },
-      "268rf9c8f9c88478f9c88038f": {
-        attrs: { cx: 150, cy: 100, rx: 50, ry: 25, fill: "#f04337" },
-        transform: { translateX: 100, translateY: 200 },
-      },
-    },
-  },
-  {
-    _id: "25e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "rect",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { x: 250, y: 300, width: 100, height: 50, fill: "#f04337" },
-        transform: { translateX: 0, translateY: 0 },
-      },
-    },
-  },
-  {
-    _id: "35e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "ellipse",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { cx: 200, cy: 250, rx: 50, ry: 25, fill: "#f04337" },
-        transform: { translateX: 0, translateY: 0 },
-      },
-    },
-  },
-  {
-    _id: "45e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "line",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { x1: 300, y1: 50, x2: 450, y2: 150, stroke: "#f04337" },
-        transform: { translateX: 0, translateY: 0 },
-      },
-    },
-  },
-  {
-    _id: "55e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "line",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { x1: 600, y1: 50, x2: 550, y2: 150, stroke: "#f04337" },
-        transform: { translateX: 0, translateY: 0 },
-      },
-    },
-  },
-  {
-    _id: "65e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "path",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: {
-          d: "M 17.4408,50.9262 C 58.1858 96.2781, 15.5423 31.5313, 52.4902 5.57424 C 80.5298 -7.72511, 93.1865 11.1156, 96.0099 22.1984 C 87.6857 35.1283, 77.4922 60.8132, 103.312 60.1132 C 135.587 59.2383, 116.309 99.7779, 103.312 146.88 C 92.9139 184.561, 46.0158 137.984, 23.8666 109.986 C 8.143 75.1819, -15.1551 14.6446, 17.4408 50.9262 Z",
-          fill: "#f04337",
-        },
-        boundingBox: "[object SVGRect]",
-        transform: { translateX: 0, translateY: 400 },
-      },
-    },
-  },
-  {
-    _id: "75e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "polygon",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { points: "0,100 50,25 50,75 100,0", fill: "#f04337" },
-        xMin: 0,
-        yMin: 0,
-        xMax: 100,
-        yMax: 100,
-        transform: { translateX: 450, translateY: 300 },
-      },
-    },
-  },
-  {
-    _id: "85e9f9c8f9c8f9c8f9c8f9c8f",
-    tag: "polyline",
-    changes: [],
-    stages: {
-      "168rf9c8f9c88478f9c88038f": {
-        attrs: { points: "0,100 50,25 50,75 100,0", fill: "none", stroke: "#f04337" },
-        xMin: 0,
-        yMin: 0,
-        xMax: 100,
-        yMax: 100,
-        transform: { translateX: 600, translateY: 300 },
       },
     },
   },
