@@ -72,3 +72,9 @@ export const HEIGHT_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.ELLIPSE]: "ry",
   [SVG_ELEMENT_TYPE.RECT]: "height",
 });
+
+export const SVG_CANVAS_EVENT_DEBOUNCE = 1500;
+
+export enum SVG_CANVAS_EVENT {
+  UPDATE = "update",
+}

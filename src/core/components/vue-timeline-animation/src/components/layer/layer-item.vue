@@ -37,7 +37,7 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    const { changedProperties, getLabelFromProperty } = useTimeline(props);
+    const { changedProperties, getLabelFromProperty } = useTimeline(props.modelValue);
 
     const handleToggleExpand = () => {
       emit("update:modelValue", {

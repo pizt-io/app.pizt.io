@@ -37,10 +37,12 @@ const STAGE_PROPERTY_PREFIX = Object.freeze({
 });
 
 export const convertDataToElements = (jsonArray: Array<any>): Array<SVGElement> => {
-  console.log("convertDataToElements");
   const elements = jsonArray.map((el: any) => ({
     _id: el._id,
     type: el.type,
+    name: el.name,
+    animated: el.animated,
+    origin: el,
     ...(SVG_COMMAND_MAPPING as any)[el.type](el.stages),
   }));
 
@@ -60,7 +62,6 @@ const _mapStage = (prop: STAGE_PROPERTY, state: any) => ({
 });
 
 export const convertDataToTimelineElements = (jsonArray: Array<any>) => {
-  console.log("convertDataToTimelineElements");
   const elements = jsonArray.map((el: any) => {
     const mappedKeyframes: string[] = [];
     const mappedStages: any = {};
@@ -68,43 +69,47 @@ export const convertDataToTimelineElements = (jsonArray: Array<any>) => {
     const stages = Object.values(el.stages);
     const keyframes = Object.keys(el.stages);
 
-    stages.forEach((currentStage: any, currentIndex: number) => {
-      const previousStage: any = stages[currentIndex - 1];
+    if (el.animated) {
+      stages.forEach((currentStage: any, currentIndex: number) => {
+        const previousStage: any = stages[currentIndex - 1];
 
-      const previousKeyframe = keyframes[currentIndex - 1];
-      const currentKeyframe = keyframes[currentIndex];
+        const previousKeyframe = keyframes[currentIndex - 1];
+        const currentKeyframe = keyframes[currentIndex];
 
-      if (previousStage && currentStage) {
-        Object.values(STAGE_PROPERTY).forEach((prop: STAGE_PROPERTY) => {
-          const previousPropValue = previousStage[prop];
-          const currentPropValue = currentStage[prop];
+        if (previousStage && currentStage) {
+          Object.values(STAGE_PROPERTY).forEach((prop: STAGE_PROPERTY) => {
+            const previousPropValue = _get(previousStage, STAGE_PROPERTY_MAPPING[prop]) || null;
+            const currentPropValue = _get(currentStage, STAGE_PROPERTY_MAPPING[prop]) || null;
+            if (
+              previousPropValue &&
+              currentPropValue &&
+              !_isEqual(previousPropValue, currentPropValue)
+            ) {
+              mappedStages[STAGE_PROPERTY_PREFIX[prop] + previousKeyframe] = _mapStage(
+                prop,
+                previousStage,
+              );
+              mappedStages[STAGE_PROPERTY_PREFIX[prop] + currentKeyframe] = _mapStage(
+                prop,
+                currentStage,
+              );
 
-          if (
-            previousPropValue &&
-            currentPropValue &&
-            !_isEqual(previousPropValue, currentPropValue)
-          ) {
-            mappedStages[STAGE_PROPERTY_PREFIX[prop] + previousKeyframe] = _mapStage(
-              prop,
-              previousStage,
-            );
-            mappedStages[STAGE_PROPERTY_PREFIX[prop] + currentKeyframe] = _mapStage(
-              prop,
-              currentStage,
-            );
-
-            mappedKeyframes.push(STAGE_PROPERTY_PREFIX[prop] + previousKeyframe);
-            mappedKeyframes.push(STAGE_PROPERTY_PREFIX[prop] + currentKeyframe);
-          }
-        });
-      }
-    });
+              mappedKeyframes.push(STAGE_PROPERTY_PREFIX[prop] + previousKeyframe);
+              mappedKeyframes.push(STAGE_PROPERTY_PREFIX[prop] + currentKeyframe);
+            }
+          });
+        }
+      });
+    }
 
     return {
       _id: el._id,
+      name: el.name,
+      animated: el.animated,
       expanded: false,
       keyframes: mappedKeyframes,
       stages: mappedStages,
+      origin: el,
     };
   });
 

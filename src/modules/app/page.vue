@@ -117,7 +117,7 @@ export default defineComponent({
   setup() {
     const { appMode } = useAppMode();
 
-    const currentTime = ref("168rf9c8f9c88478f9c88038f");
+    const currentTime = ref(1000);
 
     provide("currentTime", currentTime);
 

@@ -1,13 +1,22 @@
 import { SVGElement, SVGElementSelectPayload } from "@/types/svg";
-import { SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@core/constants/svg";
-import { computed, h, inject, onMounted, Ref, ref } from "vue";
-
-import SVGElementComponent from "@modules/app/components/animation/svg/SVGElement.vue";
-
+import {
+  SVG_CANVAS_EVENT,
+  SVG_CANVAS_EVENT_DEBOUNCE,
+  SVG_ELEMENT_PREFIX,
+  SVG_ELEMENT_TYPE,
+} from "@core/constants/svg";
+import { computed, getCurrentInstance, h, inject, onMounted, Ref, ref } from "vue";
 import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 import { BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING } from "./mapper";
 
+import SVGElementComponent from "@modules/app/components/animation/svg/SVGElement.vue";
+
+import _debounce from "lodash/debounce";
+import { findNearestObjects } from "@/core/utils/findNearestObjects";
+
 export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
+  const vm = getCurrentInstance()?.proxy;
+
   const currentTime = inject("currentTime") as Ref<number>;
 
   const elements = ref<Array<SVGElement>>(initialElementsData);
@@ -61,10 +70,28 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
 
     if (!isTransforming.value && isMousedown.value) {
       Object.keys(selectedElements.value).forEach((key) => {
-        // Elements are passed into selectedElements by references so we can mutate them through the selectedElements object
-        selectedElements.value[key].stages[currentTime.value].transform.translateX += e.movementX;
-        selectedElements.value[key].stages[currentTime.value].transform.translateY += e.movementY;
+        const el = selectedElements.value[key];
+
+        const keyframes: string[] = Object.keys(el.stages);
+
+        if (el.animated) {
+          const stages = Object.values(el.stages);
+          const currentStageIndex = stages.findIndex((stage) => stage.time === currentTime.value);
+
+          if (currentStageIndex > -1) {
+            el.stages[keyframes[currentStageIndex]].transform.translateX += e.movementX;
+            el.stages[keyframes[currentStageIndex]].transform.translateY += e.movementY;
+          } else {
+            // Create new keyframe
+          }
+        } else {
+          // Use the first stage
+          el.stages[keyframes[0]].transform.translateX += e.movementX;
+          el.stages[keyframes[0]].transform.translateY += e.movementY;
+        }
       });
+
+      _onUpdateElementPositions({ elements: selectedElements.value, path: "transform" });
     }
   };
 
@@ -93,6 +120,17 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _handleElementRotate = () => {};
 
+  const _onUpdateElementPositions = _debounce(function ({
+    elements,
+    path,
+  }: {
+    elements: { [x: string]: SVGElement };
+    path: string;
+  }) {
+    vm?.$emit(SVG_CANVAS_EVENT.UPDATE, { elements, path });
+  },
+  SVG_CANVAS_EVENT_DEBOUNCE);
+
   const svgVNode = computed(() => {
     return h(
       SVG_ELEMENT_TYPE.SVG,
@@ -104,41 +142,85 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
       },
       [
         elements.value.map((el: SVGElement, index: number) => {
-          const elementStage = el.stages[currentTime.value] || el.stages[0];
-          const time = el.stages[currentTime.value] ? currentTime.value : 0;
+          const stages = Object.values(el.stages);
+          const currentStageIndex = stages.findIndex((stage) => stage.time === currentTime.value);
 
-          return h(
-            SVGElementComponent,
-            {
-              time,
-              index,
-              element: el,
-              id: el._id,
-            },
-            [
-              h(
-                el.type,
-                {
-                  ...elementStage.attrs,
-                  onMousedown: () => _handleElementSelection({ id: el._id, el }),
-                  id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
-                },
-                [
-                  // Animation tags
-                ],
-              ),
-              selectedElements.value[el._id || 0] &&
+          const keyframes: string[] = Object.keys(el.stages);
+
+          let elementStage: any = null;
+          // let keyframe = "";
+
+          if (el.animated) {
+            elementStage = el.stages[keyframes[currentStageIndex]];
+            // keyframe = keyframes[currentStageIndex];
+
+            if (!elementStage) {
+              elementStage = {
+                time: currentTime.value,
+              };
+
+              const [previousStage, nextStage] = findNearestObjects(
+                stages,
+                currentTime.value,
+                "time",
+              );
+
+              if (previousStage && nextStage) {
+                Object.keys(previousStage).forEach((stageKey) => {
+                  elementStage[stageKey] = {};
+
+                  Object.keys(previousStage[stageKey]).forEach((attrKey) => {
+                    elementStage[stageKey][attrKey] =
+                      (Math.abs(currentTime.value - previousStage.time) *
+                        100 *
+                        Math.abs(nextStage[stageKey][attrKey] - previousStage[stageKey][attrKey])) /
+                      Math.abs(currentTime.value - nextStage.time);
+                  });
+                });
+
+                console.log(previousStage, nextStage, elementStage);
+              }
+            }
+          } else {
+            elementStage = el.stages[keyframes[0]];
+            // keyframe = keyframes[0];
+          }
+
+          return (
+            elementStage &&
+            h(
+              SVGElementComponent,
+              {
+                transform: elementStage.transform,
+                index,
+                element: el,
+                id: el._id,
+              },
+              [
                 h(
-                  SVG_ELEMENT_TYPE.G,
+                  el.type,
                   {
-                    id: [SVG_ELEMENT_PREFIX, "bbox", index].join("-"),
+                    ...elementStage.attrs,
+                    onMousedown: () => _handleElementSelection({ id: el._id, el }),
+                    id: [SVG_ELEMENT_PREFIX, "el", index].join("-"),
                   },
                   [
-                    BORDER_BUILDER_MAPPING[el.type].build(elementStage as any),
-                    HANDLES_BUILDER_MAPPING[el.type].build(elementStage as any),
+                    // Animation tags
                   ],
                 ),
-            ],
+                selectedElements.value[el._id || 0] &&
+                  h(
+                    SVG_ELEMENT_TYPE.G,
+                    {
+                      id: [SVG_ELEMENT_PREFIX, "bbox", index].join("-"),
+                    },
+                    [
+                      BORDER_BUILDER_MAPPING[el.type].build(elementStage as any),
+                      HANDLES_BUILDER_MAPPING[el.type].build(elementStage as any),
+                    ],
+                  ),
+              ],
+            )
           );
         }),
       ],

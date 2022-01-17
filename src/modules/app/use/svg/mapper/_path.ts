@@ -116,6 +116,7 @@ export const path = (stages: { [keyframe: string]: any }) => {
       },
       boundingBox,
       transform: stages[keyframe].transform,
+      time: stages[keyframe].time,
     };
   });
 

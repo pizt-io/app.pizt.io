@@ -1,7 +1,7 @@
 import { computed, ComputedRef } from "vue";
 
 export const useTimeline = (
-  props: any,
+  modelValue: any,
 ): {
   changedProperties: ComputedRef<string[]>;
   getLabelFromProperty: (property: string) => string;
@@ -9,12 +9,18 @@ export const useTimeline = (
   const changedProperties = computed(
     () =>
       Array.from(
-        new Set(Object.values(props.modelValue.stages).map((stage: any) => stage.property)),
+        modelValue.stages
+          ? new Set(Object.values(modelValue.stages).map((stage: any) => stage.property))
+          : [],
       ) as string[],
   );
 
   const getLabelFromProperty = (property: string): string => {
-    const stage = Object.values(props.modelValue.stages).find(
+    if (!modelValue.stages) {
+      return "";
+    }
+
+    const stage = Object.values(modelValue.stages).find(
       (stage: any) => stage.property === property,
     ) as any;
 

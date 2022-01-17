@@ -10,6 +10,7 @@ import { getters } from "./getters";
 export const key: InjectionKey<Store<RootState>> = Symbol();
 
 export const store = createStore<RootState>({
+  strict: true,
   state,
   mutations,
   actions,

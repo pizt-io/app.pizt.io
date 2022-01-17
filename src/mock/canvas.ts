@@ -2,24 +2,26 @@ import { SVG_ELEMENT_TYPE, SVG_PATH_CMD } from "@/core/constants/svg";
 
 export const canvas = [
   {
-    _id: "15e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-1",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
+    name: "Ellipse 1",
+    animated: true,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-1-1": {
         time: 0,
         pos: { x: 150, y: 100 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337" },
       },
-      "268rf9c8f9c88478f9c88038f": {
+      "id-el-1-2": {
         time: 1000,
         pos: { x: 150, y: 200 },
         size: { width: 100, height: 50 },
         transform: { translateX: 100, translateY: 200 },
         style: { fill: "#f04337" },
       },
-      "368rf9c8f9c88478f9c88038f": {
+      "id-el-1-3": {
         time: 1500,
         pos: { x: 150, y: 100 },
         size: { width: 200, height: 50 },
@@ -29,37 +31,48 @@ export const canvas = [
     },
   },
   {
-    _id: "25e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-2",
     type: SVG_ELEMENT_TYPE.RECT,
+    name: "Rect 1",
+    animated: true,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-2-1": {
         time: 0,
         pos: { x: 250, y: 300 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
-        style: { fill: "#f04337" },
+        style: { fill: "#f04337", opacity: 1 },
       },
-      "268rf9c8f67888478f9c88038f": {
+      "id-el-2-2": {
         time: 750,
         pos: { x: 250, y: 300 },
-        size: { width: 100, height: 50 },
+        size: { width: 200, height: 50 },
+        transform: { translateX: 0, translateY: 0 },
+        style: { fill: "#f04337", opacity: 0.5 },
+      },
+      "id-el-2-3": {
+        time: 1000,
+        pos: { x: 250, y: 300 },
+        size: { width: 200, height: 100 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337", opacity: 0.5 },
       },
     },
   },
   {
-    _id: "35e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-3",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
+    name: "Ellipse 2",
+    animated: true,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-3-1": {
         time: 0,
         pos: { x: 200, y: 250 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337" },
       },
-      "268rfidhf9c88478f9c88038f": {
+      "id-el-3-2": {
         time: 2300,
         pos: { x: 200, y: 250 },
         size: { width: 70, height: 100 },
@@ -69,10 +82,12 @@ export const canvas = [
     },
   },
   {
-    _id: "45e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-4",
     type: SVG_ELEMENT_TYPE.LINE,
+    name: "Line 1",
+    animated: false,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-4-1": {
         time: 0,
         pos: [
           { x: 300, y: 50 },
@@ -84,10 +99,12 @@ export const canvas = [
     },
   },
   {
-    _id: "55e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-5",
     type: SVG_ELEMENT_TYPE.LINE,
+    name: "Line 2",
+    animated: false,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-5-1": {
         time: 0,
         pos: [
           { x: 600, y: 50 },
@@ -99,10 +116,12 @@ export const canvas = [
     },
   },
   {
-    _id: "65e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-6",
     type: SVG_ELEMENT_TYPE.PATH,
+    name: "Path 1",
+    animated: false,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-6-1": {
         time: 0,
         commands: [
           {
@@ -144,10 +163,12 @@ export const canvas = [
     },
   },
   {
-    _id: "75e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-7",
     type: SVG_ELEMENT_TYPE.POLYGON,
+    name: "Polygon 1",
+    animated: false,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-7-1": {
         time: 0,
         pos: [
           [0, 100],
@@ -161,10 +182,12 @@ export const canvas = [
     },
   },
   {
-    _id: "85e9f9c8f9c8f9c8f9c8f9c8f",
+    _id: "id-el-8",
     type: SVG_ELEMENT_TYPE.POLYLINE,
+    name: "Polyline 1",
+    animated: false,
     stages: {
-      "168rf9c8f9c88478f9c88038f": {
+      "id-el-8-1": {
         time: 0,
         pos: [
           [0, 100],

@@ -4,7 +4,7 @@
       :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
       class="bg-white dark:bg-gray-800"
     >
-      <SVGCanvas ref="canvasRef" :key="forceUpdateCanvasFlag" :data="elements" />
+      <SVGCanvas ref="canvasRef" :key="forceUpdateFlag" :data="elements" v-on="svgCanvasHandlers" />
     </div>
   </div>
 </template>
@@ -13,18 +13,13 @@
 // PERFORMANCE NOTICE:
 // DEVTOOL CAN SOMETIME NOT DETECT CHANGES IN THE COMPONENT DUE TO HUGE AND DEEPLY NESTED DATA CHANGES
 
-import {
-  ComponentPublicInstance,
-  computed,
-  defineAsyncComponent,
-  defineComponent,
-  ref,
-  watch,
-} from "vue";
+import { ComponentPublicInstance, computed, defineAsyncComponent, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
+import { useRerenderer } from "@/core/use/useRerenderer";
+import { SVG_CANVAS_EVENT } from "@/core/constants/svg";
 
-import _debounce from "lodash/debounce";
 import _isEqual from "lodash/isEqual";
+import _cloneDeep from "lodash/cloneDeep";
 
 export default defineComponent({
   name: "AnimationCanvas",
@@ -41,17 +36,13 @@ export default defineComponent({
     const canvasWidth = ref(700);
     const canvasHeight = ref(450);
 
-    const forceUpdateCanvasFlag = ref(0);
-
     const elements = ref<any[]>([]);
 
     const hasUnsyncedDataFromOtherUser = ref(false);
 
-    const _forceRerenderCanvas = () => {
-      forceUpdateCanvasFlag.value++;
-    };
+    const { forceUpdate, forceUpdateFlag } = useRerenderer();
 
-    const _canvasElements = computed(() => store.getters["app/getCanvasElements"]);
+    const _canvasElements = computed(() => _cloneDeep(store.getters["app/getCanvasElements"]));
 
     const _updateCanvasDataFromStore = () => {
       elements.value = _canvasElements.value;
@@ -68,32 +59,23 @@ export default defineComponent({
       await store.dispatch("app/getElements");
 
       _updateCanvasDataFromStore();
-      _forceRerenderCanvas();
+      forceUpdate();
     };
     _getCanvasDataOnce();
-
-    const _updateCanvasDataToDatabase = async () => {
-      // TODO(BUG): This update the data without convertElementsToData()
-      await store.dispatch("app/updateElements", elements.value);
-
-      _updateCanvasDataFromStore();
-    };
 
     const fileSize = ref("");
     const _calculateFileSize = () => {
       fileSize.value = `${((canvasRef.value?.$el?.innerHTML.length || 0) / 1024).toFixed(2)} Kb`;
     };
 
-    watch(
-      () => elements.value,
-      _debounce(function () {
-        _updateCanvasDataToDatabase();
+    const svgCanvasHandlers = {
+      [SVG_CANVAS_EVENT.UPDATE]: async ({ elements, path }: { elements: any[]; path: string }) => {
         _calculateFileSize();
         // eslint-disable-next-line no-console
         console.log("File size:", fileSize.value);
-      }, 1500),
-      { deep: true },
-    );
+        await store.dispatch("app/updateElements", { elements, path });
+      },
+    };
 
     return {
       elements,
@@ -101,8 +83,9 @@ export default defineComponent({
       canvasWidth,
       canvasHeight,
       fileSize,
-      forceUpdateCanvasFlag,
+      forceUpdateFlag,
       hasUnsyncedDataFromOtherUser,
+      svgCanvasHandlers,
     };
   },
 });

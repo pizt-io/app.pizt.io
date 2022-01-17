@@ -43,7 +43,7 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props) {
-    const { changedProperties } = useTimeline(props);
+    const { changedProperties } = useTimeline(props.modelValue);
 
     return {
       changedProperties,

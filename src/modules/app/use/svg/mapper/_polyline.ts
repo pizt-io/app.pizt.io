@@ -15,6 +15,7 @@ export const polyline = (stages: { [keyframe: string]: any }) => {
       xMax: Math.max(...xPositions),
       yMax: Math.max(...yPositions),
       transform: stages[keyframe].transform,
+      time: stages[keyframe].time,
     };
   });
 

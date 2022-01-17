@@ -3,14 +3,19 @@
     <VueTimelineAnimation
       v-model:modelElements="elements"
       v-model:modelCurrentTime="currentTime"
+      :key="forceUpdateFlag"
       :duration="animationDuration"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, ref } from "vue";
+import { computed, defineAsyncComponent, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
+import { useRerenderer } from "@/core/use/useRerenderer";
+
+import _debounce from "lodash/debounce";
+import _cloneDeep from "lodash/cloneDeep";
 
 export default defineComponent({
   name: "AnimationTimeline",
@@ -25,11 +30,29 @@ export default defineComponent({
     const animationDuration = ref(5000);
     const currentTime = ref(1000);
 
-    const _timelineElements = computed(() => store.getters["app/getTimelineElements"]);
+    const _timelineElements = computed(() => _cloneDeep(store.getters["app/getTimelineElements"]));
 
     const elements = ref(_timelineElements.value);
 
-    return { animationDuration, elements, currentTime };
+    const hasUnsyncedDataFromOtherUser = ref(false);
+
+    const { forceUpdate, forceUpdateFlag } = useRerenderer();
+
+    watch(
+      () => elements.value,
+      _debounce(function () {
+        forceUpdate();
+      }, 1500),
+      { deep: true },
+    );
+
+    return {
+      animationDuration,
+      elements,
+      currentTime,
+      hasUnsyncedDataFromOtherUser,
+      forceUpdateFlag,
+    };
   },
 });
 </script>

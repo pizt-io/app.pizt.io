@@ -20,6 +20,7 @@ export const ellipse = (stages: { [keyframe: string]: any }) => {
         ...stages[keyframe].style,
       },
       transform: stages[keyframe].transform,
+      time: stages[keyframe].time,
     };
   });
 
