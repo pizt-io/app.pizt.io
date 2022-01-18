@@ -47,7 +47,7 @@
         </div>
         <div v-else class="relative bg-dark-500 overflow-auto">
           <CanvasBackgroundToggle />
-          <AnimationCanvas :time="currentTime" />
+          <AnimationCanvas :time="currentTime" v-on="svgCanvasHandlers" />
         </div>
       </transition>
       <transition
@@ -80,20 +80,25 @@
         enter-active-class="animated slideInUp"
         leave-active-class="animated slideOutDown"
       >
-        <AnimationTimeline />
+        <AnimationTimeline
+          ref="animationTimelineRef"
+          :time="currentTime"
+          @change-time="handleChangeCurrentTime"
+        />
       </transition>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent, defineComponent, provide, ref } from "vue";
+import { defineAsyncComponent, defineComponent, provide, ref, Ref } from "vue";
 
 import { APP_MODE } from "@core/constants/navigator";
 import { useLazyStore } from "@/core/use/useLazyStore";
 
 import { useAppMode } from "./use/useAppMode";
 import { appStoreModule } from "./store";
+import { SVG_CANVAS_EVENT } from "@/core/constants/svg";
 
 export default defineComponent({
   name: "AppPage",
@@ -121,12 +126,30 @@ export default defineComponent({
 
     provide("currentTime", currentTime);
 
+    const handleChangeCurrentTime = (time: Ref<number>) => {
+      currentTime.value = time.value;
+    };
+
     useLazyStore("app", appStoreModule);
+
+    const animationTimelineRef = ref(null);
+    const svgCanvasHandlers = {
+      [SVG_CANVAS_EVENT.UPDATE]: async () => {
+        const animationTimelineElement = animationTimelineRef.value as any;
+
+        if (animationTimelineElement) {
+          animationTimelineElement.updateElementsFromStore();
+        }
+      },
+    };
 
     return {
       APP_MODE,
       appMode,
       currentTime,
+      handleChangeCurrentTime,
+      svgCanvasHandlers,
+      animationTimelineRef,
     };
   },
 });

@@ -9,18 +9,33 @@ import {
 import { SVGRectangle } from "@/types/svg";
 
 export const useRectBorderBuilder = (borderOptions: any) => {
-  const build = (el: SVGRectangle) =>
-    h(
-      SVG_ELEMENT_TYPE.RECT,
-      {
+  const build = (stage: SVGRectangle, options: any = {}) => {
+    const x = +(stage.attrs[POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+    const y = +(stage.attrs[POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+
+    const width = +(stage.attrs[WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+    const height = +(stage.attrs[HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+
+    return [
+      h(SVG_ELEMENT_TYPE.RECT, {
         ...borderOptions,
-        x: +(el.attrs[POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0),
-        y: +(el.attrs[POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0),
-        width: +(el.attrs[WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0),
-        height: +(el.attrs[HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0),
-      },
-      [],
-    );
+        x,
+        y,
+        width,
+        height,
+      }),
+      h(
+        SVG_ELEMENT_TYPE.TEXT,
+        {
+          x: x + options.labelOffset + 2,
+          y: y - options.labelOffset,
+          fill: borderOptions.stroke,
+          style: options.labelStyle,
+        },
+        options.name,
+      ),
+    ];
+  };
 
   return { build };
 };

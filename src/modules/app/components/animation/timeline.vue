@@ -3,6 +3,7 @@
     <VueTimelineAnimation
       v-model:modelElements="elements"
       v-model:modelCurrentTime="currentTime"
+      v-on="animationTimelineEventHandlers"
       :key="forceUpdateFlag"
       :duration="animationDuration"
     />
@@ -10,7 +11,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  ref,
+  shallowRef,
+  triggerRef,
+  watch,
+} from "vue";
 import { useStore } from "vuex";
 import { useRerenderer } from "@/core/use/useRerenderer";
 
@@ -24,19 +33,37 @@ export default defineComponent({
       () => import("@/core/components/vue-timeline-animation"),
     ),
   },
-  setup() {
+  props: {
+    duration: {
+      type: Number,
+      default: 5000,
+    },
+    time: {
+      type: Number,
+      default: 1000,
+    },
+  },
+  emits: ["change-time", "change-elements"],
+  setup(props, { emit }) {
     const store = useStore();
 
-    const animationDuration = ref(5000);
-    const currentTime = ref(1000);
+    const animationDuration = ref(props.duration);
+
+    const currentTime = ref(props.time);
 
     const _timelineElements = computed(() => _cloneDeep(store.getters["app/getTimelineElements"]));
 
-    const elements = ref(_timelineElements.value);
+    const elements = shallowRef(_timelineElements.value);
 
     const hasUnsyncedDataFromOtherUser = ref(false);
 
     const { forceUpdate, forceUpdateFlag } = useRerenderer();
+
+    const updateElementsFromStore = () => {
+      elements.value = _timelineElements.value;
+
+      triggerRef(elements);
+    };
 
     watch(
       () => elements.value,
@@ -46,12 +73,19 @@ export default defineComponent({
       { deep: true },
     );
 
+    const animationTimelineEventHandlers = {
+      "update:modelCurrentTime": () => emit("change-time", currentTime),
+      "update:modelElements": () => emit("change-elements", elements),
+    };
+
     return {
       animationDuration,
       elements,
       currentTime,
       hasUnsyncedDataFromOtherUser,
       forceUpdateFlag,
+      animationTimelineEventHandlers,
+      updateElementsFromStore,
     };
   },
 });

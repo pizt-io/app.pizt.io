@@ -30,8 +30,8 @@ const borderOptions = Object.freeze({
 });
 
 const handlerOptions = Object.freeze({
-  width: 8,
-  height: 8,
+  width: 6,
+  height: 6,
   fill: "white",
   stroke: "#52647d",
   strokeWidth: "2",

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import { appRoute } from "@modules/app";
 import { homeRoute } from "@modules/home";
 import { sandboxRoute } from "@modules/sandbox";
@@ -13,7 +13,8 @@ const routes: Array<RouteRecordRaw> = [
   communityRoute,
 ];
 
+// See more at: https://next.router.vuejs.org/guide/essentials/history-mode.html#html5-mode
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });

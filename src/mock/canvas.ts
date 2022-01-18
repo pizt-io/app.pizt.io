@@ -73,11 +73,11 @@ export const canvas = [
         style: { fill: "#f04337" },
       },
       "id-el-3-2": {
-        time: 2300,
+        time: 2000,
         pos: { x: 200, y: 250 },
         size: { width: 70, height: 100 },
         transform: { translateX: 0, translateY: 0 },
-        style: { fill: "#f04337" },
+        style: { fill: "#1851d6" },
       },
     },
   },

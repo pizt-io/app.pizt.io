@@ -13,7 +13,15 @@
 // PERFORMANCE NOTICE:
 // DEVTOOL CAN SOMETIME NOT DETECT CHANGES IN THE COMPONENT DUE TO HUGE AND DEEPLY NESTED DATA CHANGES
 
-import { ComponentPublicInstance, computed, defineAsyncComponent, defineComponent, ref } from "vue";
+import {
+  ComponentPublicInstance,
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  ref,
+  shallowRef,
+  triggerRef,
+} from "vue";
 import { useStore } from "vuex";
 import { useRerenderer } from "@/core/use/useRerenderer";
 import { SVG_CANVAS_EVENT } from "@/core/constants/svg";
@@ -28,7 +36,7 @@ export default defineComponent({
       () => import("@/modules/app/components/animation/svg/SVGCanvas.vue"),
     ),
   },
-  setup() {
+  setup(props, { emit }) {
     const canvasRef = ref<ComponentPublicInstance | null>(null);
 
     const store = useStore();
@@ -36,7 +44,7 @@ export default defineComponent({
     const canvasWidth = ref(700);
     const canvasHeight = ref(450);
 
-    const elements = ref<any[]>([]);
+    const elements = shallowRef<SVGElement[]>([]);
 
     const hasUnsyncedDataFromOtherUser = ref(false);
 
@@ -69,11 +77,23 @@ export default defineComponent({
     };
 
     const svgCanvasHandlers = {
-      [SVG_CANVAS_EVENT.UPDATE]: async ({ elements, path }: { elements: any[]; path: string }) => {
+      [SVG_CANVAS_EVENT.UPDATE]: async ({
+        elements: updatedElements,
+        path,
+      }: {
+        elements: SVGElement[];
+        path: string;
+      }) => {
         _calculateFileSize();
-        // eslint-disable-next-line no-console
-        console.log("File size:", fileSize.value);
-        await store.dispatch("app/updateElements", { elements, path });
+
+        elements.value = updatedElements;
+        triggerRef(elements);
+
+        const updatePayload = { elements: elements.value, path };
+
+        await store.dispatch("app/updateElements", updatePayload);
+
+        emit(SVG_CANVAS_EVENT.UPDATE, updatePayload);
       },
     };
 

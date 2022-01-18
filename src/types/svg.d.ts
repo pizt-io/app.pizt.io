@@ -124,19 +124,22 @@ declare type SVGPolyline = {
   transform: SVGTransform;
 };
 
+declare type SVGStage =
+  | SVGCircle
+  | SVGEllipse
+  | SVGRectangle
+  | SVGLine
+  | SVGPath
+  | SVGPolygon
+  | SVGPolyline;
+
 declare type SVGElement = {
   _id?: string;
   type: SVG_ELEMENT_TYPE;
+  name: string;
   animated: boolean;
   stages: {
-    [keyframe: string]:
-      | SVGCircle
-      | SVGEllipse
-      | SVGRectangle
-      | SVGLine
-      | SVGPath
-      | SVGPolygon
-      | SVGPolyline;
+    [keyframe: string]: SVGStage;
   };
 };
 

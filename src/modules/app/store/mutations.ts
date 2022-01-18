@@ -13,11 +13,12 @@ export const mutations: Mutations = {
         const el: any = state.elements.find((el: any) => el._id === id);
 
         if (el) {
-          // el.stages = elements[id].stages;
+          el.stages = Object.assign({}, el.stages, elements[id].stages);
         }
       });
 
-      console.log("SET_ELEMENTS", state.elements, elements, path, changedIds);
+      // eslint-disable-next-line no-console
+      console.log("SET_ELEMENTS", state.elements, path, changedIds);
     } else {
       state.elements = elements;
     }

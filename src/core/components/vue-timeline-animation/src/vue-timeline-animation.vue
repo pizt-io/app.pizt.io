@@ -92,7 +92,7 @@
       >
         <TimelineItem
           v-for="(element, index) in elements"
-          v-model="elements[index]"
+          :model-value="(elements[index] as any)"
           :key="`${element.name}-${index}`"
           :duration="timelineDuration"
         />

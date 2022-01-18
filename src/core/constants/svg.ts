@@ -78,3 +78,9 @@ export const SVG_CANVAS_EVENT_DEBOUNCE = 1500;
 export enum SVG_CANVAS_EVENT {
   UPDATE = "update",
 }
+
+export enum SVG_CANVAS_GLOBAL_EVENT {
+  UPDATE_ELEMENTS = "update-elements",
+}
+
+export const HEX_COLOR_REGEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
