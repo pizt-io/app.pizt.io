@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .animated {
   animation-duration: $--animate-duration;
   animation-fill-mode: both;
@@ -16,6 +18,24 @@
     .duration-#{$count} {
       animation-duration: $--animate-duration * $count * 0.5;
     }
+  }
+
+
+
+  &.slow {
+    animation-duration: $--animate-duration * 2;
+  }
+
+  &.slower {
+    animation-duration: $--animate-duration * 3;
+  }
+
+  &.fast {
+    animation-duration: math.div($--animate-duration, 1.5);
+  }
+
+  &.faster {
+    animation-duration: math.div($--animate-duration, 2);
   }
 
   @media print, (prefers-reduced-motion: reduce) {
