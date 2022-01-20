@@ -16,6 +16,7 @@
         :key="property"
         :property="property"
         :label="getLabelFromProperty(property)"
+        :stages="Object.values(modelValue.stages)"
       />
     </div>
   </div>

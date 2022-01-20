@@ -14,7 +14,10 @@ export default defineComponent({
   emits: ["update:modelValue"],
   setup(props, { emit }) {
     const decimal = 1;
-    const position = ref(props.modelValue);
+    const position = ref({
+      x: (+props.modelValue.x).toFixed(decimal),
+      y: (+props.modelValue.y).toFixed(decimal),
+    });
 
     const handleInputX = (e: any) => {
       const value = +e.target.value;

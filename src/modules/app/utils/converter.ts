@@ -1,6 +1,7 @@
 import { SVGElement } from "@/types/svg";
 import { SVG_COMMAND_MAPPING } from "@/modules/app/components/animation/use/mapper";
 
+import _cloneDeep from "lodash/cloneDeep";
 import _isEqual from "lodash/isEqual";
 import _get from "lodash/get";
 
@@ -71,15 +72,27 @@ export const convertDataToTimelineElements = (jsonArray: Array<any>) => {
 
     if (el.animated) {
       stages.forEach((currentStage: any, currentIndex: number) => {
-        const previousStage: any = stages[currentIndex - 1];
+        const _currentState: any = _cloneDeep(currentStage);
+        const _previousStage: any = _cloneDeep(stages[currentIndex - 1]);
 
         const previousKeyframe = keyframes[currentIndex - 1];
         const currentKeyframe = keyframes[currentIndex];
 
-        if (previousStage && currentStage) {
+        if (_previousStage && _currentState) {
           Object.values(STAGE_PROPERTY).forEach((prop: STAGE_PROPERTY) => {
-            const previousPropValue = _get(previousStage, STAGE_PROPERTY_MAPPING[prop]) || null;
-            const currentPropValue = _get(currentStage, STAGE_PROPERTY_MAPPING[prop]) || null;
+            let previousPropValue = _get(_previousStage, STAGE_PROPERTY_MAPPING[prop]) || null;
+            let currentPropValue = _get(_currentState, STAGE_PROPERTY_MAPPING[prop]) || null;
+
+            if (prop === STAGE_PROPERTY.POSITION) {
+              _previousStage.transform.translateX += previousPropValue.x;
+              _previousStage.transform.translateY += previousPropValue.y;
+
+              _currentState.transform.translateX += currentPropValue.x;
+              _currentState.transform.translateY += currentPropValue.y;
+
+              previousPropValue = currentPropValue = { x: 0, y: 0 };
+            }
+
             if (
               previousPropValue &&
               currentPropValue &&
@@ -87,11 +100,11 @@ export const convertDataToTimelineElements = (jsonArray: Array<any>) => {
             ) {
               mappedStages[STAGE_PROPERTY_PREFIX[prop] + previousKeyframe] = _mapStage(
                 prop,
-                previousStage,
+                _previousStage,
               );
               mappedStages[STAGE_PROPERTY_PREFIX[prop] + currentKeyframe] = _mapStage(
                 prop,
-                currentStage,
+                _currentState,
               );
 
               mappedKeyframes.push(STAGE_PROPERTY_PREFIX[prop] + previousKeyframe);
