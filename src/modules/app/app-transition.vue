@@ -28,6 +28,11 @@ import { APP_MODE } from "@core/constants/navigator";
 
 import AppDefaultLayout from "./layout/default.vue";
 
+import TransitionToolbar from "./components/transition/toolbar.vue";
+import TransitionCanvas from "./components/transition/canvas.vue";
+import TransitionPanel from "./components/transition/panel.vue";
+import TransitionTimeline from "./components/transition/timeline.vue";
+
 export default defineComponent({
   name: "AppTransition",
   components: {
@@ -38,10 +43,10 @@ export default defineComponent({
     // eslint-disable-next-line vue/no-unused-components
     LayerTree: defineAsyncComponent(() => import("./components/tree/layer.vue")),
     Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
-    TransitionToolbar: defineAsyncComponent(() => import("./components/transition/toolbar.vue")),
-    TransitionCanvas: defineAsyncComponent(() => import("./components/transition/canvas.vue")),
-    TransitionPanel: defineAsyncComponent(() => import("./components/transition/panel.vue")),
-    TransitionTimeline: defineAsyncComponent(() => import("./components/transition/timeline.vue")),
+    TransitionToolbar,
+    TransitionCanvas,
+    TransitionPanel,
+    TransitionTimeline,
   },
   setup() {
     const currentTime = ref(1000);

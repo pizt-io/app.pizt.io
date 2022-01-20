@@ -33,7 +33,7 @@ export default defineComponent({
   name: "AnimationCanvas",
   components: {
     SVGCanvas: defineAsyncComponent(
-      () => import("@/modules/app/components/animation/svg/SVGCanvas.vue"),
+      () => import("@/modules/app/components/animation/svg-wrapper/SVGCanvas.vue"),
     ),
   },
   setup(props, { emit }) {
@@ -52,8 +52,13 @@ export default defineComponent({
 
     const _canvasElements = computed(() => _cloneDeep(store.getters["app/getCanvasElements"]));
 
-    const _updateCanvasDataFromStore = () => {
-      elements.value = _canvasElements.value;
+    const _updateElements = (updatedElements: SVGElement[]) => {
+      elements.value = updatedElements;
+      triggerRef(elements);
+    };
+
+    const updateElementsFromStore = () => {
+      _updateElements(_canvasElements.value);
 
       // data change
       // update to database
@@ -61,15 +66,6 @@ export default defineComponent({
       // if those data are not equal, they're unsynced, notify user
       hasUnsyncedDataFromOtherUser.value = !_isEqual(elements.value, _canvasElements.value);
     };
-
-    // Fetch data from backend
-    const _getCanvasDataOnce = async () => {
-      await store.dispatch("app/getElements");
-
-      _updateCanvasDataFromStore();
-      forceUpdate();
-    };
-    _getCanvasDataOnce();
 
     const fileSize = ref("");
     const _calculateFileSize = () => {
@@ -86,8 +82,7 @@ export default defineComponent({
       }) => {
         _calculateFileSize();
 
-        elements.value = updatedElements;
-        triggerRef(elements);
+        _updateElements(updatedElements);
 
         const updatePayload = { elements: elements.value, path };
 
@@ -106,6 +101,8 @@ export default defineComponent({
       forceUpdateFlag,
       hasUnsyncedDataFromOtherUser,
       svgCanvasHandlers,
+      updateElementsFromStore,
+      forceUpdate,
     };
   },
 });

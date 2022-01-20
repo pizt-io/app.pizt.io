@@ -1,12 +1,12 @@
+import { getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
 import { SVGElement, SVGElementSelectPayload, SVGStage } from "@/types/svg";
 import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_DEBOUNCE, SVG_ELEMENT_TYPE } from "@core/constants/svg";
-import { getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
+import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
 import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 
 import moment from "moment";
 
 import _debounce from "lodash/debounce";
-import { findStageBetweenStages } from "../../utils/keyframes/findStageBetweenStages";
 
 export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
   const vm = getCurrentInstance()?.proxy;

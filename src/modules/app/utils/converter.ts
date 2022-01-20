@@ -1,5 +1,5 @@
 import { SVGElement } from "@/types/svg";
-import { SVG_COMMAND_MAPPING } from "@/modules/app/use/svg/mapper";
+import { SVG_COMMAND_MAPPING } from "@/modules/app/components/animation/use/mapper";
 
 import _isEqual from "lodash/isEqual";
 import _get from "lodash/get";

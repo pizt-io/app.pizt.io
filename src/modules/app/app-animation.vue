@@ -10,7 +10,7 @@
       <AnimationToolbar />
     </template>
     <template v-slot:canvas-animation>
-      <AnimationCanvas :time="currentTime" v-on="svgCanvasHandlers" />
+      <AnimationCanvas ref="animationCanvasRef" :time="currentTime" v-on="svgCanvasHandlers" />
     </template>
     <template v-slot:timeline-animation>
       <AnimationTimeline
@@ -23,13 +23,20 @@
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent, defineComponent, provide, ref, Ref } from "vue";
+import { defineAsyncComponent, defineComponent, onMounted, provide, ref, Ref } from "vue";
 
 import { SVG_CANVAS_EVENT } from "@/core/constants/svg";
 
 import { APP_MODE } from "@core/constants/navigator";
 
+import { useStore } from "vuex";
+
 import AppDefaultLayout from "./layout/default.vue";
+
+import AnimationToolbar from "./components/animation/toolbar.vue";
+import AnimationCanvas from "./components/animation/canvas.vue";
+import AnimationPanel from "./components/animation/panel.vue";
+import AnimationTimeline from "./components/animation/timeline.vue";
 
 export default defineComponent({
   name: "AppAnimation",
@@ -40,15 +47,34 @@ export default defineComponent({
     // eslint-disable-next-line vue/no-unused-components
     LayerTree: defineAsyncComponent(() => import("./components/tree/layer.vue")),
     Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
-    AnimationToolbar: defineAsyncComponent(() => import("./components/animation/toolbar.vue")),
-    AnimationCanvas: defineAsyncComponent(() => import("./components/animation/canvas.vue")),
-    AnimationPanel: defineAsyncComponent(() => import("./components/animation/panel.vue")),
-    AnimationTimeline: defineAsyncComponent(() => import("./components/animation/timeline.vue")),
+    AnimationToolbar,
+    AnimationCanvas,
+    AnimationPanel,
+    AnimationTimeline,
   },
   setup() {
+    const store = useStore();
+
     const currentTime = ref(1000);
 
     provide("currentTime", currentTime);
+
+    // Fetch data from backend
+    const animationCanvasRef = ref(null);
+    const _getCanvasDataOnce = async () => {
+      const animationCanvasElement = animationCanvasRef.value as any;
+      const animationTimelineElement = animationTimelineRef.value as any;
+
+      await store.dispatch("app/getElements");
+
+      if (animationCanvasElement && animationTimelineElement) {
+        animationTimelineElement.updateElementsFromStore();
+
+        animationCanvasElement.updateElementsFromStore();
+        animationCanvasElement.forceUpdate();
+      }
+    };
+    onMounted(_getCanvasDataOnce);
 
     const handleChangeCurrentTime = (time: Ref<number>) => {
       currentTime.value = time.value;
@@ -69,6 +95,7 @@ export default defineComponent({
       currentTime,
       handleChangeCurrentTime,
       svgCanvasHandlers,
+      animationCanvasRef,
       animationTimelineRef,
       APP_MODE,
     };

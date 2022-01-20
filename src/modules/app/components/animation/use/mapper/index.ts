@@ -13,7 +13,7 @@ import {
   usePolygonHandlesBuilder,
   usePolylineBorderBuilder,
   usePolylineHandlesBuilder,
-} from "@modules/app/use/svg/builder";
+} from "@/modules/app/components/animation/use/builder";
 
 import { circle } from "./_circle";
 import { ellipse } from "./_ellipse";

@@ -1,12 +1,13 @@
+import { computed, h } from "vue";
 import { SVGElement } from "@/types/svg";
 import { SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@core/constants/svg";
-import { computed, h } from "vue";
 import { BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING } from "./mapper";
 
-import SVGElementComponent from "@modules/app/components/animation/svg/SVGElement.vue";
-
 import { useSVGHandlers } from "./useSVGHandlers";
-import { findStageBetweenStages } from "../../utils/keyframes/findStageBetweenStages";
+
+import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
+
+import SVGElementComponent from "@modules/app/components/animation/svg-wrapper/SVGElement.vue";
 
 export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
   const {

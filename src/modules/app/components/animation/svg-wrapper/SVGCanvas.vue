@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useSVGBuilder } from "@/modules/app/use/svg/useSVGBuilder";
+import { useSVGBuilder } from "@/modules/app/components/animation/use/useSVGBuilder";
 import { SVGElement } from "@/types/svg";
 
 export default defineComponent({
