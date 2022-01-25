@@ -1,5 +1,9 @@
 import { MutationTree } from "vuex";
+
+import { SVGElement } from "@/types/svg";
+
 import { AppState } from "./state";
+import { mapElementStageToStage } from "../utils/converter";
 
 export type Mutations = MutationTree<AppState>;
 
@@ -7,18 +11,18 @@ export const mutations: Mutations = {
   SET_ELEMENTS(state, payload = {}) {
     const { elements, path } = payload;
     if (path) {
-      const changedIds = Object.keys(elements);
+      const changedElementIds = Object.keys(elements);
 
-      changedIds.forEach((id) => {
-        const el: any = state.elements.find((el: any) => el._id === id);
+      changedElementIds.forEach((id) => {
+        const el = state.elements.find((el: any) => el._id === id) as unknown as SVGElement;
 
         if (el) {
-          el.stages = Object.assign({}, el.stages, elements[id].stages);
+          el.stages = mapElementStageToStage(el.type, elements[id].stages);
         }
       });
 
       // eslint-disable-next-line no-console
-      console.log("SET_ELEMENTS", state.elements, path, changedIds);
+      console.log("SET_ELEMENTS", elements, state.elements, path, changedElementIds);
     } else {
       state.elements = elements;
     }

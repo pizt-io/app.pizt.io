@@ -7,8 +7,15 @@ import { SVGStage } from "@/types/svg";
 import _isObject from "lodash/isObject";
 import _cloneDeep from "lodash/cloneDeep";
 
+/**
+ *
+ * @param stages
+ * @param currentTime
+ * @param keyPath Used to compare a specific property
+ * @returns
+ */
 export const findStageBetweenStages = (stages: SVGStage[], currentTime: number, keyPath = "") => {
-  const _stages = _cloneDeep(stages);
+  const _stages = _cloneDeep(stages).sort((a, b) => a.time - b.time);
 
   let elementStage: any = {
     time: currentTime,
@@ -59,10 +66,7 @@ export const findStageBetweenStages = (stages: SVGStage[], currentTime: number, 
           nextStage[keyPath],
         );
       } else {
-        console.log("findValueBetweenTime", previousStage[keyPath], nextStage[keyPath]);
         if (_isObject(previousStage[keyPath]) && _isObject(nextStage[keyPath])) {
-          console.log("findValueBetweenTime");
-
           elementStage[keyPath] = findValueBetweenTime(
             currentTime,
             previousStage.time,
@@ -85,6 +89,8 @@ export const findStageBetweenStages = (stages: SVGStage[], currentTime: number, 
   } else {
     elementStage = previousStage;
   }
+
+  elementStage.time = currentTime;
 
   return elementStage as SVGStage;
 };

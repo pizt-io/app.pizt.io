@@ -1,12 +1,11 @@
 import { getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
 import { SVGElement, SVGElementSelectPayload, SVGStage } from "@/types/svg";
-import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_DEBOUNCE, SVG_ELEMENT_TYPE } from "@core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_THROTTLE, SVG_ELEMENT_TYPE } from "@core/constants/svg";
 import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
 import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 
-import moment from "moment";
-
-import _debounce from "lodash/debounce";
+import _throttle from "lodash/throttle";
+import _cloneDeep from "lodash/cloneDeep";
 
 export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
   const vm = getCurrentInstance()?.proxy;
@@ -66,7 +65,7 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
       Object.keys(selectedElements.value).forEach((key) => {
         const el = selectedElements.value[key];
 
-        const keyframes: string[] = Object.keys(el.stages);
+        const keyframes = Object.keys(el.stages) as unknown as number[];
         const stages: SVGStage[] = Object.values(el.stages);
 
         if (el.animated) {
@@ -77,12 +76,17 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
             el.stages[keyframes[currentStageIndex]].transform.translateY += e.movementY;
           } else {
             // Create new keyframe
-            const stageId = [el._id, moment().format("x")].join("-");
+            el.stages[currentTime.value] = {} as SVGStage;
+
             const elementStage = findStageBetweenStages(stages, currentTime.value);
 
             elementStage.time = currentTime.value;
 
-            el.stages[stageId] = elementStage;
+            el.stages[currentTime.value] = Object.assign(
+              {},
+              el.stages[currentTime.value],
+              elementStage,
+            );
           }
         } else {
           // Use the first stage
@@ -120,16 +124,16 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleElementRotate = () => {};
 
-  const _onUpdateElementPositions = _debounce(function ({
+  const _onUpdateElementPositions = _throttle(function ({
     elements,
     path,
   }: {
     elements: { [x: string]: SVGElement };
     path: string;
   }) {
-    vm?.$emit(SVG_CANVAS_EVENT.UPDATE, { elements, path });
+    vm?.$emit(SVG_CANVAS_EVENT.UPDATE, { elements: _cloneDeep(elements), path });
   },
-  SVG_CANVAS_EVENT_DEBOUNCE);
+  SVG_CANVAS_EVENT_THROTTLE);
 
   const mouseOverElements = ref<{ [x: string]: SVGElement }>({});
   const handleElementMouseover = ({ id, el }: SVGElementSelectPayload) => {

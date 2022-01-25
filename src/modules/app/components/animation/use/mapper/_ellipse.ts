@@ -12,14 +12,20 @@ export const ellipse = (stages: { [keyframe: string]: any }) => {
 
   Object.keys(stages).forEach((keyframe: string) => {
     _mappedStages[keyframe] = {
-      attrs: {
-        [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[keyframe].pos.x,
-        [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[keyframe].pos.y,
-        [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[keyframe].size.width / 2, // Divide to get radius
-        [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE] as string]: stages[keyframe].size.height / 2, // Divide to get radius
-        ...stages[keyframe].style,
-      },
-      transform: stages[keyframe].transform,
+      attrs: Object.assign(
+        {},
+        {
+          [POS_X_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: 0,
+          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: 0,
+          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: stages[keyframe].size.width / 2, // Divide to get radius
+          [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.ELLIPSE]]: stages[keyframe].size.height / 2, // Divide to get radius
+        },
+        stages[keyframe].style,
+      ),
+      transform: Object.assign({}, stages[keyframe].transform, {
+        translateX: stages[keyframe].transform.translateX + stages[keyframe].pos.x,
+        translateY: stages[keyframe].transform.translateY + stages[keyframe].pos.y,
+      }),
       time: stages[keyframe].time,
     };
   });

@@ -15,6 +15,8 @@ import {
   usePolylineHandlesBuilder,
 } from "@/modules/app/components/animation/use/builder";
 
+import { SVG_STAGES_REVERSE_MAPPING } from "./reverse";
+
 import { circle } from "./_circle";
 import { ellipse } from "./_ellipse";
 import { line } from "./_line";
@@ -65,7 +67,7 @@ const BORDER_BUILDER_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.POLYLINE as string]: usePolylineBorderBuilder(borderOptions),
 });
 
-const SVG_COMMAND_MAPPING = Object.freeze({
+const SVG_STAGES_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.CIRCLE]: circle,
   [SVG_ELEMENT_TYPE.ELLIPSE]: ellipse,
   [SVG_ELEMENT_TYPE.LINE]: line,
@@ -75,4 +77,9 @@ const SVG_COMMAND_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.PATH]: path,
 });
 
-export { BORDER_BUILDER_MAPPING, HANDLES_BUILDER_MAPPING, SVG_COMMAND_MAPPING };
+export {
+  BORDER_BUILDER_MAPPING,
+  HANDLES_BUILDER_MAPPING,
+  SVG_STAGES_MAPPING,
+  SVG_STAGES_REVERSE_MAPPING,
+};

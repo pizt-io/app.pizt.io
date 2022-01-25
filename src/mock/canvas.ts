@@ -7,21 +7,21 @@ export const canvas = [
     name: "Ellipse 1",
     animated: true,
     stages: {
-      "id-el-1-1": {
+      0: {
         time: 0,
         pos: { x: 150, y: 100 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337" },
       },
-      "id-el-1-2": {
+      1000: {
         time: 1000,
-        pos: { x: 150, y: 200 },
+        pos: { x: 150, y: 100 },
         size: { width: 100, height: 50 },
         transform: { translateX: 100, translateY: 200 },
         style: { fill: "#f04337" },
       },
-      "id-el-1-3": {
+      1500: {
         time: 1500,
         pos: { x: 150, y: 100 },
         size: { width: 200, height: 50 },
@@ -36,21 +36,21 @@ export const canvas = [
     name: "Rect 1",
     animated: true,
     stages: {
-      "id-el-2-1": {
+      0: {
         time: 0,
         pos: { x: 250, y: 300 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337", opacity: 1 },
       },
-      "id-el-2-2": {
+      750: {
         time: 750,
         pos: { x: 250, y: 300 },
         size: { width: 200, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337", opacity: 0.5 },
       },
-      "id-el-2-3": {
+      1000: {
         time: 1000,
         pos: { x: 250, y: 300 },
         size: { width: 200, height: 100 },
@@ -65,14 +65,21 @@ export const canvas = [
     name: "Ellipse 2",
     animated: true,
     stages: {
-      "id-el-3-1": {
+      0: {
         time: 0,
         pos: { x: 200, y: 250 },
         size: { width: 100, height: 50 },
         transform: { translateX: 0, translateY: 0 },
         style: { fill: "#f04337" },
       },
-      "id-el-3-2": {
+      // 1000: {
+      //   time: 1000,
+      //   pos: { x: 200, y: 250 },
+      //   size: { width: 70, height: 100 },
+      //   transform: { translateX: 100, translateY: 100 },
+      //   style: { fill: "#844A87" },
+      // },
+      2000: {
         time: 2000,
         pos: { x: 200, y: 250 },
         size: { width: 70, height: 100 },
@@ -87,7 +94,7 @@ export const canvas = [
     name: "Line 1",
     animated: false,
     stages: {
-      "id-el-4-1": {
+      0: {
         time: 0,
         pos: [
           { x: 300, y: 50 },
@@ -104,7 +111,7 @@ export const canvas = [
     name: "Line 2",
     animated: false,
     stages: {
-      "id-el-5-1": {
+      0: {
         time: 0,
         pos: [
           { x: 600, y: 50 },
@@ -121,7 +128,7 @@ export const canvas = [
     name: "Path 1",
     animated: false,
     stages: {
-      "id-el-6-1": {
+      0: {
         time: 0,
         commands: [
           {
@@ -168,7 +175,7 @@ export const canvas = [
     name: "Polygon 1",
     animated: false,
     stages: {
-      "id-el-7-1": {
+      0: {
         time: 0,
         pos: [
           [0, 100],
@@ -187,7 +194,7 @@ export const canvas = [
     name: "Polyline 1",
     animated: false,
     stages: {
-      "id-el-8-1": {
+      0: {
         time: 0,
         pos: [
           [0, 100],

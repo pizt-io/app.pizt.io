@@ -139,7 +139,7 @@ declare type SVGElement = {
   name: string;
   animated: boolean;
   stages: {
-    [keyframe: string]: SVGStage;
+    [time: number]: SVGStage;
   };
 };
 

@@ -23,8 +23,9 @@ import {
 import { useStore } from "vuex";
 import { useRerenderer } from "@/core/use/useRerenderer";
 
-import _debounce from "lodash/debounce";
+import _throttle from "lodash/throttle";
 import _cloneDeep from "lodash/cloneDeep";
+import { SVG_CANVAS_EVENT_THROTTLE } from "@/core/constants/svg";
 
 export default defineComponent({
   name: "AnimationTimeline",
@@ -66,10 +67,10 @@ export default defineComponent({
     };
 
     watch(
-      () => elements.value,
-      _debounce(function () {
+      elements,
+      _throttle(function () {
         forceUpdate();
-      }, 1500),
+      }, SVG_CANVAS_EVENT_THROTTLE),
       { deep: true },
     );
 

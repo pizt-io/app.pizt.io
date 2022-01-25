@@ -18,8 +18,6 @@ export const findValueBetweenTime = (
   } else {
     const result: any = {};
 
-    console.log("findValueBetweenTime", valT1, valT2);
-
     Object.keys(valT1).forEach((key) => {
       const v1 = +valT1[key];
       const v2 = +valT2[key];

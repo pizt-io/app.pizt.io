@@ -11,14 +11,20 @@ export const rect = (stages: { [keyframe: string]: any }) => {
 
   Object.keys(stages).forEach((keyframe: string) => {
     _mappedStages[keyframe] = {
-      attrs: {
-        [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[keyframe].pos.x,
-        [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[keyframe].pos.y,
-        [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[keyframe].size.width,
-        [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT] as string]: stages[keyframe].size.height,
-        ...stages[keyframe].style,
-      },
-      transform: stages[keyframe].transform,
+      attrs: Object.assign(
+        {},
+        {
+          [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]]: 0,
+          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]]: 0,
+          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]]: stages[keyframe].size.width,
+          [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]]: stages[keyframe].size.height,
+        },
+        stages[keyframe].style,
+      ),
+      transform: Object.assign({}, stages[keyframe].transform, {
+        translateX: stages[keyframe].transform.translateX + stages[keyframe].pos.x,
+        translateY: stages[keyframe].transform.translateY + stages[keyframe].pos.y,
+      }),
       time: stages[keyframe].time,
     };
   });
