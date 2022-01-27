@@ -3,6 +3,7 @@
     <VueTimelineAnimation
       v-model:modelElements="elements"
       v-model:modelCurrentTime="currentTime"
+      v-model:modelExpanded="expandedElements"
       v-on="animationTimelineEventHandlers"
       :key="forceUpdateFlag"
       :duration="animationDuration"
@@ -74,6 +75,8 @@ export default defineComponent({
       { deep: true },
     );
 
+    const expandedElements = ref<any>({});
+
     const animationTimelineEventHandlers = {
       "update:modelCurrentTime": () => emit("change-time", currentTime),
       "update:modelElements": () => emit("change-elements", elements),
@@ -87,6 +90,7 @@ export default defineComponent({
       forceUpdateFlag,
       animationTimelineEventHandlers,
       updateElementsFromStore,
+      expandedElements,
     };
   },
 });

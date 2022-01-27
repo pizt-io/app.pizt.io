@@ -10,7 +10,7 @@
         }"
       />
     </div>
-    <div v-if="modelValue.expanded" class="va-expanded__wrapper">
+    <div v-if="expanded" class="va-expanded__wrapper">
       <div v-for="property in changedProperties" :key="property" class="va-expanded__item">
         <template v-for="key in modelValue.keyframes" :key="key">
           <i
@@ -39,6 +39,10 @@ export default defineComponent({
     duration: {
       type: Number,
       default: 5000,
+    },
+    expanded: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["update:modelValue"],

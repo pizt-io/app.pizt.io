@@ -47,6 +47,7 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
 
+    "vue/v-on-event-hyphenation": "off",
     "vue/no-v-for-template-key-on-child": "off",
     "vue/component-definition-name-casing": "error",
     "vue/array-bracket-spacing": "error",
@@ -89,7 +90,6 @@ module.exports = {
     "vue/require-default-prop": "off",
     "vue/singleline-html-element-content-newline": "off",
     "vue/no-side-effects-in-computed-properties": "off",
-    "vue/v-on-event-hyphenation": ["error", "always"],
     "vue/attribute-hyphenation": ["error", "always"],
     "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "vue/dot-location": ["error", "property"],

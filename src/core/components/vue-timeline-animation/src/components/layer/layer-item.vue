@@ -3,14 +3,11 @@
     <div class="va-layer__item">
       <i class="icon icon-va-ellipsis-v handle" />
       <span class="text">{{ modelValue.name }}</span>
-      <span
-        :class="[modelValue.expanded && 'va__active', 'va-expanded__toggle']"
-        @click="handleToggleExpand"
-      >
+      <span :class="[expanded && 'va__active', 'va-expanded__toggle']" @click="handleToggleExpand">
         <i class="icon-va-chevron-up" />
       </span>
     </div>
-    <div v-if="modelValue.expanded" class="va-expanded__wrapper">
+    <div v-if="expanded" class="va-expanded__wrapper">
       <LayerItemExpanded
         v-for="property in changedProperties"
         :key="property"
@@ -31,19 +28,23 @@ import LayerItemExpanded from "./layer-item/layer-item-expanded.vue";
 export default defineComponent({
   components: { LayerItemExpanded },
   props: {
+    expanded: {
+      type: Boolean,
+      default: false,
+    },
     modelValue: {
       type: Object,
       default: () => ({}),
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "expand"],
   setup(props, { emit }) {
     const { changedProperties, getLabelFromProperty } = useTimeline(props.modelValue);
 
     const handleToggleExpand = () => {
-      emit("update:modelValue", {
-        ...props.modelValue,
-        expanded: !props.modelValue.expanded,
+      emit("expand", {
+        _id: props.modelValue._id,
+        expanded: !props.expanded,
       });
     };
 

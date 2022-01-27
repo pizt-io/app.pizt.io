@@ -80,7 +80,11 @@
       <div class="va-layer__wrapper" :style="{ width: '320px' }">
         <draggable v-model="elements" v-bind="dragOptions" v-on="dragEventHandlers" item-key="id">
           <template v-slot:item="{ index }">
-            <LayerItem v-model="elements[index]" />
+            <LayerItem
+              v-model="elements[index]"
+              :expanded="modelExpanded[elements[index]._id]"
+              @expand="handleExpandLayer"
+            />
           </template>
         </draggable>
       </div>
@@ -91,9 +95,10 @@
         }"
       >
         <TimelineItem
-          v-for="(element, index) in elements"
-          :model-value="(elements[index] as any)"
-          :key="`${element.name}-${index}`"
+          v-for="element in elements"
+          :model-value="(element as any)"
+          :key="`t-${element._id}`"
+          :expanded="modelExpanded[element._id]"
           :duration="timelineDuration"
         />
       </div>
@@ -110,7 +115,7 @@ import Tippy from "./components/tippy/tippy.vue";
 import draggable from "vuedraggable";
 
 type Element = {
-  id: string;
+  _id: string;
   name: string;
   keyframes: string[];
   expanded?: boolean;
@@ -131,7 +136,7 @@ const TIMELINE_BODY_LEFT_OFFSET = 5;
 const TIMELINE_BODY_RIGHT_OFFSET = 10;
 
 export default defineComponent({
-  name: "AnimationTimeline",
+  name: "VueAnimationTimeline",
   components: { draggable, TimelineItem, LayerItem, Tippy },
   props: {
     duration: {
@@ -140,14 +145,21 @@ export default defineComponent({
     },
     modelElements: {
       type: Array,
+      required: true,
       default: () => [],
     },
     modelCurrentTime: {
       type: Number,
+      required: true,
       default: 0,
     },
+    modelExpanded: {
+      type: Object,
+      required: true,
+      default: () => ({}),
+    },
   },
-  emits: ["update:modelElements", "update:modelCurrentTime"],
+  emits: ["update:modelElements", "update:modelCurrentTime", "update:modelExpanded"],
   setup(props, { emit }) {
     const vaTimelineBodyRef = ref<null | HTMLDivElement>(null);
     const vaTimelineBodyHeight = computed(() => {
@@ -256,6 +268,13 @@ export default defineComponent({
       { immediate: true, deep: true },
     );
 
+    const handleExpandLayer = (payload: any) => {
+      emit("update:modelExpanded", {
+        ...props.modelExpanded,
+        [payload._id]: payload.expanded,
+      });
+    };
+
     return {
       TIMELINE_MINIMUM_DIVISION_RATE,
       TIMELINE_MAXIMUM_DIVISION_RATE,
@@ -272,6 +291,7 @@ export default defineComponent({
       isDraggingTimelineIndicator,
       handleChangeCurrentTime,
       handleMousedownIndicator,
+      handleExpandLayer,
     };
   },
 });

@@ -82,11 +82,11 @@ export default defineComponent({
 
     const animationTimelineRef = ref(null);
     const svgCanvasHandlers = {
-      [SVG_CANVAS_EVENT.UPDATE]: async () => {
+      [SVG_CANVAS_EVENT.UPDATE]: async (updatePayload: any) => {
         const animationTimelineElement = animationTimelineRef.value as any;
 
         if (animationTimelineElement) {
-          animationTimelineElement.updateElementsFromStore();
+          animationTimelineElement.updateElementsFromStore(updatePayload);
         }
       },
     };
