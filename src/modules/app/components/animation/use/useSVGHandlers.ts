@@ -1,6 +1,6 @@
 import { getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
 import { SVGElement, SVGElementSelectPayload, SVGStage } from "@/types/svg";
-import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_THROTTLE, SVG_ELEMENT_TYPE } from "@core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_THROTTLE } from "@core/constants/svg";
 import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
 import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 
@@ -30,20 +30,13 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
     },
   });
 
-  const isClickingOnCanvas = (e: MouseEvent) => {
-    const targetElement = e.target as HTMLElement;
-
-    return targetElement?.nodeName === SVG_ELEMENT_TYPE.SVG;
+  const handleMousedownCanvas = () => {
+    isMousedown.value = true;
   };
 
-  const handleMousedownCanvas = (e: MouseEvent) => {
-    isMousedown.value = true;
-
-    if (isClickingOnCanvas(e)) {
-      // TODO(BUG): Drag multiple selected elements
-      selectedElements.value = {};
-      _isSelectingMultiple.value = false;
-    }
+  const handleClearSelection = () => {
+    selectedElements.value = {};
+    _isSelectingMultiple.value = false;
   };
 
   const _handleMouseup = () => {
@@ -57,10 +50,6 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
    *
    */
   const _handleMousemove = (e: MouseEvent) => {
-    const targetElement = e.target as HTMLElement;
-
-    targetElement?.nodeName === SVG_ELEMENT_TYPE.SVG;
-
     if (!_isTransforming.value && isMousedown.value) {
       Object.keys(selectedElements.value).forEach((key) => {
         const el = selectedElements.value[key];
@@ -109,8 +98,13 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
     if (isHoldingShift.value) {
       selectedElements.value[id || 0] = el;
     } else {
-      selectedElements.value = {};
-      selectedElements.value[id || 0] = el;
+      // If element exist in selectedElements, allow drag, if not, remove all selected elements and select the new one
+      const existSelectedElement = Object.keys(selectedElements.value).find((key) => key === id);
+
+      if (!existSelectedElement) {
+        selectedElements.value = {};
+        selectedElements.value[id || 0] = el;
+      }
     }
 
     if (Object.keys(selectedElements.value).length > 1) {
@@ -151,6 +145,7 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
     isMousedown,
     isHoldingShift,
     handleMousedownCanvas,
+    handleClearSelection,
     handleElementSelection,
     handleElementResize,
     handleElementRotate,

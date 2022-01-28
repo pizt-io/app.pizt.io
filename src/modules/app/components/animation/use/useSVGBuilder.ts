@@ -17,6 +17,7 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
     isHoldingShift,
     isMousedown,
     handleMousedownCanvas,
+    handleClearSelection,
     handleElementSelection,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleElementResize,
@@ -37,11 +38,16 @@ export const useSVGBuilder = (initialElementsData: Array<SVGElement>) => {
         onMousedown: handleMousedownCanvas,
       },
       [
+        h(SVG_ELEMENT_TYPE.RECT, {
+          fill: "transparent",
+          style: { width: "100%", height: "100%" },
+          onClick: handleClearSelection,
+        }),
         elements.value.map((el: SVGElement, index: number) => {
           const stages = Object.values(el.stages);
           const currentStageIndex = stages.findIndex((stage) => stage.time === currentTime.value);
 
-          const keyframes: string[] = Object.keys(el.stages);
+          const keyframes = Object.keys(el.stages) as unknown as number[];
 
           let elementStage: any = null;
 
