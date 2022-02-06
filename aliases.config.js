@@ -47,8 +47,9 @@ for (const alias in aliases) {
   module.exports.tsconfig[alias] = aliasTo.includes("/index.")
     ? [aliasTo]
     : [
-        aliasTo + "/index.js",
+        // aliasTo + "/index.js",
         aliasTo + "/index.ts",
+        aliasTo + "/index.d.ts",
         aliasTo + "/index.json",
         aliasTo + "/index.vue",
         aliasTo + "/index.scss",
@@ -60,11 +61,11 @@ for (const alias in aliases) {
     ? [aliasTo]
     : [
         aliasTo + "/index.js",
-        aliasTo + "/index.ts",
-        aliasTo + "/index.json",
-        aliasTo + "/index.vue",
-        aliasTo + "/index.scss",
-        aliasTo + "/index.css",
+        // aliasTo + "/index.ts",
+        // aliasTo + "/index.json",
+        // aliasTo + "/index.vue",
+        // aliasTo + "/index.scss",
+        // aliasTo + "/index.css",
       ];
 }
 

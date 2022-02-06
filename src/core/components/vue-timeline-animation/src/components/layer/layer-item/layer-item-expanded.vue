@@ -9,6 +9,7 @@ import LayerRotationInputItem from "./layer-property-input-item/layer-rotation-i
 import LayerColorInputItem from "./layer-property-input-item/layer-color-input-item.vue";
 import LayerBackgroundColorInputItem from "./layer-property-input-item/layer-background-color-input-item.vue";
 import { findStageBetweenStages } from "@/modules/app/utils/keyframes/findStageBetweenStages";
+import { LayerItemStage } from "../../../types/layer";
 
 enum SUPPORT_PROPERTIES {
   opacity = "opacity",
@@ -45,7 +46,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ["change"],
+  setup(props, { emit }) {
     const currentTime = inject<Ref<number>>("currentTime", ref(0));
 
     const _property = props.property as SUPPORT_PROPERTIES;
@@ -59,7 +61,14 @@ export default defineComponent({
       h("div", { class: "va-expanded__item" }, [
         h("span", { class: "text" }, props.label),
         h(INPUT_COMPONENT_MAPPING[_property], {
-          modelValue: currentStage.value,
+          "modelValue": currentStage.value,
+          "onUpdate:modelValue": (value: any) =>
+            emit("change", {
+              label: props.label,
+              property: props.property,
+              time: currentTime.value,
+              value,
+            } as LayerItemStage),
         }),
       ]);
   },

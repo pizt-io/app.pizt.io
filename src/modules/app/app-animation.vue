@@ -3,9 +3,6 @@
     <template v-slot:app-navigator>
       <Navigator />
     </template>
-    <template v-slot:panel-animation>
-      <AnimationPanel />
-    </template>
     <template v-slot:toolbar-animation>
       <AnimationToolbar />
     </template>
@@ -17,15 +14,16 @@
         ref="animationTimelineRef"
         :time="currentTime"
         @change-time="handleChangeCurrentTime"
+        @change-elements="handleChangeElements"
       />
     </template>
   </AppDefaultLayout>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent, defineComponent, onMounted, provide, ref, Ref } from "vue";
+import { defineAsyncComponent, defineComponent, onMounted, provide, ref } from "vue";
 
-import { SVG_CANVAS_EVENT } from "@/core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@core/constants/svg";
 
 import { APP_MODE } from "@core/constants/navigator";
 
@@ -35,7 +33,6 @@ import AppDefaultLayout from "./layout/default.vue";
 
 import AnimationToolbar from "./components/animation/toolbar.vue";
 import AnimationCanvas from "./components/animation/canvas.vue";
-import AnimationPanel from "./components/animation/panel.vue";
 import AnimationTimeline from "./components/animation/timeline.vue";
 
 export default defineComponent({
@@ -49,7 +46,6 @@ export default defineComponent({
     Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
     AnimationToolbar,
     AnimationCanvas,
-    AnimationPanel,
     AnimationTimeline,
   },
   setup() {
@@ -59,41 +55,59 @@ export default defineComponent({
 
     provide("currentTime", currentTime);
 
+    const _updateCanvasElementsFromStore = (updatePayload?: any) => {
+      const animationCanvasElement = animationCanvasRef.value as any;
+
+      if (animationCanvasElement) {
+        animationCanvasElement.updateElementsFromStore(updatePayload);
+      }
+    };
+
+    const _updateTimelineElementsFromStore = (updatePayload?: any) => {
+      const animationTimelineElement = animationTimelineRef.value as any;
+
+      if (animationTimelineElement) {
+        animationTimelineElement.updateElementsFromStore(updatePayload);
+      }
+    };
+
     // Fetch data from backend
     const animationCanvasRef = ref(null);
     const _getCanvasDataOnce = async () => {
-      const animationCanvasElement = animationCanvasRef.value as any;
-      const animationTimelineElement = animationTimelineRef.value as any;
-
       await store.dispatch("app/getElements");
 
-      if (animationCanvasElement && animationTimelineElement) {
-        animationTimelineElement.updateElementsFromStore();
-
-        animationCanvasElement.updateElementsFromStore();
-        animationCanvasElement.forceUpdate();
-      }
+      _updateCanvasElementsFromStore();
+      _updateTimelineElementsFromStore();
     };
     onMounted(_getCanvasDataOnce);
 
-    const handleChangeCurrentTime = (time: Ref<number>) => {
-      currentTime.value = time.value;
+    const handleChangeCurrentTime = (time: number) => {
+      currentTime.value = time;
+    };
+
+    const handleChangeElements = (...args: any[]) => {
+      const [element, index, path] = args;
+
+      store.dispatch("app/updateElements", {
+        elements: [element],
+        indexes: [index],
+        path,
+        type: SVG_UPDATE_TYPE.TIMELINE,
+      });
+
+      _updateTimelineElementsFromStore();
+      _updateCanvasElementsFromStore();
     };
 
     const animationTimelineRef = ref(null);
     const svgCanvasHandlers = {
-      [SVG_CANVAS_EVENT.UPDATE]: async (updatePayload: any) => {
-        const animationTimelineElement = animationTimelineRef.value as any;
-
-        if (animationTimelineElement) {
-          animationTimelineElement.updateElementsFromStore(updatePayload);
-        }
-      },
+      [SVG_CANVAS_EVENT.UPDATE]: _updateTimelineElementsFromStore,
     };
 
     return {
       currentTime,
       handleChangeCurrentTime,
+      handleChangeElements,
       svgCanvasHandlers,
       animationCanvasRef,
       animationTimelineRef,

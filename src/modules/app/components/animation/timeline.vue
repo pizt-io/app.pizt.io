@@ -78,8 +78,8 @@ export default defineComponent({
     const expandedElements = ref<any>({});
 
     const animationTimelineEventHandlers = {
-      "update:modelCurrentTime": () => emit("change-time", currentTime),
-      "update:modelElements": () => emit("change-elements", elements),
+      "update:modelCurrentTime": (payload: number) => emit("change-time", payload),
+      "update:modelElements": (...args: any[]) => emit("change-elements", ...args),
     };
 
     return {

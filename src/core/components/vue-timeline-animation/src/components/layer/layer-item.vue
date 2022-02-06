@@ -14,6 +14,7 @@
         :property="property"
         :label="getLabelFromProperty(property)"
         :stages="Object.values(modelValue.stages)"
+        @change="handleChangeLayerItem"
       />
     </div>
   </div>
@@ -21,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { LayerItemStage, STAGE_PROPERTY_PREFIX } from "../../types/layer";
 import { useTimeline } from "../../use/useTimeline";
 
 import LayerItemExpanded from "./layer-item/layer-item-expanded.vue";
@@ -48,10 +50,27 @@ export default defineComponent({
       });
     };
 
+    const handleChangeLayerItem = (payload: Event) => {
+      const _payload = payload as unknown as LayerItemStage;
+
+      emit(
+        "update:modelValue",
+        {
+          ...props.modelValue,
+          stages: {
+            ...props.modelValue.stages,
+            [STAGE_PROPERTY_PREFIX[_payload.property] + _payload.time]: _payload,
+          },
+        },
+        _payload.property,
+      );
+    };
+
     return {
       changedProperties,
       getLabelFromProperty,
       handleToggleExpand,
+      handleChangeLayerItem,
     };
   },
 });

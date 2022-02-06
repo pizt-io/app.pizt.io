@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex justify-center items-center">
+  <div class="flex justify-center items-center">
     <div
       :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
       class="bg-white dark:bg-gray-800"
@@ -24,7 +24,7 @@ import {
 } from "vue";
 import { useStore } from "vuex";
 import { useRerenderer } from "@/core/use/useRerenderer";
-import { SVG_CANVAS_EVENT } from "@/core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@/core/constants/svg";
 
 import _isEqual from "lodash/isEqual";
 import _cloneDeep from "lodash/cloneDeep";
@@ -65,6 +65,8 @@ export default defineComponent({
       // api returns data from database to make sure that data is synced
       // if those data are not equal, they're unsynced, notify user
       hasUnsyncedDataFromOtherUser.value = !_isEqual(elements.value, _canvasElements.value);
+
+      forceUpdate();
     };
 
     const fileSize = ref("");
@@ -84,7 +86,7 @@ export default defineComponent({
 
         _updateElements(updatedElements);
 
-        const updatePayload = { elements: elements.value, path };
+        const updatePayload = { elements: elements.value, path, type: SVG_UPDATE_TYPE.ELEMENT };
 
         await store.dispatch("app/updateElements", updatePayload);
 
@@ -98,10 +100,10 @@ export default defineComponent({
       canvasWidth,
       canvasHeight,
       fileSize,
-      forceUpdateFlag,
       hasUnsyncedDataFromOtherUser,
       svgCanvasHandlers,
       updateElementsFromStore,
+      forceUpdateFlag,
       forceUpdate,
     };
   },

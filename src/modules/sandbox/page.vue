@@ -105,13 +105,10 @@ import TransitionPanel from "@modules/app/components/transition/panel.vue";
 import TransitionTimeline from "@modules/app/components/transition/timeline.vue";
 import AnimationToolbar from "@modules/app/components/animation/toolbar.vue";
 import AnimationCanvas from "@modules/app/components/animation/canvas.vue";
-import AnimationPanel from "@modules/app/components/animation/panel.vue";
 import AnimationTimeline from "@modules/app/components/animation/timeline.vue";
 
 import { useAppMode } from "@modules/app/use/useAppMode";
 import { useDark } from "@use/useDark";
-import { useStore } from "vuex";
-// import { appStoreModule } from "./store";
 
 export default defineComponent({
   name: "AppPage",
@@ -126,21 +123,12 @@ export default defineComponent({
     TransitionTimeline,
     AnimationToolbar,
     AnimationCanvas,
-    AnimationPanel,
     AnimationTimeline,
     CodeGenerator,
   },
   setup() {
     const { appMode } = useAppMode();
     const { isDark } = useDark();
-
-    // const store = useStore();
-
-    // store.registerModule("app", appStoreModule);
-
-    // onUnmounted(() => {
-    //   store.unregisterModule("app");
-    // });
 
     return {
       APP_MODE,

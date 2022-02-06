@@ -37,7 +37,7 @@
           <CanvasBackgroundToggle />
           <slot name="canvas-transition" />
         </div>
-        <div v-else class="relative bg-dark-500 overflow-auto">
+        <div v-else class="relative bg-dark-500 overflow-auto p-5">
           <CanvasBackgroundToggle />
           <slot name="canvas-animation" />
         </div>
@@ -52,16 +52,14 @@
         </div>
       </transition>
     </div>
-    <div :class="$style.layoutRight">
+    <div v-if="mode === APP_MODE.MAIN" :class="$style.layoutRight">
       <div class="bg-dark-600">
         <transition
           appear
           enter-active-class="animated slideInRight"
           leave-active-class="animated slideOutRight"
         >
-          <slot v-if="mode === APP_MODE.MAIN" name="code-generator" />
-
-          <slot v-else name="panel-animation" />
+          <slot name="code-generator" />
         </transition>
       </div>
     </div>
@@ -149,7 +147,7 @@ export default defineComponent({
   grid-template-rows: 1.25rem auto 200px;
   grid-template-areas:
     "header header header"
-    "left body right"
+    "left body body"
     "footer footer footer";
   overflow: hidden;
 

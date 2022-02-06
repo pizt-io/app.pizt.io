@@ -83,4 +83,9 @@ export enum SVG_CANVAS_GLOBAL_EVENT {
   UPDATE_ELEMENTS = "update-elements",
 }
 
+export enum SVG_UPDATE_TYPE {
+  ELEMENT,
+  TIMELINE,
+}
+
 export const HEX_COLOR_REGEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;

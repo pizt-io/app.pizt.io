@@ -12,10 +12,10 @@ export const actions: Actions = {
 
     return elements;
   },
-  updateElements: async ({ commit }, { elements, path }) => {
+  updateElements: async ({ commit }, { elements, indexes, path, type }) => {
     // Update to database
     // Get data back from database (in case of multiple modification from different browsers in the same time)
 
-    commit("SET_ELEMENTS", { elements, path });
+    commit("SET_ELEMENTS", { elements, indexes, path, type });
   },
 };

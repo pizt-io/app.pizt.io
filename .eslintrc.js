@@ -41,7 +41,7 @@ module.exports = {
     "no-debugger": "warn",
     "quote-props": [2, "consistent-as-needed"],
     "no-case-declarations": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-empty-function": "off",

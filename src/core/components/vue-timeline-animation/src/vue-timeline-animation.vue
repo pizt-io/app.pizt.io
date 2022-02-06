@@ -8,10 +8,10 @@
             <span>(s)</span>
             <input
               type="number"
-              :max="timelineDuration / TIMELINE_MAXIMUM_DIVISION_RATE"
+              step="0.01"
               min="0"
-              step="0.001"
-              :value="(currentTime / TIMELINE_MAXIMUM_DIVISION_RATE).toFixed(3)"
+              :max="timelineDuration / TIMELINE_MAXIMUM_DIVISION_RATE"
+              :value="(currentTime / TIMELINE_MAXIMUM_DIVISION_RATE).toFixed(2)"
               @change="handleChangeCurrentTime"
             />
           </span>
@@ -20,7 +20,9 @@
           <Tippy trigger="click">
             <i class="icon icon-va-plus-circle" />
             <template v-slot:body>
-              <div> Add keyframe </div>
+              <ul>
+                <li>Add keyframe</li>
+              </ul>
             </template>
           </Tippy>
         </span>
@@ -76,7 +78,11 @@
         </div>
       </div>
     </div>
-    <div ref="vaTimelineBodyRef" class="va-timeline-component__body">
+    <div
+      ref="vaTimelineBodyRef"
+      :key="timelineBodyForceRerenderFlag"
+      class="va-timeline-component__body"
+    >
       <div class="va-layer__wrapper" :style="{ width: '320px' }">
         <draggable v-model="elements" v-bind="dragOptions" v-on="dragEventHandlers" item-key="id">
           <template v-slot:item="{ index }">
@@ -84,6 +90,7 @@
               v-model="elements[index]"
               :expanded="modelExpanded[elements[index]._id]"
               @expand="handleExpandLayer"
+              @update:modelValue="handleUpdateLayer"
             />
           </template>
         </draggable>
@@ -107,12 +114,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, shallowRef, triggerRef, watch } from "vue";
 import TimelineItem from "./components/timeline/timeline-item.vue";
 import LayerItem from "./components/layer/layer-item.vue";
 import Tippy from "./components/tippy/tippy.vue";
 
 import draggable from "vuedraggable";
+
+import _throttle from "lodash/throttle";
 
 type Element = {
   _id: string;
@@ -169,7 +178,6 @@ export default defineComponent({
 
       return 0;
     });
-
     const timelineDuration = ref(props.duration);
     const isDragging = ref(false);
     const dragOptions = computed(() => ({
@@ -185,14 +193,24 @@ export default defineComponent({
       },
       end() {
         isDragging.value = false;
+
+        triggerRef(elements);
+        emit("update:modelElements", elements.value);
       },
     };
 
     const currentTime = ref(props.modelCurrentTime as number);
-    const elements = ref(props.modelElements as Element[]);
+    const elements = shallowRef(props.modelElements as Element[]);
+
+    const timelineBodyForceRerenderFlag = ref(0);
+    const _forceRerenderTimelineBody = _throttle(function () {
+      timelineBodyForceRerenderFlag.value++;
+    }, 100);
 
     const handleChangeCurrentTime = (e: any) => {
       currentTime.value = +e.target.value * TIMELINE_MAXIMUM_DIVISION_RATE;
+
+      _forceRerenderTimelineBody();
     };
 
     const vaTimelineRulerRef = ref<null | HTMLDivElement>(null);
@@ -244,6 +262,8 @@ export default defineComponent({
           currentTime.value =
             (xRelativeToRuler / vaTimelineRulerLength.value) * timelineDuration.value;
         }
+
+        _forceRerenderTimelineBody();
       }
     };
 
@@ -260,13 +280,15 @@ export default defineComponent({
       { immediate: true },
     );
 
-    watch(
-      elements,
-      () => {
-        emit("update:modelElements", elements.value);
-      },
-      { immediate: true, deep: true },
-    );
+    const handleUpdateLayer = (...args: any[]) => {
+      const [element, path] = args;
+
+      const elementIndex = elements.value.findIndex((e) => e._id === element._id);
+      elements.value[elementIndex] = element;
+
+      triggerRef(elements);
+      emit("update:modelElements", elements.value[elementIndex], elementIndex, path);
+    };
 
     const handleExpandLayer = (payload: any) => {
       emit("update:modelExpanded", {
@@ -292,6 +314,8 @@ export default defineComponent({
       handleChangeCurrentTime,
       handleMousedownIndicator,
       handleExpandLayer,
+      handleUpdateLayer,
+      timelineBodyForceRerenderFlag,
     };
   },
 });

@@ -36,7 +36,7 @@ export default defineComponent({
           width: "45px",
         },
         value: (+opacity.value).toFixed(decimal),
-        onInput: handleInput,
+        // onInput: handleInput,
         onChange: handleInput,
       });
   },
