@@ -22,7 +22,7 @@ export const findValueBetweenTime = (
       const v1 = +valT1[key];
       const v2 = +valT2[key];
 
-      const valueDistance = v1 - v2;
+      const valueDistance = v2 - v1;
 
       result[key] = v1 + valueDistance * changeFraction;
     });

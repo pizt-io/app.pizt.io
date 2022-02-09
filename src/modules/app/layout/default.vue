@@ -37,7 +37,7 @@
           <CanvasBackgroundToggle />
           <slot name="canvas-transition" />
         </div>
-        <div v-else class="relative bg-dark-500 overflow-auto p-5">
+        <div v-else class="flex items-center justify-center relative bg-dark-500 overflow-auto p-5">
           <CanvasBackgroundToggle />
           <slot name="canvas-animation" />
         </div>

@@ -6,6 +6,8 @@ import { SVGStage } from "@/types/svg";
 
 import _isObject from "lodash/isObject";
 import _cloneDeep from "lodash/cloneDeep";
+import _get from "lodash/get";
+import _set from "lodash/set";
 
 /**
  *
@@ -52,38 +54,36 @@ export const findStageBetweenStages = (stages: SVGStage[], currentTime: number, 
         });
       });
     } else {
-      elementStage[keyPath] = {};
+      elementStage = {};
 
-      if (
-        HEX_COLOR_REGEX.test(previousStage[keyPath]) &&
-        HEX_COLOR_REGEX.test(nextStage[keyPath])
-      ) {
-        elementStage[keyPath] = findColorBetweenTime(
-          currentTime,
-          previousStage.time,
-          nextStage.time,
-          previousStage[keyPath],
-          nextStage[keyPath],
+      const previousStageValue = _get(previousStage, keyPath);
+      const nextStageValue = _get(nextStage, keyPath);
+
+      if (HEX_COLOR_REGEX.test(previousStageValue) && HEX_COLOR_REGEX.test(nextStageValue)) {
+        _set(
+          elementStage,
+          keyPath,
+          findColorBetweenTime(
+            currentTime,
+            previousStage.time,
+            nextStage.time,
+            previousStageValue,
+            nextStageValue,
+          ),
         );
       } else {
-        if (_isObject(previousStage[keyPath]) && _isObject(nextStage[keyPath])) {
-          elementStage[keyPath] = findValueBetweenTime(
+        _set(
+          elementStage,
+          keyPath,
+          findValueBetweenTime(
             currentTime,
             previousStage.time,
             nextStage.time,
-            previousStage[keyPath],
-            nextStage[keyPath],
-            true,
-          );
-        } else {
-          elementStage[keyPath] = findValueBetweenTime(
-            currentTime,
-            previousStage.time,
-            nextStage.time,
-            previousStage[keyPath],
-            nextStage[keyPath],
-          );
-        }
+            previousStageValue,
+            nextStageValue,
+            _isObject(previousStageValue) && _isObject(nextStageValue),
+          ),
+        );
       }
     }
   } else {

@@ -1,34 +1,7 @@
-<template>
-  <div>
-    <div class="va-timeline__item">
-      <i
-        v-for="key in modelValue.keyframes"
-        :key="key"
-        class="icon icon-va-locate"
-        :style="{
-          left: (modelValue.stages[key].time * 100) / duration + '%',
-        }"
-      />
-    </div>
-    <div v-if="expanded" class="va-expanded__wrapper">
-      <div v-for="property in changedProperties" :key="property" class="va-expanded__item">
-        <template v-for="key in modelValue.keyframes" :key="key">
-          <i
-            class="icon icon-va-locate"
-            v-if="modelValue.stages[key].property === property"
-            :style="{
-              left: (modelValue.stages[key].time * 100) / duration + '%',
-            }"
-          />
-        </template>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useTimeline } from "../../use/useTimeline";
+import TimelineExpandedItem from "./timeline-expanded-item.vue";
+
+import { defineComponent, h } from "vue";
 
 export default defineComponent({
   props: {
@@ -45,13 +18,56 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["update:modelValue"],
-  setup(props) {
-    const { changedProperties } = useTimeline(props.modelValue);
-
-    return {
-      changedProperties,
+  emits: ["update:modelValue", "expand", "change"],
+  setup(props, { emit }) {
+    const handleToggleExpand = () => {
+      emit("expand");
     };
+
+    return () =>
+      h("div", {}, [
+        h(
+          "div",
+          {
+            class: "va-timeline__item",
+          },
+          [
+            h("div", { class: "va-timeline__label" }, [
+              h("i", { class: "icon icon-va-ellipsis-v handle" }),
+              h("label", props.modelValue.name),
+              h(
+                "span",
+                {
+                  class: [props.expanded && "va__active", "va-timeline__toggle"],
+                  onClick: handleToggleExpand,
+                },
+                [h("i", { class: "icon-va-chevron-up" })],
+              ),
+            ]),
+            h(
+              "div",
+              {
+                class: "va-timeline__body",
+              },
+              (Object.values(props.modelValue.animations) as any[]).map((stages) =>
+                stages.map((stage: any) =>
+                  h("i", {
+                    class: "icon icon-va-locate",
+                    style: {
+                      left: `${(stage.time * 100) / props.duration}%`,
+                    },
+                  }),
+                ),
+              ),
+            ),
+          ],
+        ),
+        props.expanded &&
+          h(TimelineExpandedItem, {
+            item: props.modelValue,
+            onChange: (payload: any) => emit("change", payload),
+          }),
+      ]);
   },
 });
 </script>

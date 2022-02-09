@@ -83,39 +83,60 @@
       :key="timelineBodyForceRerenderFlag"
       class="va-timeline-component__body"
     >
-      <draggable
-        v-model="elements"
-        v-bind="dragOptions"
-        v-on="dragEventHandlers"
-        style="width: 100%"
-        item-key="id"
+      <div class="va-layer__wrapper" :style="{ width: '320px' }">
+        <draggable v-model="elements" v-bind="dragOptions" v-on="dragEventHandlers" item-key="id">
+          <template v-slot:item="{ index }">
+            <LayerItem
+              v-model="elements[index]"
+              :expanded="modelExpanded[elements[index]._id]"
+              @expand="handleExpandLayer"
+              @update:modelValue="handleUpdateLayer"
+            />
+          </template>
+        </draggable>
+      </div>
+      <div
+        class="va-timeline__wrapper"
+        :style="{
+          paddingLeft: TIMELINE_BODY_LEFT_OFFSET + 'px',
+        }"
       >
-        <template v-slot:item="{ index }">
-          <TimelineItem
-            v-model="elements[index]"
-            :key="`t-${elements[index]._id}`"
-            :expanded="elements[index].expanded"
-            :duration="timelineDuration"
-            @expand="handleExpandItem(index, !elements[index].expanded)"
-            @change="handleChangeItem(index, $event)"
-          />
-        </template>
-      </draggable>
+        <TimelineItem
+          v-for="element in elements"
+          :model-value="(element as any)"
+          :key="`t-${element._id}`"
+          :expanded="modelExpanded[element._id]"
+          :duration="timelineDuration"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, shallowRef, triggerRef, watch } from "vue";
-import { timelineElements } from "@/mock/timeline";
-
 import TimelineItem from "./components/timeline/timeline-item.vue";
+import LayerItem from "./components/layer/layer-item.vue";
 import Tippy from "./components/tippy/tippy.vue";
 
 import draggable from "vuedraggable";
 
 import _throttle from "lodash/throttle";
-import _set from "lodash/set";
+
+type Element = {
+  _id: string;
+  name: string;
+  keyframes: string[];
+  expanded?: boolean;
+  stages: {
+    [key: string]: {
+      time: number;
+      label: string;
+      property: string;
+      value: any;
+    };
+  };
+};
 
 const TIMELINE_MINIMUM_DIVISION_RATE = 100;
 const TIMELINE_MAXIMUM_DIVISION_RATE = 1000;
@@ -123,11 +144,9 @@ const TIMELINE_MAXIMUM_DIVISION_RATE = 1000;
 const TIMELINE_BODY_LEFT_OFFSET = 5;
 const TIMELINE_BODY_RIGHT_OFFSET = 10;
 
-const TIMELINE_THROTTLE_RATE = 100;
-
 export default defineComponent({
   name: "VueAnimationTimeline",
-  components: { draggable, TimelineItem, Tippy },
+  components: { draggable, TimelineItem, LayerItem, Tippy },
   props: {
     duration: {
       type: Number,
@@ -136,7 +155,7 @@ export default defineComponent({
     modelElements: {
       type: Array,
       required: true,
-      default: () => timelineElements,
+      default: () => [],
     },
     modelCurrentTime: {
       type: Number,
@@ -181,13 +200,12 @@ export default defineComponent({
     };
 
     const currentTime = ref(props.modelCurrentTime as number);
-
-    const elements = shallowRef(props.modelElements as any[]);
+    const elements = shallowRef(props.modelElements as Element[]);
 
     const timelineBodyForceRerenderFlag = ref(0);
     const _forceRerenderTimelineBody = _throttle(function () {
       timelineBodyForceRerenderFlag.value++;
-    }, TIMELINE_THROTTLE_RATE);
+    }, 100);
 
     const handleChangeCurrentTime = (e: any) => {
       currentTime.value = +e.target.value * TIMELINE_MAXIMUM_DIVISION_RATE;
@@ -232,7 +250,7 @@ export default defineComponent({
       isDraggingTimelineIndicator.value = false;
     };
 
-    const _handleMousemoveIndicator = _throttle(function (e: MouseEvent) {
+    const _handleMousemoveIndicator = (e: MouseEvent) => {
       if (isDraggingTimelineIndicator.value && vaTimelineRulerRef.value) {
         const xRelativeToRuler = e.clientX - vaTimelineRulerBoundingBox.value.left;
 
@@ -247,7 +265,7 @@ export default defineComponent({
 
         _forceRerenderTimelineBody();
       }
-    }, TIMELINE_THROTTLE_RATE);
+    };
 
     onMounted(() => {
       window.addEventListener("mousemove", _handleMousemoveIndicator);
@@ -262,21 +280,21 @@ export default defineComponent({
       { immediate: true },
     );
 
-    const handleExpandItem = (index: number, expanded: boolean) => {
-      elements.value[index].expanded = expanded;
+    const handleUpdateLayer = (...args: any[]) => {
+      const [element, path] = args;
+
+      const elementIndex = elements.value.findIndex((e) => e._id === element._id);
+      elements.value[elementIndex] = element;
 
       triggerRef(elements);
-      emit("update:modelElements", elements.value[index], index);
+      emit("update:modelElements", elements.value[elementIndex], elementIndex, path);
     };
 
-    const handleChangeItem = (index: number, payload: any) => {
-      const stages = elements.value[index].animations[payload.attr];
-      const stageIndex = stages.findIndex((e: any) => e.time === payload.time);
-
-      _set(stages[stageIndex], payload.attr, payload.value);
-
-      triggerRef(elements);
-      emit("update:modelElements", elements.value[index], index);
+    const handleExpandLayer = (payload: any) => {
+      emit("update:modelExpanded", {
+        ...props.modelExpanded,
+        [payload._id]: payload.expanded,
+      });
     };
 
     return {
@@ -295,8 +313,8 @@ export default defineComponent({
       isDraggingTimelineIndicator,
       handleChangeCurrentTime,
       handleMousedownIndicator,
-      handleExpandItem,
-      handleChangeItem,
+      handleExpandLayer,
+      handleUpdateLayer,
       timelineBodyForceRerenderFlag,
     };
   },

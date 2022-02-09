@@ -1,9 +1,6 @@
 <template>
   <div class="w-full h-full">
     <VueTimelineAnimation
-      v-model:modelElements="elements"
-      v-model:modelCurrentTime="currentTime"
-      v-model:modelExpanded="expandedElements"
       v-on="animationTimelineEventHandlers"
       :key="forceUpdateFlag"
       :duration="animationDuration"

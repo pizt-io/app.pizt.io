@@ -1,0 +1,15 @@
+export enum AttributesMap {
+  POSITION = "pos",
+  SIZE = "size",
+  TRANSLATE = "transform.translate",
+  SCALE = "transform.scale",
+  ROTATE = "transform.rotate",
+  SKEW = "transform.skew",
+  ORIGIN = "style.transformOrigin",
+  FILL = "style.fill",
+  STROKE = "style.stroke",
+  STROKE_WIDTH = "style.strokeWidth",
+  STROKE_DASH_ARRAY = "style.strokeDasharray",
+  STROKE_DASH_OFFSET = "style.strokeDashoffset",
+  OPACITY = "style.opacity",
+}
