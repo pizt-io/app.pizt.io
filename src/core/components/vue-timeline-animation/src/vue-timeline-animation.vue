@@ -17,11 +17,17 @@
           </span>
         </span>
         <span class="va-toolbar__right">
-          <Tippy trigger="click">
+          <Tippy trigger="click" :options="{ hideOnClick: true }">
             <i class="icon icon-va-plus-circle" />
             <template v-slot:body>
               <ul>
-                <li>Add keyframe</li>
+                <li
+                  v-for="animation in selectableAnimations"
+                  :key="animation.value"
+                  @click="handleAddAnimation(animation)"
+                >
+                  Animate {{ animation.label }}
+                </li>
               </ul>
             </template>
           </Tippy>
@@ -93,11 +99,16 @@
         <template v-slot:item="{ index }">
           <TimelineItem
             v-model="elements[index]"
-            :key="`t-${elements[index]._id}`"
-            :expanded="elements[index].expanded"
+            :ref="'timelineItemRef' + index"
+            :key="`t${timelineElementForceRerenderFlag[elements[index]._id]}-${
+              elements[index]._id
+            }-`"
+            :expanded="expandedElements.includes(elements[index]._id)"
             :duration="timelineDuration"
-            @expand="handleExpandItem(index, !elements[index].expanded)"
+            :selected="selectedElement._id === elements[index]._id"
+            @expand="handleExpandItem(index)"
             @change="handleChangeItem(index, $event)"
+            @select="handleSelectElement"
           />
         </template>
       </draggable>
@@ -106,8 +117,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, shallowRef, triggerRef, watch } from "vue";
 import { timelineElements } from "@/mock/timeline";
+import { useCursor } from "./use/useCursor";
+import {
+  ANIMATED_ATTRIBUTES,
+  AttributesMap,
+  DEFAULT_VALUE_MAPPPING,
+  LABEL_MAPPING,
+} from "./constants";
+import { computed, defineComponent, onMounted, ref, shallowRef, triggerRef, watch } from "vue";
 
 import TimelineItem from "./components/timeline/timeline-item.vue";
 import Tippy from "./components/tippy/tippy.vue";
@@ -115,6 +133,7 @@ import Tippy from "./components/tippy/tippy.vue";
 import draggable from "vuedraggable";
 
 import _throttle from "lodash/throttle";
+import _get from "lodash/get";
 import _set from "lodash/set";
 
 const TIMELINE_MINIMUM_DIVISION_RATE = 100;
@@ -184,7 +203,34 @@ export default defineComponent({
 
     const elements = shallowRef(props.modelElements as any[]);
 
-    const timelineBodyForceRerenderFlag = ref(0);
+    const selectedElement = ref(elements.value[0] || null);
+    const handleSelectElement = (element: any) => {
+      selectedElement.value = element;
+    };
+
+    const selectableAnimations = computed(() =>
+      timelineBodyForceRerenderFlag.value && selectedElement.value
+        ? ANIMATED_ATTRIBUTES.filter(
+            (attr) => !Object.keys(selectedElement.value.animations).includes(attr),
+          ).map((attr) => ({
+            value: attr,
+            label: LABEL_MAPPING[attr],
+          }))
+        : [],
+    );
+
+    const timelineElementForceRerenderFlag = ref<{ [x: string]: number }>({});
+    const forceRerenderElements = (ids: string[] | string) => {
+      (Array.isArray(ids) ? ids : [ids]).forEach((id) => {
+        if (timelineElementForceRerenderFlag.value[id]) {
+          timelineElementForceRerenderFlag.value[id]++;
+        } else {
+          timelineElementForceRerenderFlag.value[id] = 1;
+        }
+      });
+    };
+
+    const timelineBodyForceRerenderFlag = ref(1);
     const _forceRerenderTimelineBody = _throttle(function () {
       timelineBodyForceRerenderFlag.value++;
     }, TIMELINE_THROTTLE_RATE);
@@ -228,12 +274,16 @@ export default defineComponent({
     const handleMousedownIndicator = () => {
       isDraggingTimelineIndicator.value = true;
     };
+
+    const { changeCursor, CURSOR_TYPE } = useCursor();
     const _handleMounseupIndicator = () => {
       isDraggingTimelineIndicator.value = false;
+      changeCursor(CURSOR_TYPE.INHERIT);
     };
 
     const _handleMousemoveIndicator = _throttle(function (e: MouseEvent) {
       if (isDraggingTimelineIndicator.value && vaTimelineRulerRef.value) {
+        changeCursor(CURSOR_TYPE.GRABBING);
         const xRelativeToRuler = e.clientX - vaTimelineRulerBoundingBox.value.left;
 
         if (xRelativeToRuler < 0) {
@@ -262,11 +312,16 @@ export default defineComponent({
       { immediate: true },
     );
 
-    const handleExpandItem = (index: number, expanded: boolean) => {
-      elements.value[index].expanded = expanded;
+    const expandedElements = ref<string[]>([]);
+    const handleExpandItem = (index: number) => {
+      const el = elements.value[index];
+      const expandedIndex = expandedElements.value.indexOf(el._id);
 
-      triggerRef(elements);
-      emit("update:modelElements", elements.value[index], index);
+      if (expandedIndex < 0) {
+        expandedElements.value.push(el._id);
+      } else {
+        expandedElements.value.splice(expandedIndex, 1);
+      }
     };
 
     const handleChangeItem = (index: number, payload: any) => {
@@ -279,6 +334,32 @@ export default defineComponent({
       emit("update:modelElements", elements.value[index], index);
     };
 
+    const handleAddAnimation = (animation: { label: string; value: AttributesMap }) => {
+      const elementIndex = elements.value.findIndex(
+        (e: any) => e._id === selectedElement.value._id,
+      );
+
+      if (elementIndex >= 0) {
+        const newAnimation = {
+          time: currentTime.value,
+        };
+
+        _set(
+          newAnimation,
+          animation.value,
+          _get(selectedElement.value.attrs, animation.value) ||
+            DEFAULT_VALUE_MAPPPING[animation.value],
+        );
+
+        elements.value[elementIndex].animations[animation.value] = [newAnimation];
+
+        triggerRef(elements);
+        handleSelectElement(elements.value[elementIndex]);
+
+        _forceRerenderTimelineBody();
+      }
+    };
+
     return {
       TIMELINE_MINIMUM_DIVISION_RATE,
       TIMELINE_MAXIMUM_DIVISION_RATE,
@@ -286,7 +367,9 @@ export default defineComponent({
       TIMELINE_BODY_RIGHT_OFFSET,
       vaTimelineBodyRef,
       vaTimelineBodyHeight,
+      selectableAnimations,
       elements,
+      expandedElements,
       dragOptions,
       dragEventHandlers,
       currentTime,
@@ -298,6 +381,11 @@ export default defineComponent({
       handleExpandItem,
       handleChangeItem,
       timelineBodyForceRerenderFlag,
+      timelineElementForceRerenderFlag,
+      forceRerenderElements,
+      handleSelectElement,
+      selectedElement,
+      handleAddAnimation,
     };
   },
 });

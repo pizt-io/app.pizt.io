@@ -4,76 +4,41 @@ import { defineComponent, h, ref } from "vue";
 export default defineComponent({
   props: {
     modelValue: {
-      type: Object,
-      default: () => ({
-        width: "0.0",
-        height: "0.0",
-      }),
+      type: String,
+      default: "1.00",
     },
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    const decimal = 1;
-    const size = ref({
-      width: (+props.modelValue.width).toFixed(decimal),
-      height: (+props.modelValue.height).toFixed(decimal),
-    });
+    const decimal = 2;
+    const num = ref(props.modelValue);
 
-    const handleInputW = (e: any) => {
+    const handleInput = (e: any) => {
       const value = +e.target.value;
 
-      size.value.width = (+value).toFixed(decimal);
-
-      emit("update:modelValue", size.value);
-    };
-
-    const handleInputH = (e: any) => {
-      const value = +e.target.value;
-
-      size.value.height = (+value).toFixed(decimal);
-
-      emit("update:modelValue", size.value);
+      if (value > 1) {
+        num.value = (1).toFixed(decimal);
+      } else if (value < 0) {
+        num.value = (0).toFixed(decimal);
+      } else {
+        num.value = (+value).toFixed(decimal);
+      }
+      emit("update:modelValue", num.value);
     };
 
     return () =>
-      h(
-        "span",
-        {
-          style: {
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          },
+      h("input", {
+        type: "number",
+        min: 0,
+        max: 999999,
+        step: 0.1 * decimal,
+        style: {
+          width: "45px",
         },
-        [
-          h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "W"),
-          h("input", {
-            type: "number",
-            min: 0,
-            max: 2000,
-            step: 0.1 * decimal,
-            style: {
-              width: "60px",
-            },
-            value: (+size.value.width).toFixed(decimal),
-            // onInput: handleInputW,
-            onChange: handleInputW,
-          }),
-          h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "H"),
-          h("input", {
-            type: "number",
-            min: 0,
-            max: 2000,
-            step: 0.1 * decimal,
-            style: {
-              width: "60px",
-            },
-            value: (+size.value.height).toFixed(decimal),
-            // onInput: handleInputH,
-            onChange: handleInputH,
-          }),
-        ],
-      );
+        value: (+num.value).toFixed(decimal),
+        // onInput: handleInput,
+        onChange: handleInput,
+      });
   },
 });
 </script>

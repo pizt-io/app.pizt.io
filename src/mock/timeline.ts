@@ -5,7 +5,6 @@ export const timelineElements = [
     _id: "id-el-1",
     type: SVG_ELEMENT_TYPE.ELLIPSE,
     name: "Ellipse 1",
-    expanded: true,
     attrs: {
       pos: { x: 150, y: 100 },
       size: { width: 100, height: 50 },
@@ -20,9 +19,9 @@ export const timelineElements = [
         stroke: "#5ad3db",
         strokeWidth: 1,
         opacity: 1,
-        strokeDasharray: "none",
+        strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "50% 50%",
+        transformOrigin: "center center",
       },
     },
     animations: {
@@ -41,7 +40,7 @@ export const timelineElements = [
         { time: 3000, style: { fill: "#5449cc" } },
       ],
       "size": [
-        { time: 0, size: { width: 100, height: 50 } },
+        { time: 1000, size: { width: 100, height: 50 } },
         { time: 2000, size: { width: 200, height: 200 } },
       ],
     },
@@ -50,7 +49,6 @@ export const timelineElements = [
     _id: "id-el-4",
     type: SVG_ELEMENT_TYPE.LINE,
     name: "Line 1",
-    expanded: true,
     attrs: {
       pos: [
         [600, 50],
@@ -78,7 +76,6 @@ export const timelineElements = [
     _id: "id-el-6",
     type: SVG_ELEMENT_TYPE.PATH,
     name: "Path 1",
-    expanded: true,
     attrs: {
       commands: [
         {

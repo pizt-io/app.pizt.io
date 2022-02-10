@@ -6,33 +6,33 @@ export default defineComponent({
     modelValue: {
       type: Object,
       default: () => ({
-        width: "0.0",
-        height: "0.0",
+        skewX: "0.0",
+        skewY: "0.0",
       }),
     },
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
     const decimal = 1;
-    const size = ref({
-      width: (+props.modelValue.width).toFixed(decimal),
-      height: (+props.modelValue.height).toFixed(decimal),
+    const position = ref({
+      skewX: (+props.modelValue.skewX).toFixed(decimal),
+      skewY: (+props.modelValue.skewY).toFixed(decimal),
     });
 
-    const handleInputW = (e: any) => {
+    const handleInputX = (e: any) => {
       const value = +e.target.value;
 
-      size.value.width = (+value).toFixed(decimal);
+      position.value.skewX = (+value).toFixed(decimal);
 
-      emit("update:modelValue", size.value);
+      emit("update:modelValue", position.value);
     };
 
-    const handleInputH = (e: any) => {
+    const handleInputY = (e: any) => {
       const value = +e.target.value;
 
-      size.value.height = (+value).toFixed(decimal);
+      position.value.skewY = (+value).toFixed(decimal);
 
-      emit("update:modelValue", size.value);
+      emit("update:modelValue", position.value);
     };
 
     return () =>
@@ -46,7 +46,7 @@ export default defineComponent({
           },
         },
         [
-          h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "W"),
+          h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "X"),
           h("input", {
             type: "number",
             min: 0,
@@ -55,11 +55,11 @@ export default defineComponent({
             style: {
               width: "60px",
             },
-            value: (+size.value.width).toFixed(decimal),
-            // onInput: handleInputW,
-            onChange: handleInputW,
+            value: (+position.value.skewX).toFixed(decimal),
+            // onInput: handleInputX,
+            onChange: handleInputX,
           }),
-          h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "H"),
+          h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "Y"),
           h("input", {
             type: "number",
             min: 0,
@@ -68,9 +68,9 @@ export default defineComponent({
             style: {
               width: "60px",
             },
-            value: (+size.value.height).toFixed(decimal),
-            // onInput: handleInputH,
-            onChange: handleInputH,
+            value: (+position.value.skewY).toFixed(decimal),
+            // onInput: handleInputY,
+            onChange: handleInputY,
           }),
         ],
       );

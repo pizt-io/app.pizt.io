@@ -2,28 +2,17 @@
   <div class="w-full h-full">
     <VueTimelineAnimation
       v-on="animationTimelineEventHandlers"
-      :key="forceUpdateFlag"
+      ref="vueTimelineAnimationRef"
       :duration="animationDuration"
     />
   </div>
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineAsyncComponent,
-  defineComponent,
-  ref,
-  shallowRef,
-  triggerRef,
-  watch,
-} from "vue";
+import { computed, defineAsyncComponent, defineComponent, ref, shallowRef, triggerRef } from "vue";
 import { useStore } from "vuex";
-import { useRerenderer } from "@/core/use/useRerenderer";
 
-import _throttle from "lodash/throttle";
 import _cloneDeep from "lodash/cloneDeep";
-import { SVG_CANVAS_EVENT_THROTTLE } from "@/core/constants/svg";
 
 export default defineComponent({
   name: "AnimationTimeline",
@@ -56,23 +45,17 @@ export default defineComponent({
 
     const hasUnsyncedDataFromOtherUser = ref(false);
 
-    const { forceUpdate, forceUpdateFlag } = useRerenderer();
-
-    const updateElementsFromStore = () => {
+    const vueTimelineAnimationRef = ref(null);
+    const updateElements = (payload: any[]) => {
       elements.value = _timelineElements.value;
-
       triggerRef(elements);
+
+      const vueTimelineAnimationElement = vueTimelineAnimationRef.value as any;
+
+      if (vueTimelineAnimationElement) {
+        vueTimelineAnimationElement.forceRerenderElements(payload.map((el) => el._id));
+      }
     };
-
-    watch(
-      elements,
-      _throttle(function () {
-        forceUpdate();
-      }, SVG_CANVAS_EVENT_THROTTLE),
-      { deep: true },
-    );
-
-    const expandedElements = ref<any>({});
 
     const animationTimelineEventHandlers = {
       "update:modelCurrentTime": (payload: number) => emit("change-time", payload),
@@ -84,10 +67,9 @@ export default defineComponent({
       elements,
       currentTime,
       hasUnsyncedDataFromOtherUser,
-      forceUpdateFlag,
       animationTimelineEventHandlers,
-      updateElementsFromStore,
-      expandedElements,
+      vueTimelineAnimationRef,
+      updateElements,
     };
   },
 });

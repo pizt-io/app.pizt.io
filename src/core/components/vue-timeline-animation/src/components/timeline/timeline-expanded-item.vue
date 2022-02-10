@@ -1,6 +1,6 @@
 <script lang="ts">
 import TimelineOpacityInputItem from "./timeline-property-input-item/timeline-opacity-input-item.vue";
-import TimelinePositionInputItem from "./timeline-property-input-item/timeline-position-input-item.vue";
+import TimelineOriginInputItem from "./timeline-property-input-item/timeline-origin-input-item.vue";
 import TimelineTranslateInputItem from "./timeline-property-input-item/timeline-translate-input-item.vue";
 import TimelineSizeInputItem from "./timeline-property-input-item/timeline-size-input-item.vue";
 import TimelineRotationInputItem from "./timeline-property-input-item/timeline-rotation-input-item.vue";
@@ -9,43 +9,11 @@ import TimelineScaleInputItem from "./timeline-property-input-item/timeline-scal
 import TimelineSkewInputItem from "./timeline-property-input-item/timeline-skew-input-item.vue";
 import TimelineNumberInputItem from "./timeline-property-input-item/timeline-number-input-item.vue";
 
-import { AttributesMap } from "../../constants";
+import { ANIMATED_ATTRIBUTES, AttributesMap, LABEL_MAPPING } from "../../constants";
 import { findStageBetweenStages } from "@/modules/app/utils/keyframes/findStageBetweenStages";
 import { defineComponent, h, inject, ref, Ref } from "vue";
 
 import _get from "lodash/get";
-
-const ANIMATED_ATTRIBUTES = [
-  // AttributesMap.POSITION,
-  AttributesMap.SIZE,
-  AttributesMap.TRANSLATE,
-  AttributesMap.SCALE,
-  AttributesMap.ROTATE,
-  AttributesMap.SKEW,
-  AttributesMap.ORIGIN,
-  AttributesMap.FILL,
-  AttributesMap.STROKE,
-  AttributesMap.STROKE_WIDTH,
-  AttributesMap.STROKE_DASH_ARRAY,
-  AttributesMap.STROKE_DASH_OFFSET,
-  AttributesMap.OPACITY,
-];
-
-const LABEL_MAPPING = Object.freeze({
-  [AttributesMap.POSITION]: "Position",
-  [AttributesMap.SIZE]: "Size",
-  [AttributesMap.TRANSLATE]: "Position",
-  [AttributesMap.SCALE]: "Scale",
-  [AttributesMap.ROTATE]: "Rotate",
-  [AttributesMap.SKEW]: "Skew",
-  [AttributesMap.ORIGIN]: "Origin",
-  [AttributesMap.FILL]: "Fill",
-  [AttributesMap.STROKE]: "Stroke color",
-  [AttributesMap.STROKE_WIDTH]: "Stroke width",
-  [AttributesMap.STROKE_DASH_ARRAY]: "Stroke dash array",
-  [AttributesMap.STROKE_DASH_OFFSET]: "Stroke dash offset",
-  [AttributesMap.OPACITY]: "Opacity",
-});
 
 const INPUT_COMPONENT_MAPPING = Object.freeze({
   [AttributesMap.SIZE]: TimelineSizeInputItem,
@@ -53,7 +21,7 @@ const INPUT_COMPONENT_MAPPING = Object.freeze({
   [AttributesMap.SCALE]: TimelineScaleInputItem,
   [AttributesMap.ROTATE]: TimelineRotationInputItem,
   [AttributesMap.SKEW]: TimelineSkewInputItem,
-  [AttributesMap.ORIGIN]: TimelinePositionInputItem,
+  [AttributesMap.ORIGIN]: TimelineOriginInputItem,
   [AttributesMap.FILL]: TimelineColorInputItem,
   [AttributesMap.STROKE]: TimelineColorInputItem,
   [AttributesMap.STROKE_WIDTH]: TimelineNumberInputItem,

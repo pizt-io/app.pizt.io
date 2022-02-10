@@ -17,11 +17,19 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    selected: {
+      type: Boolean,
+      default: false,
+    },
   },
-  emits: ["update:modelValue", "expand", "change"],
+  emits: ["update:modelValue", "expand", "change", "select"],
   setup(props, { emit }) {
     const handleToggleExpand = () => {
       emit("expand");
+    };
+
+    const handleSelectElement = () => {
+      emit("select", props.modelValue);
     };
 
     return () =>
@@ -29,7 +37,8 @@ export default defineComponent({
         h(
           "div",
           {
-            class: "va-timeline__item",
+            onClick: handleSelectElement,
+            class: ["va-timeline__item", props.selected && "va__selected"],
           },
           [
             h("div", { class: "va-timeline__label" }, [

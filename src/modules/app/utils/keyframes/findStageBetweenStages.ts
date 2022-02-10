@@ -87,7 +87,7 @@ export const findStageBetweenStages = (stages: SVGStage[], currentTime: number, 
       }
     }
   } else {
-    elementStage = previousStage;
+    elementStage = previousStage || nextStage;
   }
 
   elementStage.time = currentTime;

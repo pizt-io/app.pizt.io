@@ -14,6 +14,8 @@ $--item-font-size: 0.8rem;
 $--item-expanded-bg: #1A1D20;
 $--item-expanded-toggle: #bbbbbb;
 
+$--item-selected-bg: #122942;
+
 $--item-input-color: #c9b12e;
 $--item-input-color-focus: #bbbbbb;
 
@@ -237,6 +239,10 @@ $--item-input-color-focus: #bbbbbb;
     color: $--item-color;
     background-color: $--item-bg;
     border-bottom: 1px solid $--border-color-base;
+
+    &.va__selected {
+      background-color: $--item-selected-bg;
+    }
   }
 
   &__toggle {
@@ -253,7 +259,9 @@ $--item-input-color-focus: #bbbbbb;
     &.va__active {
       transform: translate(-50%, -50%) scale(0.6) rotate(180deg);
     }
+
   }
+
 }
 
 .va-expanded {
@@ -279,7 +287,7 @@ $--item-input-color-focus: #bbbbbb;
       }
     }
 
-    input {
+    input, select {
       display: inline-block;
       margin-right: 5px;
       font-size: 0.75rem;
@@ -294,6 +302,13 @@ $--item-input-color-focus: #bbbbbb;
         border: 1px dotted rgb(161, 161, 161);
         color: $--item-input-color-focus;
         cursor: initial;
+      }
+    }
+
+    select {
+      option {
+        background-color: $--item-bg;
+        border: none;
       }
     }
   }
@@ -319,5 +334,27 @@ $--item-input-color-focus: #bbbbbb;
   &__label {
     font-size: $--item-font-size;
     line-height: $--item-font-size;
+  }
+}
+
+.my-tippy-inner {
+  background-color: $--item-bg;
+  color: $--item-color;
+
+  ul {
+    li {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      line-height: 0.75rem;
+      color: $--item-color;
+      background-color: $--item-bg;
+      border-bottom: 1px solid $--border-color-base;
+      cursor: pointer;
+      user-select: none;
+
+      &:hover {
+        background-color: $--item-selected-bg;
+      }
+    }
   }
 }

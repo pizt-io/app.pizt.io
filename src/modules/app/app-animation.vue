@@ -63,11 +63,13 @@ export default defineComponent({
       }
     };
 
-    const _updateTimelineElementsFromStore = (updatePayload?: any) => {
+    const _updateTimelineElements = (updatePayload?: any) => {
       const animationTimelineElement = animationTimelineRef.value as any;
 
       if (animationTimelineElement) {
-        animationTimelineElement.updateElementsFromStore(updatePayload);
+        animationTimelineElement.updateElements(
+          updatePayload && Object.values(updatePayload?.elements),
+        );
       }
     };
 
@@ -77,7 +79,7 @@ export default defineComponent({
       await store.dispatch("app/getElements");
 
       _updateCanvasElementsFromStore();
-      _updateTimelineElementsFromStore();
+      _updateTimelineElements();
     };
     onMounted(_getCanvasDataOnce);
 
@@ -95,13 +97,12 @@ export default defineComponent({
         type: SVG_UPDATE_TYPE.TIMELINE,
       });
 
-      _updateTimelineElementsFromStore();
       _updateCanvasElementsFromStore();
     };
 
     const animationTimelineRef = ref(null);
     const svgCanvasHandlers = {
-      [SVG_CANVAS_EVENT.UPDATE]: _updateTimelineElementsFromStore,
+      [SVG_CANVAS_EVENT.UPDATE]: _updateTimelineElements,
     };
 
     return {
