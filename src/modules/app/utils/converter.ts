@@ -47,7 +47,7 @@ export const mapStagetoElementStage = (type: SVG_ELEMENT_TYPE, stages: { [x: str
 export const mapElementStageToStage = (type: SVG_ELEMENT_TYPE, stages: { [x: string]: SVGStage }) =>
   (SVG_STAGES_REVERSE_MAPPING as any)[type](stages);
 
-export const convertDataToElements = (jsonArray: Array<any>): Array<SVGElement> => {
+export const convertDataToElements = (jsonArray: any[]): Array<SVGElement> => {
   const elements = jsonArray.map((el: any) => ({
     _id: el._id,
     type: el.type,
@@ -61,7 +61,7 @@ export const convertDataToElements = (jsonArray: Array<any>): Array<SVGElement> 
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const convertElementsToData = (elements: Array<SVGElement>): Array<any> => {
+export const convertElementsToData = (elements: Array<SVGElement>): any[] => {
   return [];
 };
 
@@ -72,7 +72,7 @@ const _mapStage = (prop: STAGE_PROPERTY, state: any) => ({
   value: _get(state, STAGE_PROPERTY_MAPPING[prop]),
 });
 
-export const convertDataToTimelineElements = (jsonArray: Array<any>) => {
+export const convertDataToTimelineElements = (jsonArray: any[]) => {
   const elements = jsonArray.map((el: any) => {
     const mappedKeyframes: string[] = [];
     const mappedStages: any = {};
@@ -151,6 +151,6 @@ export const convertDataToTimelineElements = (jsonArray: Array<any>) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const convertTimelineElementsToData = (elements: Array<SVGElement>): Array<any> => {
+export const convertTimelineElementsToData = (elements: Array<SVGElement>): any[] => {
   return [];
 };

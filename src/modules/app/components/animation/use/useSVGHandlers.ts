@@ -1,24 +1,29 @@
-import { getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
-import { SVGElement, SVGElementSelectPayload, SVGStage } from "@/types/svg";
-import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_THROTTLE } from "@core/constants/svg";
-import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
+import { computed, getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
+import { SVG_CANVAS_EVENT_THROTTLE } from "@core/constants/svg";
+// import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
 import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 
 import _throttle from "lodash/throttle";
 import _cloneDeep from "lodash/cloneDeep";
+import { findStageBetweenStages } from "@/modules/app/utils/keyframes/findStageBetweenStages";
+import { AttributesMap } from "@/core/components/vue-timeline-animation/src/constants";
 
-export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
+export const useSVGHandlers = (elements: Ref<any[]>) => {
   const vm = getCurrentInstance()?.proxy;
 
   const currentTime = inject("currentTime") as Ref<number>;
 
-  const elements = ref<Array<SVGElement>>(initialElementsData);
-  const selectedElements = ref<{ [x: string]: SVGElement }>({});
+  const selectedElements = ref<{ [x: string]: any }>({});
   const isMousedown = ref(false);
 
   const _isTransforming = ref(false);
 
   const _isSelectingMultiple = ref(false);
+
+  const svgCanvasElement = computed(() => document && document.getElementById("svg-canvas"));
+  const svgCanvasBoundingRectangle = computed(() =>
+    svgCanvasElement.value?.getBoundingClientRect(),
+  );
 
   const { isHoldingShift } = useSVGCanvasEvents({
     onKeydownControlA: (e: KeyboardEvent) => {
@@ -51,40 +56,38 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
    */
   const _handleMousemove = (e: MouseEvent) => {
     if (!_isTransforming.value && isMousedown.value) {
-      Object.keys(selectedElements.value).forEach((key) => {
-        const el = selectedElements.value[key];
+      Object.keys(selectedElements.value).forEach((elementId: string) => {
+        const element = selectedElements.value[elementId];
+        const stages = element.animations[AttributesMap.TRANSLATE];
 
-        const keyframes = Object.keys(el.stages) as unknown as number[];
-        const stages: SVGStage[] = Object.values(el.stages);
+        if (stages) {
+          const currentStageIndex = stages.findIndex(
+            (stage: any) => stage.time === currentTime.value,
+          );
 
-        if (el.animated) {
-          const currentStageIndex = stages.findIndex((stage) => stage.time === currentTime.value);
-
-          if (currentStageIndex > -1) {
-            el.stages[keyframes[currentStageIndex]].transform.translateX += e.movementX;
-            el.stages[keyframes[currentStageIndex]].transform.translateY += e.movementY;
+          if (currentStageIndex >= 0) {
+            stages[currentStageIndex].transform.translate.translateX += e.movementX;
+            stages[currentStageIndex].transform.translate.translateY += e.movementY;
           } else {
             // Create new keyframe
-            el.stages[currentTime.value] = {} as SVGStage;
-
-            const elementStage = findStageBetweenStages(stages, currentTime.value);
-
-            elementStage.time = currentTime.value;
-
-            el.stages[currentTime.value] = Object.assign(
-              {},
-              el.stages[currentTime.value],
-              elementStage,
+            const currentStage = findStageBetweenStages(
+              stages,
+              currentTime.value,
+              AttributesMap.TRANSLATE,
             );
+
+            stages.push(currentStage);
           }
         } else {
-          // Use the first stage
-          el.stages[keyframes[0]].transform.translateX += e.movementX;
-          el.stages[keyframes[0]].transform.translateY += e.movementY;
+          element.attrs.transform.translate.translateX += e.movementX;
+          element.attrs.transform.translate.translateY += e.movementY;
         }
       });
 
-      _onUpdateElementPositions({ elements: selectedElements.value, path: "transform" });
+      _onUpdateElementPositions({
+        elements: selectedElements.value,
+        path: AttributesMap.TRANSLATE,
+      });
     }
   };
 
@@ -93,17 +96,17 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
     window.addEventListener("mousemove", _handleMousemove);
   });
 
-  const handleElementSelection = ({ id, el }: SVGElementSelectPayload) => {
+  const handleElementSelection = ({ id, element }: any) => {
     // Multiple selection
     if (isHoldingShift.value) {
-      selectedElements.value[id || 0] = el;
+      selectedElements.value[id] = element;
     } else {
       // If element exist in selectedElements, allow drag, if not, remove all selected elements and select the new one
       const existSelectedElement = Object.keys(selectedElements.value).find((key) => key === id);
 
       if (!existSelectedElement) {
         selectedElements.value = {};
-        selectedElements.value[id || 0] = el;
+        selectedElements.value[id] = element;
       }
     }
 
@@ -118,21 +121,14 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleElementRotate = () => {};
 
-  const _onUpdateElementPositions = _throttle(function ({
-    elements,
-    path,
-  }: {
-    elements: { [x: string]: SVGElement };
-    path: string;
-  }) {
-    vm?.$emit(SVG_CANVAS_EVENT.UPDATE, { elements: _cloneDeep(elements), path });
-  },
-  SVG_CANVAS_EVENT_THROTTLE);
+  const _onUpdateElementPositions = _throttle(function ({ elements, path }: any) {
+    vm?.$emit("update:modelElements", { elements: _cloneDeep(elements), path });
+  }, SVG_CANVAS_EVENT_THROTTLE);
 
-  const mouseOverElements = ref<{ [x: string]: SVGElement }>({});
-  const handleElementMouseover = ({ id, el }: SVGElementSelectPayload) => {
+  const mouseOverElements = ref<{ [x: string]: any }>({});
+  const handleElementMouseover = ({ id, element }: any) => {
     mouseOverElements.value = {};
-    mouseOverElements.value[id || 0] = el;
+    mouseOverElements.value[id || 0] = element;
   };
   const handleElementMouseout = () => {
     mouseOverElements.value = {};
@@ -152,5 +148,7 @@ export const useSVGHandlers = (initialElementsData: Array<SVGElement>) => {
     mouseOverElements,
     handleElementMouseover,
     handleElementMouseout,
+    svgCanvasElement,
+    svgCanvasBoundingRectangle,
   };
 };

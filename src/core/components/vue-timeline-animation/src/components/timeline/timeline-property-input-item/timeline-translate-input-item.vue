@@ -15,24 +15,26 @@ export default defineComponent({
   setup(props, { emit }) {
     const decimal = 1;
     const position = ref({
-      translateX: (+props.modelValue.translateX).toFixed(decimal),
-      translateY: (+props.modelValue.translateY).toFixed(decimal),
+      translateX: props.modelValue.translateX,
+      translateY: props.modelValue.translateY,
     });
 
-    const handleInputX = (e: any) => {
+    const handleChangeX = (e: any) => {
       const value = +e.target.value;
 
-      position.value.translateX = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit(
+        "update:modelValue",
+        Object.assign({}, { translateX: value, translateY: position.value.translateY }),
+      );
     };
 
-    const handleInputY = (e: any) => {
+    const handleChangeY = (e: any) => {
       const value = +e.target.value;
 
-      position.value.translateY = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit(
+        "update:modelValue",
+        Object.assign({}, { translateY: value, translateX: position.value.translateX }),
+      );
     };
 
     return () =>
@@ -56,8 +58,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+position.value.translateX).toFixed(decimal),
-            // onInput: handleInputX,
-            onChange: handleInputX,
+            onChange: handleChangeX,
           }),
           h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "Y"),
           h("input", {
@@ -69,8 +70,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+position.value.translateY).toFixed(decimal),
-            // onInput: handleInputY,
-            onChange: handleInputY,
+            onChange: handleChangeY,
           }),
         ],
       );

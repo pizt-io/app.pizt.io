@@ -77,6 +77,7 @@ export const SVG_CANVAS_EVENT_THROTTLE = 300;
 
 export enum SVG_CANVAS_EVENT {
   UPDATE = "update",
+  UPDATE_TIME = "update-time",
 }
 
 export enum SVG_CANVAS_GLOBAL_EVENT {
@@ -84,7 +85,7 @@ export enum SVG_CANVAS_GLOBAL_EVENT {
 }
 
 export enum SVG_UPDATE_TYPE {
-  ELEMENT,
+  CANVAS,
   TIMELINE,
 }
 

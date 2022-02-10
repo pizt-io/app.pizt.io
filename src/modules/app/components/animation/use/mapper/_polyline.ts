@@ -1,25 +1,19 @@
-export const polyline = (stages: { [keyframe: string]: any }) => {
-  const _mappedStages: any = {};
+export const polyline = (attrs: any) => {
+  const xPositions = attrs.pos.map((point: any) => point[0]);
+  const yPositions = attrs.pos.map((point: any) => point[1]);
 
-  Object.keys(stages).forEach((keyframe: string) => {
-    const xPositions = stages[keyframe].pos.map((point: any) => point[0]);
-    const yPositions = stages[keyframe].pos.map((point: any) => point[1]);
+  const svgAttrs = {};
 
-    _mappedStages[keyframe] = {
-      attrs: {
-        points: stages[keyframe].pos.map((point: number[]) => point.join(",")).join(" "),
-        ...stages[keyframe].style,
-      },
+  attrs.pos &&
+    Object.assign(svgAttrs, {
+      points: attrs.pos.map((point: number[]) => point.join(",")).join(" "),
       xMin: Math.min(...xPositions),
       yMin: Math.min(...yPositions),
       xMax: Math.max(...xPositions),
       yMax: Math.max(...yPositions),
-      transform: stages[keyframe].transform,
-      time: stages[keyframe].time,
-    };
-  });
+    });
 
-  return {
-    stages: _mappedStages,
-  };
+  attrs = Object.assign({}, attrs, { svg: svgAttrs });
+
+  return attrs;
 };

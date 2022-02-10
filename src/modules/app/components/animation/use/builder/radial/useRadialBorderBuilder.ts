@@ -6,16 +6,16 @@ import {
   SVG_ELEMENT_TYPE,
   WIDTH_MAPPING,
 } from "@/core/constants/svg";
-import { SVGEllipse, SVGCircle } from "@/types/svg";
 
 export const useRadialBorderBuilder =
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (borderOptions: any) => (tag: SVG_ELEMENT_TYPE.CIRCLE | SVG_ELEMENT_TYPE.ELLIPSE) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const build = (stage: SVGEllipse | SVGCircle, options: any = {}) => {
-      const x = +(stage.attrs[POS_X_MAPPING[tag]] || 0) - +(stage.attrs[WIDTH_MAPPING[tag]] || 0);
-      const y = +(stage.attrs[POS_Y_MAPPING[tag]] || 0) - +(stage.attrs[HEIGHT_MAPPING[tag]] || 0);
-      const width = +(stage.attrs[WIDTH_MAPPING[tag]] || 0) * 2;
-      const height = +(stage.attrs[HEIGHT_MAPPING[tag]] || 0) * 2;
+    const build = (attrs: any, options: any = {}) => {
+      const x = +(attrs.svg[POS_X_MAPPING[tag]] || 0) - +(attrs.svg[WIDTH_MAPPING[tag]] || 0);
+      const y = +(attrs.svg[POS_Y_MAPPING[tag]] || 0) - +(attrs.svg[HEIGHT_MAPPING[tag]] || 0);
+      const width = +(attrs.svg[WIDTH_MAPPING[tag]] || 0) * 2;
+      const height = +(attrs.svg[HEIGHT_MAPPING[tag]] || 0) * 2;
 
       return [
         h(SVG_ELEMENT_TYPE.RECT, {

@@ -15,24 +15,20 @@ export default defineComponent({
   setup(props, { emit }) {
     const decimal = 1;
     const position = ref({
-      skewX: (+props.modelValue.skewX).toFixed(decimal),
-      skewY: (+props.modelValue.skewY).toFixed(decimal),
+      skewX: props.modelValue.skewX,
+      skewY: props.modelValue.skewY,
     });
 
-    const handleInputX = (e: any) => {
+    const handleChangeX = (e: any) => {
       const value = +e.target.value;
 
-      position.value.skewX = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit("update:modelValue", Object.assign({}, { skewX: value, skewY: position.value.skewY }));
     };
 
-    const handleInputY = (e: any) => {
+    const handleChangeY = (e: any) => {
       const value = +e.target.value;
 
-      position.value.skewY = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit("update:modelValue", Object.assign({}, { skewY: value, skewX: position.value.skewX }));
     };
 
     return () =>
@@ -56,8 +52,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+position.value.skewX).toFixed(decimal),
-            // onInput: handleInputX,
-            onChange: handleInputX,
+            onChange: handleChangeX,
           }),
           h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "Y"),
           h("input", {
@@ -69,8 +64,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+position.value.skewY).toFixed(decimal),
-            // onInput: handleInputY,
-            onChange: handleInputY,
+            onChange: handleChangeY,
           }),
         ],
       );

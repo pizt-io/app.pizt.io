@@ -1,5 +1,5 @@
 <template>
-  <div class="va-timeline-component">
+  <div class="va-timeline-component" :key="timelineComponentForceRerenderFlag">
     <div class="va-timeline-component__header">
       <div class="va-timeline-component__toolbar" :style="{ width: '320px' }">
         <span class="va-toolbar__left">
@@ -100,9 +100,7 @@
           <TimelineItem
             v-model="elements[index]"
             :ref="'timelineItemRef' + index"
-            :key="`t${timelineElementForceRerenderFlag[elements[index]._id]}-${
-              elements[index]._id
-            }-`"
+            :key="`t-${elements[index]._id}-`"
             :expanded="expandedElements.includes(elements[index]._id)"
             :duration="timelineDuration"
             :selected="selectedElement._id === elements[index]._id"
@@ -117,7 +115,6 @@
 </template>
 
 <script lang="ts">
-import { timelineElements } from "@/mock/timeline";
 import { useCursor } from "./use/useCursor";
 import {
   ANIMATED_ATTRIBUTES,
@@ -155,20 +152,15 @@ export default defineComponent({
     modelElements: {
       type: Array,
       required: true,
-      default: () => timelineElements,
+      default: () => [],
     },
     modelCurrentTime: {
       type: Number,
       required: true,
       default: 0,
     },
-    modelExpanded: {
-      type: Object,
-      required: true,
-      default: () => ({}),
-    },
   },
-  emits: ["update:modelElements", "update:modelCurrentTime", "update:modelExpanded"],
+  emits: ["update:modelElements", "update:modelCurrentTime", "select"],
   setup(props, { emit }) {
     const vaTimelineBodyRef = ref<null | HTMLDivElement>(null);
     const vaTimelineBodyHeight = computed(() => {
@@ -202,10 +194,15 @@ export default defineComponent({
     const currentTime = ref(props.modelCurrentTime as number);
 
     const elements = shallowRef(props.modelElements as any[]);
+    const updateElements = () => {
+      elements.value = props.modelElements;
+      triggerRef(elements);
+    };
 
     const selectedElement = ref(elements.value[0] || null);
     const handleSelectElement = (element: any) => {
       selectedElement.value = element;
+      emit("select", element);
     };
 
     const selectableAnimations = computed(() =>
@@ -219,21 +216,25 @@ export default defineComponent({
         : [],
     );
 
-    const timelineElementForceRerenderFlag = ref<{ [x: string]: number }>({});
-    const forceRerenderElements = (ids: string[] | string) => {
-      (Array.isArray(ids) ? ids : [ids]).forEach((id) => {
-        if (timelineElementForceRerenderFlag.value[id]) {
-          timelineElementForceRerenderFlag.value[id]++;
-        } else {
-          timelineElementForceRerenderFlag.value[id] = 1;
-        }
-      });
-    };
+    const timelineComponentForceRerenderFlag = ref(1);
+    const _forceRerenderTimelineComponent = _throttle(function () {
+      timelineComponentForceRerenderFlag.value++;
+    }, TIMELINE_THROTTLE_RATE);
 
     const timelineBodyForceRerenderFlag = ref(1);
     const _forceRerenderTimelineBody = _throttle(function () {
       timelineBodyForceRerenderFlag.value++;
     }, TIMELINE_THROTTLE_RATE);
+
+    const forceRerenderElements = (onlyRerenderBody?: boolean) => {
+      updateElements();
+      if (onlyRerenderBody) {
+        _forceRerenderTimelineBody();
+      } else {
+        // rerender all
+        _forceRerenderTimelineComponent();
+      }
+    };
 
     const handleChangeCurrentTime = (e: any) => {
       currentTime.value = +e.target.value * TIMELINE_MAXIMUM_DIVISION_RATE;
@@ -328,10 +329,19 @@ export default defineComponent({
       const stages = elements.value[index].animations[payload.attr];
       const stageIndex = stages.findIndex((e: any) => e.time === payload.time);
 
-      _set(stages[stageIndex], payload.attr, payload.value);
+      if (stageIndex >= 0) {
+        _set(stages[stageIndex], payload.attr, payload.value);
+      } else {
+        const newStage = { time: currentTime.value };
+        _set(newStage, payload.attr, payload.value);
+
+        stages.push(newStage);
+      }
 
       triggerRef(elements);
-      emit("update:modelElements", elements.value[index], index);
+      emit("update:modelElements", elements.value);
+
+      _forceRerenderTimelineBody();
     };
 
     const handleAddAnimation = (animation: { label: string; value: AttributesMap }) => {
@@ -381,7 +391,7 @@ export default defineComponent({
       handleExpandItem,
       handleChangeItem,
       timelineBodyForceRerenderFlag,
-      timelineElementForceRerenderFlag,
+      timelineComponentForceRerenderFlag,
       forceRerenderElements,
       handleSelectElement,
       selectedElement,

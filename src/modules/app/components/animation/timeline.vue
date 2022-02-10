@@ -1,7 +1,8 @@
 <template>
   <div class="w-full h-full">
     <VueTimelineAnimation
-      v-on="animationTimelineEventHandlers"
+      v-model:modelCurrentTime="currentTime"
+      v-model:modelElements="timelineElements"
       ref="vueTimelineAnimationRef"
       :duration="animationDuration"
     />
@@ -9,10 +10,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, ref, shallowRef, triggerRef } from "vue";
+import { computed, defineAsyncComponent, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 
 import _cloneDeep from "lodash/cloneDeep";
+import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@/core/constants/svg";
 
 export default defineComponent({
   name: "AnimationTimeline",
@@ -31,43 +33,42 @@ export default defineComponent({
       default: 1000,
     },
   },
-  emits: ["change-time", "change-elements"],
+  emits: [SVG_CANVAS_EVENT.UPDATE, SVG_CANVAS_EVENT.UPDATE_TIME],
   setup(props, { emit }) {
     const store = useStore();
 
     const animationDuration = ref(props.duration);
 
-    const currentTime = ref(props.time);
+    const currentTime = computed({
+      get: () => props.time,
+      set: (value) => {
+        emit(SVG_CANVAS_EVENT.UPDATE_TIME, value);
+      },
+    });
 
-    const _timelineElements = computed(() => _cloneDeep(store.getters["app/getTimelineElements"]));
-
-    const elements = shallowRef(_timelineElements.value);
+    const timelineElements = computed({
+      get: () => _cloneDeep(store.getters["app/getElements"]),
+      set: (value) => {
+        emit(SVG_CANVAS_EVENT.UPDATE, { elements: value, type: SVG_UPDATE_TYPE.TIMELINE });
+      },
+    });
 
     const hasUnsyncedDataFromOtherUser = ref(false);
 
     const vueTimelineAnimationRef = ref(null);
-    const updateElements = (payload: any[]) => {
-      elements.value = _timelineElements.value;
-      triggerRef(elements);
-
+    const updateElements = () => {
       const vueTimelineAnimationElement = vueTimelineAnimationRef.value as any;
 
       if (vueTimelineAnimationElement) {
-        vueTimelineAnimationElement.forceRerenderElements(payload.map((el) => el._id));
+        vueTimelineAnimationElement.forceRerenderElements(true);
       }
-    };
-
-    const animationTimelineEventHandlers = {
-      "update:modelCurrentTime": (payload: number) => emit("change-time", payload),
-      "update:modelElements": (...args: any[]) => emit("change-elements", ...args),
     };
 
     return {
       animationDuration,
-      elements,
+      timelineElements,
       currentTime,
       hasUnsyncedDataFromOtherUser,
-      animationTimelineEventHandlers,
       vueTimelineAnimationRef,
       updateElements,
     };

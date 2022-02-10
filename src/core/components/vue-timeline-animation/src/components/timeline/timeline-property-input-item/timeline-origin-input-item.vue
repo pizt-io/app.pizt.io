@@ -24,7 +24,7 @@ export default defineComponent({
       "bottom right",
     ];
 
-    const handleInput = (e: any) => {
+    const handleChange = (e: any) => {
       emit("update:modelValue", e.target.value);
     };
 
@@ -35,8 +35,7 @@ export default defineComponent({
           "select",
           {
             value: origin.value,
-            // onInput: handleInput,
-            onChange: handleInput,
+            onChange: handleChange,
           },
           [
             originOptions.map((option) =>

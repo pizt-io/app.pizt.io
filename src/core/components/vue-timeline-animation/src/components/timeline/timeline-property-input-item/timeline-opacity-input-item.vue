@@ -13,7 +13,7 @@ export default defineComponent({
     const decimal = 2;
     const opacity = ref(props.modelValue);
 
-    const handleInput = (e: any) => {
+    const handleChange = (e: any) => {
       const value = +e.target.value;
 
       if (value > 1) {
@@ -23,7 +23,8 @@ export default defineComponent({
       } else {
         opacity.value = (+value).toFixed(decimal);
       }
-      emit("update:modelValue", opacity.value);
+
+      emit("update:modelValue", +opacity.value);
     };
 
     return () =>
@@ -36,8 +37,7 @@ export default defineComponent({
           width: "45px",
         },
         value: (+opacity.value).toFixed(decimal),
-        // onInput: handleInput,
-        onChange: handleInput,
+        onChange: handleChange,
       });
   },
 });

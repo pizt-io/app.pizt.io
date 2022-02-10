@@ -1,10 +1,10 @@
 <template>
-  <div class="flex justify-center items-center">
+  <div class="flex justify-center items-center" :key="forceUpdateFlag">
     <div
       :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
       class="bg-white dark:bg-gray-800"
     >
-      <SVGCanvas ref="canvasRef" :key="forceUpdateFlag" :data="elements" v-on="svgCanvasHandlers" />
+      <SVGCanvas v-model:modelElements="canvasElements" ref="canvasRef" :time="time" />
     </div>
   </div>
 </template>
@@ -18,16 +18,14 @@ import {
   computed,
   defineAsyncComponent,
   defineComponent,
+  getCurrentInstance,
   ref,
-  shallowRef,
-  triggerRef,
 } from "vue";
 import { useStore } from "vuex";
-import { useRerenderer } from "@/core/use/useRerenderer";
 import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@/core/constants/svg";
 
-import _isEqual from "lodash/isEqual";
 import _cloneDeep from "lodash/cloneDeep";
+import { useRerenderer } from "@/core/use/useRerenderer";
 
 export default defineComponent({
   name: "AnimationCanvas",
@@ -36,75 +34,44 @@ export default defineComponent({
       () => import("@/modules/app/components/animation/svg-wrapper/SVGCanvas.vue"),
     ),
   },
+  props: {
+    time: {
+      type: Number,
+      default: 0,
+    },
+  },
   setup(props, { emit }) {
+    const vm = getCurrentInstance()?.proxy;
+
     const canvasRef = ref<ComponentPublicInstance | null>(null);
 
     const store = useStore();
 
     const canvasWidth = ref(700);
     const canvasHeight = ref(450);
-
-    const elements = shallowRef<SVGElement[]>([]);
-
     const hasUnsyncedDataFromOtherUser = ref(false);
+
+    const canvasElements = computed({
+      get: () => _cloneDeep(store.getters["app/getElements"]),
+      set: ({ elements, path }) => {
+        emit(SVG_CANVAS_EVENT.UPDATE, { elements, path, type: SVG_UPDATE_TYPE.CANVAS });
+      },
+    });
 
     const { forceUpdate, forceUpdateFlag } = useRerenderer();
 
-    const _canvasElements = computed(() => _cloneDeep(store.getters["app/getCanvasElements"]));
-
-    const _updateElements = (updatedElements: SVGElement[]) => {
-      elements.value = updatedElements;
-      triggerRef(elements);
-    };
-
-    const updateElementsFromStore = () => {
-      _updateElements(_canvasElements.value);
-
-      // data change
-      // update to database
-      // api returns data from database to make sure that data is synced
-      // if those data are not equal, they're unsynced, notify user
-      hasUnsyncedDataFromOtherUser.value = !_isEqual(elements.value, _canvasElements.value);
-
-      forceUpdate();
-    };
-
-    const fileSize = ref("");
-    const _calculateFileSize = () => {
-      fileSize.value = `${((canvasRef.value?.$el?.innerHTML.length || 0) / 1024).toFixed(2)} Kb`;
-    };
-
-    const svgCanvasHandlers = {
-      [SVG_CANVAS_EVENT.UPDATE]: async ({
-        elements: updatedElements,
-        path,
-      }: {
-        elements: SVGElement[];
-        path: string;
-      }) => {
-        _calculateFileSize();
-
-        _updateElements(updatedElements);
-
-        const updatePayload = { elements: elements.value, path, type: SVG_UPDATE_TYPE.ELEMENT };
-
-        await store.dispatch("app/updateElements", updatePayload);
-
-        emit(SVG_CANVAS_EVENT.UPDATE, updatePayload);
-      },
+    const updateElements = () => {
+      vm?.$nextTick(forceUpdate);
     };
 
     return {
-      elements,
+      canvasElements,
       canvasRef,
       canvasWidth,
       canvasHeight,
-      fileSize,
       hasUnsyncedDataFromOtherUser,
-      svgCanvasHandlers,
-      updateElementsFromStore,
+      updateElements,
       forceUpdateFlag,
-      forceUpdate,
     };
   },
 });

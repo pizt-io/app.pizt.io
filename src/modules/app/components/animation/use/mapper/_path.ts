@@ -99,28 +99,23 @@ const SVG_PATH_COMMAND_MAPPING: any = Object.freeze({
   [SVG_PATH_CMD.CLOSE_PATH]: _closePath,
 });
 
-export const path = (stages: { [keyframe: string]: any }) => {
-  const _mappedStages: any = {};
+export const path = (attrs: any) => {
+  const svgAttrs = {};
 
-  Object.keys(stages).forEach((keyframe: string) => {
-    const commands = stages[keyframe].commands.map((command: { type: string; path: number[] }) =>
+  if (attrs.commands) {
+    const commands = attrs.commands.map((command: { type: string; path: number[] }) =>
       SVG_PATH_COMMAND_MAPPING[command.type](...command.path),
     );
     const path = commands.join(" ");
     const boundingBox = _getSVGPathBoundingBox(path);
 
-    _mappedStages[keyframe] = {
-      attrs: {
-        d: path,
-        ...stages[keyframe].style,
-      },
+    Object.assign(svgAttrs, {
+      d: path,
       boundingBox,
-      transform: stages[keyframe].transform,
-      time: stages[keyframe].time,
-    };
-  });
+    });
+  }
 
-  return {
-    stages: _mappedStages,
-  };
+  attrs = Object.assign({}, attrs, { svg: svgAttrs });
+
+  return attrs;
 };

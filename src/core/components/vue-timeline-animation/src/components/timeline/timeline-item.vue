@@ -1,7 +1,7 @@
 <script lang="ts">
 import TimelineExpandedItem from "./timeline-expanded-item.vue";
 
-import { defineComponent, h } from "vue";
+import { computed, defineComponent, h } from "vue";
 
 export default defineComponent({
   props: {
@@ -32,6 +32,12 @@ export default defineComponent({
       emit("select", props.modelValue);
     };
 
+    const handleItemChange = (payload: any) => {
+      emit("change", payload);
+    };
+
+    const itemAnimations = computed(() => Object.values(props.modelValue.animations) as any[]);
+
     return () =>
       h("div", {}, [
         h(
@@ -44,21 +50,23 @@ export default defineComponent({
             h("div", { class: "va-timeline__label" }, [
               h("i", { class: "icon icon-va-ellipsis-v handle" }),
               h("label", props.modelValue.name),
-              h(
-                "span",
-                {
-                  class: [props.expanded && "va__active", "va-timeline__toggle"],
-                  onClick: handleToggleExpand,
-                },
-                [h("i", { class: "icon-va-chevron-up" })],
-              ),
+              itemAnimations.value.length
+                ? h(
+                    "span",
+                    {
+                      class: [props.expanded && "va__active", "va-timeline__toggle"],
+                      onClick: handleToggleExpand,
+                    },
+                    [h("i", { class: "icon-va-chevron-up" })],
+                  )
+                : null,
             ]),
             h(
               "div",
               {
                 class: "va-timeline__body",
               },
-              (Object.values(props.modelValue.animations) as any[]).map((stages) =>
+              itemAnimations.value.map((stages) =>
                 stages.map((stage: any) =>
                   h("i", {
                     class: "icon icon-va-locate",
@@ -74,7 +82,7 @@ export default defineComponent({
         props.expanded &&
           h(TimelineExpandedItem, {
             item: props.modelValue,
-            onChange: (payload: any) => emit("change", payload),
+            onChange: handleItemChange,
           }),
       ]);
   },

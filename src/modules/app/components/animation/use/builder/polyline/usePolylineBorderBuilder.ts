@@ -1,14 +1,13 @@
 import { h } from "vue";
 import { SVG_ELEMENT_TYPE } from "@/core/constants/svg";
-import { SVGPolyline } from "@/types/svg";
 
 export const usePolylineBorderBuilder = (borderOptions: any) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const build = (stage: SVGPolyline, options: any = {}) => {
-    const x = stage.xMin;
-    const y = stage.yMin;
-    const width = Math.abs(stage.xMax - stage.xMin);
-    const height = Math.abs(stage.yMax - stage.yMin);
+  const build = (attrs: any, options: any = {}) => {
+    const x = attrs.svg.xMin;
+    const y = attrs.svg.yMin;
+    const width = Math.abs(attrs.svg.xMax - attrs.svg.xMin);
+    const height = Math.abs(attrs.svg.yMax - attrs.svg.yMin);
 
     return [
       h(

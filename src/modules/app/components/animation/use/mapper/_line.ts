@@ -1,21 +1,15 @@
-export const line = (stages: { [keyframe: string]: any }) => {
-  const _mappedStages: any = {};
+export const line = (attrs: any) => {
+  const svgAttrs = {};
 
-  Object.keys(stages).forEach((keyframe: string) => {
-    _mappedStages[keyframe] = {
-      attrs: {
-        x1: stages[keyframe].pos[0].x,
-        y1: stages[keyframe].pos[0].y,
-        x2: stages[keyframe].pos[1].x,
-        y2: stages[keyframe].pos[1].y,
-        ...stages[keyframe].style,
-      },
-      transform: stages[keyframe].transform,
-      time: stages[keyframe].time,
-    };
-  });
+  attrs.pos &&
+    Object.assign(svgAttrs, {
+      x1: attrs.pos[0][0],
+      y1: attrs.pos[0][1],
+      x2: attrs.pos[1][0],
+      y2: attrs.pos[1][1],
+    });
 
-  return {
-    stages: _mappedStages,
-  };
+  attrs = Object.assign({}, attrs, { svg: svgAttrs });
+
+  return attrs;
 };

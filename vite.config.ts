@@ -42,13 +42,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     VitePWA({
-      includeAssets: [
-        "icons/style.css",
-        "favicon.svg",
-        "favicon.ico",
-        "robots.txt",
-        "apple-touch-icon.png",
-      ],
+      includeAssets: ["icons/style.css", "favicon.ico", "robots.txt", "apple-touch-icon.png"],
       manifest: {
         name: "Vue next template",
         short_name: "Short name of your app",

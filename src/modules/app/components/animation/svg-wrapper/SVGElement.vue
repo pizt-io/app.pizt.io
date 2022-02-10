@@ -1,15 +1,17 @@
 <template>
   <g
     :id="id"
-    :class="[SVG_ELEMENT_PREFIX, element.tag].join('-')"
-    :transform="`translate(${transform.translateX}, ${transform.translateY})`"
+    :class="[SVG_ELEMENT_PREFIX, element.type].join('-')"
+    :style="{
+      transform: elementTransform,
+    }"
   >
     <slot />
   </g>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { SVG_ELEMENT_PREFIX } from "@core/constants/svg";
 
 export default defineComponent({
@@ -25,16 +27,32 @@ export default defineComponent({
     },
     transform: {
       type: Object,
-      default: () => ({ translateX: 0, translateY: 0 }),
+      default: () => ({}),
     },
     element: {
       type: Object,
       default: () => ({}),
     },
   },
-  setup() {
+  setup(props) {
+    const elementTransform = computed(() =>
+      [
+        props.transform.translate
+          ? `translate(${props.transform.translate.translateX}px,${props.transform.translate.translateY}px)`
+          : "",
+        props.transform.scale
+          ? `scale(${props.transform.scale.scaleX},${props.transform.scale.scaleY})`
+          : "",
+        props.transform.rotate ? `rotate(${props.transform.rotate}deg)` : "",
+        props.transform.skew
+          ? `skew(${props.transform.skew.skewX}deg,${props.transform.skew.skewY}deg)`
+          : "",
+      ].join(" "),
+    );
+
     return {
       SVG_ELEMENT_PREFIX,
+      elementTransform,
     };
   },
 });

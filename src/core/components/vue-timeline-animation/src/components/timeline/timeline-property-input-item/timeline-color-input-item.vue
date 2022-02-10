@@ -12,7 +12,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const color = ref(props.modelValue);
 
-    const handleInput = (e: any) => {
+    const handleChange = (e: any) => {
       emit("update:modelValue", e.target.value);
     };
 
@@ -23,8 +23,8 @@ export default defineComponent({
           // width: "45px",
         },
         value: color.value,
-        onInput: handleInput,
-        onChange: handleInput,
+        onInput: handleChange,
+        onChange: handleChange,
       });
   },
 });

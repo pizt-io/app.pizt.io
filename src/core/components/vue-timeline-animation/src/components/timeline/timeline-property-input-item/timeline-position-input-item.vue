@@ -15,24 +15,20 @@ export default defineComponent({
   setup(props, { emit }) {
     const decimal = 1;
     const position = ref({
-      x: (+props.modelValue.x).toFixed(decimal),
-      y: (+props.modelValue.y).toFixed(decimal),
+      x: props.modelValue.x,
+      y: props.modelValue.y,
     });
 
-    const handleInputX = (e: any) => {
+    const handleChangeX = (e: any) => {
       const value = +e.target.value;
 
-      position.value.x = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit("update:modelValue", Object.assign({}, { x: value, y: position.value.y }));
     };
 
-    const handleInputY = (e: any) => {
+    const handleChangeY = (e: any) => {
       const value = +e.target.value;
 
-      position.value.y = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit("update:modelValue", Object.assign({}, { y: value, x: position.value.x }));
     };
 
     return () =>
@@ -56,8 +52,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+position.value.x).toFixed(decimal),
-            // onInput: handleInputX,
-            onChange: handleInputX,
+            onChange: handleChangeX,
           }),
           h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "Y"),
           h("input", {
@@ -69,8 +64,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+position.value.y).toFixed(decimal),
-            // onInput: handleInputY,
-            onChange: handleInputY,
+            onChange: handleChangeY,
           }),
         ],
       );

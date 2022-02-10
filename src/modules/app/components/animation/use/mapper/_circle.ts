@@ -1,28 +1,18 @@
-import { SVG_ELEMENT_TYPE, WIDTH_MAPPING, POS_X_MAPPING, POS_Y_MAPPING } from "@core/constants/svg";
+export const circle = (attrs: any) => {
+  const svgAttrs = {};
 
-export const circle = (stages: { [keyframe: string]: any }) => {
-  const _mappedStages: any = {};
+  attrs.pos &&
+    Object.assign(svgAttrs, {
+      x: attrs.pos.x,
+      y: attrs.pos.y,
+    });
 
-  Object.keys(stages).forEach((keyframe: string) => {
-    _mappedStages[keyframe] = {
-      attrs: Object.assign(
-        {},
-        {
-          [POS_X_MAPPING[SVG_ELEMENT_TYPE.CIRCLE]]: 0,
-          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.CIRCLE]]: 0,
-          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.CIRCLE]]: stages[keyframe].size.width / 2, // Divide to get radius
-        },
-        stages[keyframe].style,
-      ),
-      transform: Object.assign({}, stages[keyframe].transform, {
-        translateX: stages[keyframe].transform.translateX + stages[keyframe].pos.x,
-        translateY: stages[keyframe].transform.translateY + stages[keyframe].pos.y,
-      }),
-      time: stages[keyframe].time,
-    };
-  });
+  attrs.size &&
+    Object.assign(svgAttrs, {
+      r: attrs.size.width / 2, // Divide to get radius
+    });
 
-  return {
-    stages: _mappedStages,
-  };
+  attrs = Object.assign({}, attrs, { svg: svgAttrs });
+
+  return attrs;
 };

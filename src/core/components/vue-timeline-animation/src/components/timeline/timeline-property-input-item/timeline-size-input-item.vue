@@ -15,24 +15,20 @@ export default defineComponent({
   setup(props, { emit }) {
     const decimal = 1;
     const size = ref({
-      width: (+props.modelValue.width).toFixed(decimal),
-      height: (+props.modelValue.height).toFixed(decimal),
+      width: props.modelValue.width,
+      height: props.modelValue.height,
     });
 
-    const handleInputW = (e: any) => {
+    const handleChangeW = (e: any) => {
       const value = +e.target.value;
 
-      size.value.width = (+value).toFixed(decimal);
-
-      emit("update:modelValue", size.value);
+      emit("update:modelValue", Object.assign({}, { width: value, height: size.value.height }));
     };
 
-    const handleInputH = (e: any) => {
+    const handleChangeH = (e: any) => {
       const value = +e.target.value;
 
-      size.value.height = (+value).toFixed(decimal);
-
-      emit("update:modelValue", size.value);
+      emit("update:modelValue", Object.assign({}, { height: value, width: size.value.width }));
     };
 
     return () =>
@@ -56,8 +52,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+size.value.width).toFixed(decimal),
-            // onInput: handleInputW,
-            onChange: handleInputW,
+            onChange: handleChangeW,
           }),
           h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "H"),
           h("input", {
@@ -69,8 +64,7 @@ export default defineComponent({
               width: "60px",
             },
             value: (+size.value.height).toFixed(decimal),
-            // onInput: handleInputH,
-            onChange: handleInputH,
+            onChange: handleChangeH,
           }),
         ],
       );

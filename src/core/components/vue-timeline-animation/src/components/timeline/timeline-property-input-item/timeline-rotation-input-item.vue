@@ -13,7 +13,7 @@ export default defineComponent({
     const decimal = 2;
     const deg = ref(props.modelValue);
 
-    const handleInput = (e: any) => {
+    const handleChange = (e: any) => {
       const value = +e.target.value;
 
       if (value > 1) {
@@ -36,8 +36,7 @@ export default defineComponent({
           width: "45px",
         },
         value: (+deg.value).toFixed(decimal),
-        // onInput: handleInput,
-        onChange: handleInput,
+        onChange: handleChange,
       });
   },
 });

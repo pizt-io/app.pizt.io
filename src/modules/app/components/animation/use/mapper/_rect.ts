@@ -1,35 +1,19 @@
-import {
-  SVG_ELEMENT_TYPE,
-  WIDTH_MAPPING,
-  HEIGHT_MAPPING,
-  POS_X_MAPPING,
-  POS_Y_MAPPING,
-} from "@core/constants/svg";
+export const rect = (attrs: any) => {
+  const svgAttrs = {};
 
-export const rect = (stages: { [keyframe: string]: any }) => {
-  const _mappedStages: any = {};
+  attrs.pos &&
+    Object.assign(svgAttrs, {
+      x: attrs.pos.x,
+      y: attrs.pos.y,
+    });
 
-  Object.keys(stages).forEach((keyframe: string) => {
-    _mappedStages[keyframe] = {
-      attrs: Object.assign(
-        {},
-        {
-          [POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]]: 0,
-          [POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]]: 0,
-          [WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]]: stages[keyframe].size.width,
-          [HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]]: stages[keyframe].size.height,
-        },
-        stages[keyframe].style,
-      ),
-      transform: Object.assign({}, stages[keyframe].transform, {
-        translateX: stages[keyframe].transform.translateX + stages[keyframe].pos.x,
-        translateY: stages[keyframe].transform.translateY + stages[keyframe].pos.y,
-      }),
-      time: stages[keyframe].time,
-    };
-  });
+  attrs.size &&
+    Object.assign(svgAttrs, {
+      width: attrs.size.width,
+      height: attrs.size.height,
+    });
 
-  return {
-    stages: _mappedStages,
-  };
+  attrs = Object.assign({}, attrs, { svg: svgAttrs });
+
+  return attrs;
 };

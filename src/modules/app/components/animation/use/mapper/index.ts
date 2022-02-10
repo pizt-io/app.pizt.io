@@ -75,7 +75,7 @@ const SVG_STAGES_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.POLYLINE]: polyline,
   [SVG_ELEMENT_TYPE.RECT]: rect,
   [SVG_ELEMENT_TYPE.PATH]: path,
-});
+} as { [x: string]: (attrs: any) => any });
 
 export {
   BORDER_BUILDER_MAPPING,

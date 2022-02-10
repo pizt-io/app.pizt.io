@@ -6,15 +6,14 @@ import {
   SVG_ELEMENT_TYPE,
   WIDTH_MAPPING,
 } from "@/core/constants/svg";
-import { SVGRectangle } from "@/types/svg";
 
 export const useRectBorderBuilder = (borderOptions: any) => {
-  const build = (stage: SVGRectangle, options: any = {}) => {
-    const x = +(stage.attrs[POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
-    const y = +(stage.attrs[POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+  const build = (attrs: any, options: any = {}) => {
+    const x = +(attrs.svg[POS_X_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+    const y = +(attrs.svg[POS_Y_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
 
-    const width = +(stage.attrs[WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
-    const height = +(stage.attrs[HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+    const width = +(attrs.svg[WIDTH_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
+    const height = +(attrs.svg[HEIGHT_MAPPING[SVG_ELEMENT_TYPE.RECT]] || 0);
 
     return [
       h(SVG_ELEMENT_TYPE.RECT, {

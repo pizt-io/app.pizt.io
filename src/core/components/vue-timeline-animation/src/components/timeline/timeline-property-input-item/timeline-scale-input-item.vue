@@ -14,25 +14,21 @@ export default defineComponent({
   emits: ["update:modelValue"],
   setup(props, { emit }) {
     const decimal = 1;
-    const position = ref({
-      scaleX: (+props.modelValue.scaleX).toFixed(decimal),
-      scaleY: (+props.modelValue.scaleY).toFixed(decimal),
+    const scale = ref({
+      scaleX: props.modelValue.scaleX,
+      scaleY: props.modelValue.scaleY,
     });
 
-    const handleInputX = (e: any) => {
+    const handleChangeX = (e: any) => {
       const value = +e.target.value;
 
-      position.value.scaleX = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit("update:modelValue", Object.assign({}, { scaleX: value, scaleY: scale.value.scaleY }));
     };
 
-    const handleInputY = (e: any) => {
+    const handleChangeY = (e: any) => {
       const value = +e.target.value;
 
-      position.value.scaleY = (+value).toFixed(decimal);
-
-      emit("update:modelValue", position.value);
+      emit("update:modelValue", Object.assign({}, { scaleY: value, scaleX: scale.value.scaleX }));
     };
 
     return () =>
@@ -55,9 +51,8 @@ export default defineComponent({
             style: {
               width: "60px",
             },
-            value: (+position.value.scaleX).toFixed(decimal),
-            // onInput: handleInputX,
-            onChange: handleInputX,
+            value: (+scale.value.scaleX).toFixed(decimal),
+            onChange: handleChangeX,
           }),
           h("span", { style: { lineHeight: 1, fontSize: "0.75rem", marginRight: "3px" } }, "Y"),
           h("input", {
@@ -68,9 +63,8 @@ export default defineComponent({
             style: {
               width: "60px",
             },
-            value: (+position.value.scaleY).toFixed(decimal),
-            // onInput: handleInputY,
-            onChange: handleInputY,
+            value: (+scale.value.scaleY).toFixed(decimal),
+            onChange: handleChangeY,
           }),
         ],
       );

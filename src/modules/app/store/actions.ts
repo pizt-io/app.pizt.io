@@ -1,4 +1,4 @@
-import { canvas } from "@/mock/canvas";
+import { canvas } from "@/mock/animations";
 import { ActionTree } from "vuex";
 import { AppState } from "./state";
 
@@ -12,10 +12,12 @@ export const actions: Actions = {
 
     return elements;
   },
-  updateElements: async ({ commit }, { elements, indexes, path, type }) => {
-    // Update to database
-    // Get data back from database (in case of multiple modification from different browsers in the same time)
+  updateElements: async ({ commit }, payload: any) => {
+    const { elements, path, type } = payload;
 
-    commit("SET_ELEMENTS", { elements, indexes, path, type });
+    commit("SET_ELEMENTS", { elements, path, type });
+
+    // Update to database asynchoronously
+    // Get data back from database (in case of multiple modification from different browsers in the same time)
   },
 };
