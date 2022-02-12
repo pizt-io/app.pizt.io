@@ -106,6 +106,7 @@
             :selected="selectedElement._id === elements[index]._id"
             @expand="handleExpandItem(index)"
             @change="handleChangeItem(index, $event)"
+            @changeKeyframe="handleChangeItemKeyframe(index, $event)"
             @select="handleSelectElement"
           />
         </template>
@@ -136,8 +137,11 @@ import _set from "lodash/set";
 const TIMELINE_MINIMUM_DIVISION_RATE = 100;
 const TIMELINE_MAXIMUM_DIVISION_RATE = 1000;
 
-const TIMELINE_BODY_LEFT_OFFSET = 5;
-const TIMELINE_BODY_RIGHT_OFFSET = 10;
+const TIMELINE_KEYFRAME_CLIENT_WIDTH = 16;
+const TIMELINE_SCROLLBAR_CLIENT_WIDTH = 10;
+
+const TIMELINE_BODY_LEFT_OFFSET = TIMELINE_KEYFRAME_CLIENT_WIDTH / 2;
+const TIMELINE_BODY_RIGHT_OFFSET = TIMELINE_SCROLLBAR_CLIENT_WIDTH + TIMELINE_BODY_LEFT_OFFSET;
 
 const TIMELINE_THROTTLE_RATE = 100;
 
@@ -326,17 +330,34 @@ export default defineComponent({
     };
 
     const handleChangeItem = (index: number, payload: any) => {
-      const stages = elements.value[index].animations[payload.attr];
-      const stageIndex = stages.findIndex((e: any) => e.time === payload.time);
+      const { time, attr, value } = payload;
+
+      const stages = elements.value[index].animations[attr];
+
+      let stageIndex = stages.findIndex((e: any) => e.time === time);
 
       if (stageIndex >= 0) {
-        _set(stages[stageIndex], payload.attr, payload.value);
+        if (value) {
+          _set(stages[stageIndex], attr, value);
+        }
       } else {
         const newStage = { time: currentTime.value };
-        _set(newStage, payload.attr, payload.value);
+        _set(newStage, attr, value);
 
         stages.push(newStage);
       }
+
+      triggerRef(elements);
+      emit("update:modelElements", elements.value);
+
+      _forceRerenderTimelineBody();
+    };
+
+    const handleChangeItemKeyframe = (index: number, payload: any) => {
+      const { keyframeIndex, time, attr } = payload;
+      const stages = elements.value[index].animations[attr];
+
+      stages[keyframeIndex].time = time;
 
       triggerRef(elements);
       emit("update:modelElements", elements.value);
@@ -390,6 +411,7 @@ export default defineComponent({
       handleMousedownIndicator,
       handleExpandItem,
       handleChangeItem,
+      handleChangeItemKeyframe,
       timelineBodyForceRerenderFlag,
       timelineComponentForceRerenderFlag,
       forceRerenderElements,

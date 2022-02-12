@@ -73,7 +73,7 @@ export const HEIGHT_MAPPING = Object.freeze({
   [SVG_ELEMENT_TYPE.RECT]: "height",
 });
 
-export const SVG_CANVAS_EVENT_THROTTLE = 300;
+export const SVG_CANVAS_EVENT_THROTTLE = 100;
 
 export enum SVG_CANVAS_EVENT {
   UPDATE = "update",

@@ -19,6 +19,10 @@ $--item-selected-bg: #122942;
 $--item-input-color: #c9b12e;
 $--item-input-color-focus: #bbbbbb;
 
+$--item-keyframe-client-width: 16px;
+$--item-keyframe-selected-color: #ffd900;
+$--item-keyframe-offset: $--item-keyframe-client-width / 2;
+
 .va-timeline-component {
   display: flex;
   flex-direction: column;
@@ -39,6 +43,7 @@ $--item-input-color-focus: #bbbbbb;
     display: flex;
     flex: 1;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   &__toolbar {
@@ -149,6 +154,7 @@ $--item-input-color-focus: #bbbbbb;
     align-items: center;
 
     .icon {
+      user-select: none;
       cursor: pointer;
       &:hover {
         color: $--item-input-color;
@@ -177,6 +183,7 @@ $--item-input-color-focus: #bbbbbb;
     }
 
     .icon {
+      user-select: none;
       cursor: grab;
       margin: 0 0.5rem;
       font-size: $--item-font-size;
@@ -206,6 +213,7 @@ $--item-input-color-focus: #bbbbbb;
     }
 
     .icon {
+      user-select: none;
       cursor: grab;
 
       &:active {
@@ -217,17 +225,14 @@ $--item-input-color-focus: #bbbbbb;
   &__body {
     flex: 1;
     position: relative;
-    margin-left: 5px;
+    margin-left: $--item-keyframe-offset;
+    margin-right: $--item-keyframe-offset;
 
     .icon {
+      user-select: none;
       position: absolute;
       top: 50%;
       transform: translate(-50%, -50%);
-      cursor: grab;
-
-      &:active {
-        cursor: grabbing;
-      }
     }
   }
 
@@ -277,6 +282,7 @@ $--item-input-color-focus: #bbbbbb;
     border-bottom: 1px solid $--border-color-base;
 
     .icon {
+      user-select: none;
       position: absolute;
       top: 50%;
       transform: translate(-50%, -50%);
@@ -289,7 +295,6 @@ $--item-input-color-focus: #bbbbbb;
 
     input, select {
       display: inline-block;
-      margin-right: 5px;
       font-size: 0.75rem;
       background-color: transparent;
       outline: none;
@@ -315,7 +320,20 @@ $--item-input-color-focus: #bbbbbb;
   &__body {
     position: relative;
     flex: 1;
-    margin-left: 5px;
+    margin-left: $--item-keyframe-offset;
+    margin-right: $--item-keyframe-offset;
+    height: $--item-height;
+
+    .icon {
+      user-select: none;
+      display: block;
+      width: $--item-keyframe-client-width;
+      height: $--item-keyframe-client-width;
+
+      &.va__selected {
+        color: $--item-keyframe-selected-color;
+      }
+    }
   }
 }
 

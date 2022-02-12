@@ -11,9 +11,11 @@ import TimelineNumberInputItem from "./timeline-property-input-item/timeline-num
 
 import { ANIMATED_ATTRIBUTES, AttributesMap, LABEL_MAPPING } from "../../constants";
 import { findStageBetweenStages } from "@/modules/app/utils/keyframes/findStageBetweenStages";
-import { defineComponent, h, inject, ref, Ref } from "vue";
+import { minMax } from "../../utils/minMax";
+import { computed, defineComponent, h, inject, onMounted, ref, Ref } from "vue";
 
 import _get from "lodash/get";
+import _throttle from "lodash/throttle";
 
 const INPUT_COMPONENT_MAPPING = Object.freeze({
   [AttributesMap.SIZE]: TimelineSizeInputItem,
@@ -45,9 +47,62 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["update:item", "expand", "change"],
+  emits: ["update:item", "expand", "change", "changeKeyframe"],
   setup(props, { emit }) {
     const currentTime = inject<Ref<number>>("currentTime", ref(0));
+
+    const isMousedown = ref(false);
+
+    const timelineItemBodyBoundingBox = computed(
+      () =>
+        document && document.getElementsByClassName("va-expanded__body")[0].getBoundingClientRect(),
+    );
+
+    const updateItem = _throttle(function (payload: any) {
+      emit("change", payload);
+    }, 100);
+
+    const updateItemKeyframe = _throttle(function (payload: any) {
+      emit("changeKeyframe", payload);
+    }, 100);
+
+    const handleMouseup = () => {
+      isMousedown.value = false;
+    };
+
+    const handleMousemove = (e: MouseEvent) => {
+      if (isMousedown.value) {
+        const timelineBodyWidth = timelineItemBodyBoundingBox.value.width;
+
+        const currentKeyframeLeft = e.clientX - timelineItemBodyBoundingBox.value.left;
+
+        const newTime = Math.round(
+          minMax(0, props.duration, (props.duration * currentKeyframeLeft) / timelineBodyWidth),
+        );
+
+        updateItemKeyframe({
+          keyframeIndex: selectedKeyframeIndex.value,
+          time: newTime,
+          attr: selectedAttr.value,
+        });
+      }
+    };
+
+    onMounted(() => {
+      window.addEventListener("mouseup", handleMouseup);
+      window.addEventListener("mousemove", handleMousemove);
+    });
+
+    const selectedKeyframeIndex = ref<null | any>(null);
+    const selectedKeyframe = ref<null | any>(null);
+    const selectedAttr = ref<null | string>(null);
+    const handleSelectKeyframe = (stage: any, index: number, attr: string) => {
+      isMousedown.value = true;
+
+      selectedKeyframeIndex.value = index;
+      selectedKeyframe.value = stage;
+      selectedAttr.value = attr;
+    };
 
     return () =>
       h(
@@ -78,20 +133,36 @@ export default defineComponent({
                       {
                         class: "va-property__label",
                       },
-                      LABEL_MAPPING[attr],
+                      [
+                        h("i", { class: "icon-va-times-circle", style: { marginRight: "8px" } }),
+                        LABEL_MAPPING[attr],
+                      ],
                     ),
-                    h("div", {}, [
-                      h(INPUT_COMPONENT_MAPPING[attr], {
-                        "modelValue": _get(currentStage, attr),
-                        "onUpdate:modelValue": (value: any) => {
-                          emit("change", {
-                            time: currentTime.value,
-                            attr,
-                            value,
-                          });
+                    h(
+                      "div",
+                      {
+                        style: {
+                          flex: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-end",
+                          paddingRight: "8px",
                         },
-                      }),
-                    ]),
+                      },
+                      [
+                        h(INPUT_COMPONENT_MAPPING[attr], {
+                          "modelValue": _get(currentStage, attr),
+                          "onUpdate:modelValue": (value: any) => {
+                            updateItem({
+                              time: currentTime.value,
+                              attr,
+                              value,
+                            });
+                          },
+                        }),
+                        h("i", { class: "icon-va-point", style: { marginLeft: "8px" } }),
+                      ],
+                    ),
                   ]),
                   h(
                     "div",
@@ -99,12 +170,19 @@ export default defineComponent({
                       class: "va-expanded__body",
                     },
                     props.item.animations[attr] &&
-                      props.item.animations[attr].map((stage: any) =>
+                      props.item.animations[attr].map((stage: any, index: number) =>
                         h("i", {
-                          class: "icon icon-va-locate",
+                          class: [
+                            "icon icon-va-locate",
+                            selectedKeyframeIndex.value === index && selectedAttr.value === attr
+                              ? "va__selected"
+                              : "",
+                          ],
+                          title: (stage.time / 1000).toFixed(2),
                           style: {
                             left: `${(stage.time * 100) / props.duration}%`,
                           },
+                          onMousedown: () => handleSelectKeyframe(stage, index, attr),
                         }),
                       ),
                   ),

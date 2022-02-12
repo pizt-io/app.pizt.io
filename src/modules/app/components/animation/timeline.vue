@@ -13,7 +13,6 @@
 import { computed, defineAsyncComponent, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 
-import _cloneDeep from "lodash/cloneDeep";
 import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@/core/constants/svg";
 
 export default defineComponent({
@@ -47,7 +46,7 @@ export default defineComponent({
     });
 
     const timelineElements = computed({
-      get: () => _cloneDeep(store.getters["app/getElements"]),
+      get: () => store.getters["app/getElements"],
       set: (value) => {
         emit(SVG_CANVAS_EVENT.UPDATE, { elements: value, type: SVG_UPDATE_TYPE.TIMELINE });
       },

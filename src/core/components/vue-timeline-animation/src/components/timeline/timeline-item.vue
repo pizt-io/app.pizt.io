@@ -22,7 +22,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["update:modelValue", "expand", "change", "select"],
+  emits: ["update:modelValue", "expand", "change", "changeKeyframe", "select"],
   setup(props, { emit }) {
     const handleToggleExpand = () => {
       emit("expand");
@@ -30,10 +30,6 @@ export default defineComponent({
 
     const handleSelectElement = () => {
       emit("select", props.modelValue);
-    };
-
-    const handleItemChange = (payload: any) => {
-      emit("change", payload);
     };
 
     const itemAnimations = computed(() => Object.values(props.modelValue.animations) as any[]);
@@ -66,10 +62,11 @@ export default defineComponent({
               {
                 class: "va-timeline__body",
               },
-              itemAnimations.value.map((stages) =>
-                stages.map((stage: any) =>
+              itemAnimations.value.map((keyframes) =>
+                keyframes.map((stage: any) =>
                   h("i", {
-                    class: "icon icon-va-locate",
+                    key: stage.time,
+                    class: ["icon icon-va-locate"],
                     style: {
                       left: `${(stage.time * 100) / props.duration}%`,
                     },
@@ -82,7 +79,8 @@ export default defineComponent({
         props.expanded &&
           h(TimelineExpandedItem, {
             item: props.modelValue,
-            onChange: handleItemChange,
+            onChange: (payload: any) => emit("change", payload),
+            onChangeKeyframe: (payload: any) => emit("changeKeyframe", payload),
           }),
       ]);
   },

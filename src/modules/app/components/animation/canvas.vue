@@ -23,8 +23,6 @@ import {
 } from "vue";
 import { useStore } from "vuex";
 import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@/core/constants/svg";
-
-import _cloneDeep from "lodash/cloneDeep";
 import { useRerenderer } from "@/core/use/useRerenderer";
 
 export default defineComponent({
@@ -52,7 +50,7 @@ export default defineComponent({
     const hasUnsyncedDataFromOtherUser = ref(false);
 
     const canvasElements = computed({
-      get: () => _cloneDeep(store.getters["app/getElements"]),
+      get: () => store.getters["app/getElements"],
       set: ({ elements, path }) => {
         emit(SVG_CANVAS_EVENT.UPDATE, { elements, path, type: SVG_UPDATE_TYPE.CANVAS });
       },

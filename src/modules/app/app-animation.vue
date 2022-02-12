@@ -7,7 +7,7 @@
       <AnimationToolbar />
     </template>
     <template v-slot:canvas-animation>
-      <AnimationCanvas v-on="svgCanvasHandlers" ref="animationCanvasRef" :time="currentTime" />
+      <AnimationCanvas v-on="svgCanvasHandlers" :key="forceUpdateFlag" :time="currentTime" />
     </template>
     <template v-slot:timeline-animation>
       <AnimationTimeline
@@ -34,6 +34,7 @@ import AppDefaultLayout from "./layout/default.vue";
 import AnimationToolbar from "./components/animation/toolbar.vue";
 import AnimationCanvas from "./components/animation/canvas.vue";
 import AnimationTimeline from "./components/animation/timeline.vue";
+import { useRerenderer } from "@/core/use/useRerenderer";
 
 export default defineComponent({
   name: "AppAnimation",
@@ -55,13 +56,15 @@ export default defineComponent({
 
     provide("currentTime", currentTime);
 
-    const animationCanvasRef = ref(null);
     const animationTimelineRef = ref(null);
+
+    const { forceUpdate, forceUpdateFlag } = useRerenderer();
 
     const _updateTimelineElements = (payload?: any) => {
       if (payload) {
         store.dispatch("app/updateElements", payload);
       }
+
       const animationTimelineElement = animationTimelineRef.value as any;
 
       if (animationTimelineElement) {
@@ -73,11 +76,8 @@ export default defineComponent({
       if (payload) {
         store.dispatch("app/updateElements", payload);
       }
-      const animationCanvasElement = animationCanvasRef.value as any;
 
-      if (animationCanvasElement) {
-        animationCanvasElement.updateElements();
-      }
+      forceUpdate();
     };
 
     // Fetch data from backend
@@ -106,9 +106,9 @@ export default defineComponent({
       currentTime,
       svgCanvasHandlers,
       svgTimelineHandlers,
-      animationCanvasRef,
       animationTimelineRef,
       APP_MODE,
+      forceUpdateFlag,
     };
   },
 });

@@ -32,7 +32,7 @@ export const canvas = [
       ],
       "transform.rotate": [
         { time: 0, transform: { rotate: 45 } },
-        { time: 4000, transform: { rotate: 90 } },
+        { time: 5000, transform: { rotate: 90 } },
       ],
       "style.fill": [
         { time: 0, style: { fill: "#f04337" } },
