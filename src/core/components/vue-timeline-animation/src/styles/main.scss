@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $--border-color-base: #363636;
 
 $--timeline-unit-color: #6d6d6d;
@@ -21,7 +23,7 @@ $--item-input-color-focus: #bbbbbb;
 
 $--item-keyframe-client-width: 16px;
 $--item-keyframe-selected-color: #ffd900;
-$--item-keyframe-offset: $--item-keyframe-client-width / 2;
+$--item-keyframe-offset: math.div($--item-keyframe-client-width, 2);
 
 .va-timeline-component {
   display: flex;

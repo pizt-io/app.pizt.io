@@ -1,9 +1,13 @@
 <template>
   <div
-    :class="[
-      mode === APP_MODE.MAIN && $style.mainLayoutWrapper,
-      mode === APP_MODE.SVG && $style.svgLayoutWrapper,
-    ]"
+    :class="[isMain && $style.mainLayoutWrapper, isSvg && $style.svgLayoutWrapper]"
+    :style="{
+      gridTemplateRows: isMain
+        ? '1.25rem auto'
+        : isSvg
+        ? '1.25rem auto ' + svgLayoutFooterHeight + 'px'
+        : '',
+    }"
   >
     <div :class="$style.layoutHeader">Header</div>
     <div :class="$style.layoutLeft">
@@ -16,7 +20,7 @@
           enter-active-class="animated slideInLeft"
           leave-active-class="animated slideOutLeft"
         >
-          <slot v-if="mode === APP_MODE.MAIN" name="panel-transition" />
+          <slot v-if="isMain" name="panel-transition" />
           <slot v-else name="panel-animation" />
         </transition>
       </div>
@@ -28,12 +32,12 @@
           enter-active-class="animated flipInX"
           leave-active-class="animated flipOutX"
         >
-          <slot v-if="mode === APP_MODE.MAIN" name="toolbar-transition" />
+          <slot v-if="isMain" name="toolbar-transition" />
           <slot v-else name="toolbar-animation" />
         </transition>
       </div>
       <transition appear enter-active-class="animated zoomIn" leave-active-class="animated zoomOut">
-        <div v-if="mode === APP_MODE.MAIN" class="relative dark:bg-dark-500 bg-white">
+        <div v-if="isMain" class="relative dark:bg-dark-500 bg-white">
           <CanvasBackgroundToggle />
           <slot name="canvas-transition" />
         </div>
@@ -47,12 +51,12 @@
         enter-active-class="animated flipInX"
         leave-active-class="animated flipOutX"
       >
-        <div v-if="mode === APP_MODE.MAIN" class="bg-dark-500">
+        <div v-if="isMain" class="bg-dark-500">
           <slot name="timeline-transition" />
         </div>
       </transition>
     </div>
-    <div v-if="mode === APP_MODE.MAIN" :class="$style.layoutRight">
+    <div v-if="isMain" :class="$style.layoutRight">
       <div class="bg-dark-600">
         <transition
           appear
@@ -63,7 +67,8 @@
         </transition>
       </div>
     </div>
-    <div v-if="mode === APP_MODE.SVG" :class="$style.layoutFooter">
+    <div v-if="isSvg" :class="$style.layoutFooter">
+      <hr :class="$style.layoutFooterResizeBar" @mousedown="handleMousedownResizeBar" />
       <transition
         appear
         enter-active-class="animated slideInUp"
@@ -76,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, defineComponent, onMounted, ref } from "vue";
 
 import { APP_MODE } from "@core/constants/navigator";
 
@@ -97,9 +102,35 @@ export default defineComponent({
       default: APP_MODE.MAIN,
     },
   },
-  setup() {
+  setup(props) {
+    const isMain = computed(() => props.mode === APP_MODE.MAIN);
+    const isSvg = computed(() => props.mode === APP_MODE.SVG);
+
+    const svgLayoutFooterHeight = ref(200);
+
+    const isMousedownResizeBar = ref(false);
+    const handleMousedownResizeBar = () => {
+      isMousedownResizeBar.value = true;
+    };
+    const handleMouseupResizeBar = () => {
+      isMousedownResizeBar.value = false;
+    };
+    const handleMousemoveResizeBar = (e: MouseEvent) => {
+      if (isMousedownResizeBar.value) {
+        svgLayoutFooterHeight.value += -e.movementY;
+      }
+    };
+
+    onMounted(() => {
+      window.addEventListener("mouseup", handleMouseupResizeBar);
+      window.addEventListener("mousemove", handleMousemoveResizeBar);
+    });
+
     return {
-      APP_MODE,
+      isMain,
+      isSvg,
+      svgLayoutFooterHeight,
+      handleMousedownResizeBar,
     };
   },
 });
@@ -126,12 +157,23 @@ export default defineComponent({
   grid-template-rows: 7rem auto 2.25rem;
 }
 .layoutFooter {
+  position: relative;
   grid-area: footer;
+}
+.layoutFooterResizeBar {
+  border-width: 1px;
+  border-color: rgb(41, 41, 41);
+  transition-duration: 300ms;
+  cursor: ns-resize;
+
+  &:hover {
+    border-width: 3px;
+    border-color: rgb(37, 115, 233);
+  }
 }
 .mainLayoutWrapper {
   display: grid;
   grid-template-columns: 13rem auto 20rem;
-  grid-template-rows: 1.25rem auto;
   grid-template-areas:
     "header header header"
     "left body right";
@@ -144,7 +186,6 @@ export default defineComponent({
 .svgLayoutWrapper {
   display: grid;
   grid-template-columns: 13rem auto 20rem;
-  grid-template-rows: 1.25rem auto 200px;
   grid-template-areas:
     "header header header"
     "left body body"
