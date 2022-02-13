@@ -9,6 +9,8 @@ import TimelineScaleInputItem from "./timeline-property-input-item/timeline-scal
 import TimelineSkewInputItem from "./timeline-property-input-item/timeline-skew-input-item.vue";
 import TimelineNumberInputItem from "./timeline-property-input-item/timeline-number-input-item.vue";
 
+import Tippy from "../tippy/tippy.vue";
+
 import { ANIMATED_ATTRIBUTES, AttributesMap, LABEL_MAPPING } from "../../constants";
 import { findStageBetweenStages } from "@/modules/app/utils/keyframes/findStageBetweenStages";
 import { minMax } from "../../utils/minMax";
@@ -47,7 +49,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["update:item", "expand", "change", "changeKeyframe"],
+  emits: ["update:item", "expand", "change", "changeKeyframe", "removeAnimation", "removeKeyframe"],
   setup(props, { emit }) {
     const currentTime = inject<Ref<number>>("currentTime", ref(0));
 
@@ -104,6 +106,30 @@ export default defineComponent({
       selectedAttr.value = attr;
     };
 
+    const handleRemoveAnimation = (attr: string) => {
+      emit("removeAnimation", { attr });
+    };
+
+    const handleRemoveSelectedKeyframe = (attr: string) => {
+      emit("removeKeyframe", { attr, keyframeIndex: selectedKeyframeIndex.value });
+    };
+
+    const renderTippyVNode = (body: string, triggerProps: any) =>
+      h(
+        Tippy,
+        {
+          trigger: "mouseover",
+          offsetY: 5,
+          hideOnMouseoutTrigger: true,
+          tippyClass: "tooltip",
+          options: { interactive: false, role: "tooltip" },
+        },
+        {
+          default: () => h("i", triggerProps),
+          body: () => h("span", body),
+        },
+      );
+
     return () =>
       h(
         "div",
@@ -134,7 +160,11 @@ export default defineComponent({
                         class: "va-property__label",
                       },
                       [
-                        h("i", { class: "icon-va-times-circle", style: { marginRight: "8px" } }),
+                        renderTippyVNode("Remove", {
+                          class: "icon-va-times-circle",
+                          style: { marginRight: "8px", cursor: "pointer" },
+                          onClick: () => handleRemoveAnimation(attr),
+                        }),
                         LABEL_MAPPING[attr],
                       ],
                     ),
@@ -160,7 +190,11 @@ export default defineComponent({
                             });
                           },
                         }),
-                        h("i", { class: "icon-va-point", style: { marginLeft: "8px" } }),
+                        renderTippyVNode("Remove selected keyframe", {
+                          class: "icon-va-point",
+                          style: { marginLeft: "8px", cursor: "pointer" },
+                          onClick: () => handleRemoveSelectedKeyframe(attr),
+                        }),
                       ],
                     ),
                   ]),

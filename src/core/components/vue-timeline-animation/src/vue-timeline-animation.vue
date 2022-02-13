@@ -17,7 +17,7 @@
           </span>
         </span>
         <span class="va-toolbar__right">
-          <Tippy trigger="click" :options="{ hideOnClick: true }">
+          <Tippy trigger="click" tippy-class="toolbar-tippy" :options="{ hideOnClick: true }">
             <i class="icon icon-va-plus-circle" />
             <template v-slot:body>
               <ul>
@@ -108,6 +108,8 @@
             @change="handleChangeItem(index, $event)"
             @changeKeyframe="handleChangeItemKeyframe(index, $event)"
             @select="handleSelectElement"
+            @removeAnimation="handleRemoveAnimation(index, $event)"
+            @removeKeyframe="handleRemoveKeyframe(index, $event)"
           />
         </template>
       </draggable>
@@ -329,6 +331,18 @@ export default defineComponent({
       }
     };
 
+    const selectedKeyframe = ref<any>({});
+    const handleSelectKeyframe = (keyframe: any) => {
+      selectedKeyframe.value = keyframe;
+    };
+
+    const _triggerElementsRefAndRerenderBody = () => {
+      triggerRef(elements);
+      emit("update:modelElements", elements.value);
+
+      _forceRerenderTimelineBody();
+    };
+
     const handleChangeItem = (index: number, payload: any) => {
       const { time, attr, value } = payload;
 
@@ -347,10 +361,7 @@ export default defineComponent({
         stages.push(newStage);
       }
 
-      triggerRef(elements);
-      emit("update:modelElements", elements.value);
-
-      _forceRerenderTimelineBody();
+      _triggerElementsRefAndRerenderBody();
     };
 
     const handleChangeItemKeyframe = (index: number, payload: any) => {
@@ -359,10 +370,25 @@ export default defineComponent({
 
       stages[keyframeIndex].time = time;
 
-      triggerRef(elements);
-      emit("update:modelElements", elements.value);
+      _triggerElementsRefAndRerenderBody();
+    };
 
-      _forceRerenderTimelineBody();
+    const handleRemoveAnimation = (index: number, payload: any) => {
+      const { attr } = payload;
+
+      delete elements.value[index].animations[attr];
+
+      _triggerElementsRefAndRerenderBody();
+    };
+
+    const handleRemoveKeyframe = (index: number, payload: any) => {
+      const { attr, keyframeIndex } = payload;
+
+      const stages = elements.value[index].animations[attr];
+
+      stages.splice(keyframeIndex, 1);
+
+      _triggerElementsRefAndRerenderBody();
     };
 
     const handleAddAnimation = (animation: { label: string; value: AttributesMap }) => {
@@ -418,6 +444,9 @@ export default defineComponent({
       handleSelectElement,
       selectedElement,
       handleAddAnimation,
+      handleSelectKeyframe,
+      handleRemoveAnimation,
+      handleRemoveKeyframe,
     };
   },
 });

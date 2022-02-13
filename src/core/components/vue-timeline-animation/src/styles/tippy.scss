@@ -1,0 +1,32 @@
+.tippy-box {
+  box-shadow: none !important;
+}
+
+.toolbar-tippy.my-tippy-inner {
+  background-color: $--item-bg;
+  color: $--item-color;
+
+  ul {
+    li {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      line-height: 0.75rem;
+      color: $--item-color;
+      background-color: $--item-bg;
+      border-bottom: 1px solid $--border-color-base;
+      cursor: pointer;
+      user-select: none;
+
+      &:hover {
+        background-color: $--item-selected-bg;
+      }
+    }
+  }
+}
+
+.tooltip.my-tippy-inner {
+  background-color: $--item-bg;
+  color: $--item-color;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.2rem;
+}

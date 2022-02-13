@@ -22,7 +22,15 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["update:modelValue", "expand", "change", "changeKeyframe", "select"],
+  emits: [
+    "update:modelValue",
+    "expand",
+    "change",
+    "changeKeyframe",
+    "select",
+    "removeAnimation",
+    "removeKeyframe",
+  ],
   setup(props, { emit }) {
     const handleToggleExpand = () => {
       emit("expand");
@@ -81,6 +89,8 @@ export default defineComponent({
             item: props.modelValue,
             onChange: (payload: any) => emit("change", payload),
             onChangeKeyframe: (payload: any) => emit("changeKeyframe", payload),
+            onRemoveAnimation: (payload: any) => emit("removeAnimation", payload),
+            onRemoveKeyframe: (payload: any) => emit("removeKeyframe", payload),
           }),
       ]);
   },

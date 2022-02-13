@@ -25,6 +25,8 @@ $--item-keyframe-client-width: 16px;
 $--item-keyframe-selected-color: #ffd900;
 $--item-keyframe-offset: math.div($--item-keyframe-client-width, 2);
 
+@import "./tippy.scss";
+
 .va-timeline-component {
   display: flex;
   flex-direction: column;
@@ -354,27 +356,5 @@ $--item-keyframe-offset: math.div($--item-keyframe-client-width, 2);
   &__label {
     font-size: $--item-font-size;
     line-height: $--item-font-size;
-  }
-}
-
-.my-tippy-inner {
-  background-color: $--item-bg;
-  color: $--item-color;
-
-  ul {
-    li {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.75rem;
-      line-height: 0.75rem;
-      color: $--item-color;
-      background-color: $--item-bg;
-      border-bottom: 1px solid $--border-color-base;
-      cursor: pointer;
-      user-select: none;
-
-      &:hover {
-        background-color: $--item-selected-bg;
-      }
-    }
   }
 }
