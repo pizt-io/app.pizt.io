@@ -4,10 +4,10 @@ export const transitions = [
     thumbnail: "/img/svg/transition-fade.svg",
     animationName: "Fade",
     animationKeyframes: {
-      from: {
+      "0%": {
         opacity: 0,
       },
-      to: {
+      "100%": {
         opacity: 1,
       },
     },
@@ -17,10 +17,10 @@ export const transitions = [
     thumbnail: "/img/svg/transition-slide.svg",
     animationName: "Slide",
     animationKeyframes: {
-      from: {
+      "0%": {
         transform: [{ translateX: "-100%" }],
       },
-      to: {
+      "100%": {
         transform: [{ translateX: "0" }],
       },
     },
@@ -30,11 +30,11 @@ export const transitions = [
     thumbnail: "/img/svg/transition-fade-slide.svg",
     animationName: "FadeSlide",
     animationKeyframes: {
-      from: {
+      "0%": {
         transform: [{ translateX: "-100%" }],
         opacity: 0,
       },
-      to: {
+      "100%": {
         transform: [{ translateX: "0" }],
         opacity: 1,
       },
@@ -45,7 +45,7 @@ export const transitions = [
     thumbnail: "/img/svg/transition-bounce.svg",
     animationName: "Bounce",
     animationKeyframes: {
-      "from, 20%, 53%, to": {
+      "0%, 20%, 53%, 100%": {
         "animation-timing-function": [{ "cubic-bezier": "0.215, 0.61, 0.355, 1" }],
         "transform": [{ translate3d: "0, 0, 0" }],
       },
@@ -74,7 +74,7 @@ export const transitions = [
     thumbnail: "/img/svg/transition-flip.svg",
     animationName: "Flip",
     animationKeyframes: {
-      "from": {
+      "0%": {
         "transform": [{ perspective: "400px" }, { rotate3d: "0, 1, 0, 90deg" }],
         "animation-timing-function": "ease-in",
         "opacity": 0,
@@ -90,7 +90,7 @@ export const transitions = [
       "80%": {
         transform: [{ perspective: "400px" }, { rotate3d: "0, 1, 0, -5deg" }],
       },
-      "to": {
+      "100%": {
         transform: [{ perspective: "400px" }],
       },
     },
@@ -103,7 +103,7 @@ export const transitions = [
     thumbnail: "/img/svg/transition-dash.svg",
     animationName: "Dash",
     animationKeyframes: {
-      "from": {
+      "0%": {
         transform: [{ translate3d: "-150%, 0, 0" }, { skewX: "30deg" }],
         opacity: 0,
       },
@@ -114,7 +114,7 @@ export const transitions = [
       "80%": {
         transform: [{ skewX: "5deg" }],
       },
-      "to": {
+      "100%": {
         transform: [{ translate3d: "0, 0, 0" }],
       },
     },
@@ -124,11 +124,11 @@ export const transitions = [
     thumbnail: "/img/svg/transition-rotate.svg",
     animationName: "Rotate",
     animationKeyframes: {
-      from: {
+      "0%": {
         transform: [{ scale: 0 }, { rotate: "0deg" }],
         opacity: 0,
       },
-      to: {
+      "100%": {
         transform: [{ scale: 1 }, { rotate: "360deg" }],
         opacity: 1,
       },
