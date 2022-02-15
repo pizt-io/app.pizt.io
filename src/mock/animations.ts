@@ -13,6 +13,7 @@ export const canvas = [
         scale: { scaleX: 1, scaleY: 1 },
         rotate: 0,
         skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
       },
       style: {
         fill: "#f04337",
@@ -21,7 +22,6 @@ export const canvas = [
         opacity: 1,
         strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "center center",
       },
     },
     animations: {
@@ -144,6 +144,7 @@ export const canvas = [
         scale: { scaleX: 1, scaleY: 1 },
         rotate: 0,
         skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
       },
       style: {
         fill: "#f04337",
@@ -152,7 +153,6 @@ export const canvas = [
         opacity: 1,
         strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "center center",
       },
     },
     animations: {},
@@ -169,6 +169,7 @@ export const canvas = [
         scale: { scaleX: 1, scaleY: 1 },
         rotate: 0,
         skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
       },
       style: {
         fill: "#03f0fc",
@@ -177,7 +178,6 @@ export const canvas = [
         opacity: 1,
         strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "center center",
       },
     },
     animations: {},
@@ -194,6 +194,7 @@ export const canvas = [
         scale: { scaleX: 1, scaleY: 1 },
         rotate: 0,
         skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
       },
       style: {
         fill: "#f04337",
@@ -202,7 +203,6 @@ export const canvas = [
         opacity: 1,
         strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "center center",
       },
     },
     animations: {},
@@ -223,6 +223,7 @@ export const canvas = [
         scale: { scaleX: 1, scaleY: 1 },
         rotate: 0,
         skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
       },
       style: {
         fill: "#f04337",
@@ -231,7 +232,6 @@ export const canvas = [
         opacity: 1,
         strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "center center",
       },
     },
     animations: {},
@@ -252,6 +252,7 @@ export const canvas = [
         scale: { scaleX: 1, scaleY: 1 },
         rotate: 0,
         skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
       },
       style: {
         fill: "none",
@@ -260,7 +261,6 @@ export const canvas = [
         opacity: 1,
         strokeDasharray: 0,
         strokeDashoffset: 0,
-        transformOrigin: "center center",
       },
     },
     animations: {},

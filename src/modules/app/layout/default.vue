@@ -67,16 +67,22 @@
         </transition>
       </div>
     </div>
-    <div v-if="isSvg" :class="$style.layoutFooter">
-      <hr :class="$style.layoutFooterResizeBar" @mousedown="handleMousedownResizeBar" />
-      <transition
-        appear
-        enter-active-class="animated slideInUp"
-        leave-active-class="animated slideOutDown"
-      >
+    <template v-if="isSvg">
+      <div v-if="!forceUpdateFlag" :class="$style.layoutFooter" :key="forceUpdateFlag">
+        <hr :class="$style.layoutFooterResizeBar" @mousedown="handleMousedownResizeBar" />
+        <transition
+          appear
+          enter-active-class="animated slideInUp"
+          leave-active-class="animated slideOutDown"
+        >
+          <slot name="timeline-animation" />
+        </transition>
+      </div>
+      <div v-else :class="$style.layoutFooter" :key="'' + forceUpdateFlag">
+        <hr :class="$style.layoutFooterResizeBar" @mousedown="handleMousedownResizeBar" />
         <slot name="timeline-animation" />
-      </transition>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -84,6 +90,10 @@
 import { computed, defineAsyncComponent, defineComponent, onMounted, ref } from "vue";
 
 import { APP_MODE } from "@core/constants/navigator";
+import { useRerenderer } from "@/core/use/useRerenderer";
+import { SVG_CANVAS_EVENT_THROTTLE } from "@/core/constants/svg";
+
+import _debounce from "lodash/debounce";
 
 export default defineComponent({
   name: "AppDefaultLayout",
@@ -108,6 +118,12 @@ export default defineComponent({
 
     const svgLayoutFooterHeight = ref(200);
 
+    const { forceUpdate, forceUpdateFlag } = useRerenderer(0);
+
+    const forceUpdateTimeline = _debounce(function () {
+      forceUpdate();
+    }, SVG_CANVAS_EVENT_THROTTLE * 5);
+
     const isMousedownResizeBar = ref(false);
     const handleMousedownResizeBar = () => {
       isMousedownResizeBar.value = true;
@@ -118,6 +134,8 @@ export default defineComponent({
     const handleMousemoveResizeBar = (e: MouseEvent) => {
       if (isMousedownResizeBar.value) {
         svgLayoutFooterHeight.value += -e.movementY;
+
+        forceUpdateTimeline();
       }
     };
 
@@ -131,6 +149,8 @@ export default defineComponent({
       isSvg,
       svgLayoutFooterHeight,
       handleMousedownResizeBar,
+      forceUpdate,
+      forceUpdateFlag,
     };
   },
 });

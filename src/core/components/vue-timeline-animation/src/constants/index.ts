@@ -5,7 +5,7 @@ export enum AttributesMap {
   SCALE = "transform.scale",
   ROTATE = "transform.rotate",
   SKEW = "transform.skew",
-  ORIGIN = "style.transformOrigin",
+  ORIGIN = "transform.transformOrigin",
   FILL = "style.fill",
   STROKE = "style.stroke",
   STROKE_WIDTH = "style.strokeWidth",

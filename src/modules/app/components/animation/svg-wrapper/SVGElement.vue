@@ -4,6 +4,8 @@
     :class="[SVG_ELEMENT_PREFIX, element.type].join('-')"
     :style="{
       transform: elementTransform,
+      transformOrigin: transform.transformOrigin,
+      transformBox: 'fill-box',
     }"
   >
     <slot />

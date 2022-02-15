@@ -14,16 +14,9 @@ export default defineComponent({
     const deg = ref(props.modelValue);
 
     const handleChange = (e: any) => {
-      const value = +e.target.value;
+      deg.value = e.target.value;
 
-      if (value > 1) {
-        deg.value = (1).toFixed(decimal);
-      } else if (value < 0) {
-        deg.value = (0).toFixed(decimal);
-      } else {
-        deg.value = (+value).toFixed(decimal);
-      }
-      emit("update:modelValue", deg.value);
+      emit("update:modelValue", +deg.value);
     };
 
     return () =>

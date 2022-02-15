@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-import { prettyCodeCss } from "@core/utils/prettier";
 import { RootState } from "@store/state";
 import { keyframes } from "@utils/keyframes";
 import { computed, defineComponent, ref } from "vue";
@@ -17,8 +16,6 @@ export default defineComponent({
   setup() {
     const store = useStore<RootState>();
 
-    const styleHolderRef = ref<HTMLElement | null>(null);
-
     const forceRerenderFlag = ref(0);
     const selectedTransition = computed(() => {
       forceRerenderFlag.value++;
@@ -27,17 +24,16 @@ export default defineComponent({
     });
 
     const parsedStyle = computed(
-      () => `
-    <style>${prettyCodeCss(
-      selectedTransition.value.animationKeyframes &&
-        keyframes.stringify({
-          [selectedTransition.value.animationName]: selectedTransition.value.animationKeyframes,
-        }),
-    )}</style>`,
+      () =>
+        `<style>${
+          selectedTransition.value.animationKeyframes &&
+          keyframes.stringify({
+            [selectedTransition.value.animationName]: selectedTransition.value.animationKeyframes,
+          })
+        }</style>`,
     );
 
     return {
-      styleHolderRef,
       selectedTransition,
       forceRerenderFlag,
       parsedStyle,

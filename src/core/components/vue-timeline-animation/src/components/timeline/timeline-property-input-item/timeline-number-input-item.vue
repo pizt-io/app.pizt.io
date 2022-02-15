@@ -14,15 +14,7 @@ export default defineComponent({
     const num = ref(props.modelValue);
 
     const handleChange = (e: any) => {
-      const value = +e.target.value;
-
-      if (value > 1) {
-        num.value = (1).toFixed(decimal);
-      } else if (value < 0) {
-        num.value = (0).toFixed(decimal);
-      } else {
-        num.value = (+value).toFixed(decimal);
-      }
+      num.value = e.target.value;
 
       emit("update:modelValue", +num.value);
     };

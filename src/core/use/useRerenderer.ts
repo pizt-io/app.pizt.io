@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
-export const useRerenderer = () => {
-  const forceUpdateFlag = ref(1);
+export const useRerenderer = (defaultVal = 1) => {
+  const forceUpdateFlag = ref(defaultVal);
 
   const forceUpdate = () => {
     forceUpdateFlag.value++;
