@@ -21,11 +21,29 @@
         "</script>",
         "",
         "<style lang=\"scss\" module>",
-        "@import \"@styles/scss/all\";",
+        "@import \"@styles/all\";",
         "",
         "",
         "</style>",
         ""
+    ],
+    "description": ""
+  },
+  "script tag": {
+    "scope": "vue",
+    "prefix": "script",
+    "body": [
+      "<script lang=\"ts\">",
+      "import { defineComponent } from 'vue';",
+      "",
+      "export default defineComponent({",
+      "  name: 'Component',",
+      "  setup(props) {",
+      "    ${1}",
+      "  }",
+      "})",
+      "</script>",
+      ""
     ],
     "description": ""
   },
@@ -34,7 +52,7 @@
     "prefix": "style",
     "body": [
         "<style lang=\"scss\" module>",
-        "@import \"@styles/scss/all\";",
+        "@import \"@styles/all\";",
         "",
         "${0}",
         "</style>",

@@ -2,86 +2,26 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [".src/*"],
-      "@": [
-        ".src/index.js",
-        ".src/index.json",
-        ".src/index.vue",
-        ".src/index.scss",
-        ".src/index.css"
-      ],
+      "@/*": ["./src/*"],
+      "@": ["./src/index.js"],
       "@core/*": ["./src/core/*"],
-      "@core": [
-        "./src/core/index.js",
-        "./src/core/index.json",
-        "./src/core/index.vue",
-        "./src/core/index.scss",
-        "./src/core/index.css"
-      ],
+      "@core": ["./src/core/index.js"],
       "@components/*": ["./src/components/*"],
-      "@components": [
-        "./src/components/index.js",
-        "./src/components/index.json",
-        "./src/components/index.vue",
-        "./src/components/index.scss",
-        "./src/components/index.css"
-      ],
+      "@components": ["./src/components/index.js"],
       "@constants/*": ["./src/constants/*"],
-      "@constants": [
-        "./src/constants/index.js",
-        "./src/constants/index.json",
-        "./src/constants/index.vue",
-        "./src/constants/index.scss",
-        "./src/constants/index.css"
-      ],
+      "@constants": ["./src/constants/index.js"],
       "@store/*": ["./src/store/*"],
-      "@store": [
-        "./src/store/index.js",
-        "./src/store/index.json",
-        "./src/store/index.vue",
-        "./src/store/index.scss",
-        "./src/store/index.css"
-      ],
+      "@store": ["./src/store/index.js"],
       "@types/*": ["./src/types/*"],
-      "@types": [
-        "./src/types/index.js",
-        "./src/types/index.json",
-        "./src/types/index.vue",
-        "./src/types/index.scss",
-        "./src/types/index.css"
-      ],
+      "@types": ["./src/types/index.js"],
       "@modules/*": ["./src/modules/*"],
-      "@modules": [
-        "./src/modules/index.js",
-        "./src/modules/index.json",
-        "./src/modules/index.vue",
-        "./src/modules/index.scss",
-        "./src/modules/index.css"
-      ],
+      "@modules": ["./src/modules/index.js"],
       "@styles/*": ["./src/core/styles/*"],
-      "@styles": [
-        "./src/core/styles/index.js",
-        "./src/core/styles/index.json",
-        "./src/core/styles/index.vue",
-        "./src/core/styles/index.scss",
-        "./src/core/styles/index.css"
-      ],
+      "@styles": ["./src/core/styles/index.js"],
       "@use/*": ["./src/core/use/*"],
-      "@use": [
-        "./src/core/use/index.js",
-        "./src/core/use/index.json",
-        "./src/core/use/index.vue",
-        "./src/core/use/index.scss",
-        "./src/core/use/index.css"
-      ],
+      "@use": ["./src/core/use/index.js"],
       "@utils/*": ["./src/core/utils/*"],
-      "@utils": [
-        "./src/core/utils/index.js",
-        "./src/core/utils/index.json",
-        "./src/core/utils/index.vue",
-        "./src/core/utils/index.scss",
-        "./src/core/utils/index.css"
-      ]
+      "@utils": ["./src/core/utils/index.js"]
     }
   },
   "exclude": ["node_modules", "dist"]

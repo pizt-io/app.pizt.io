@@ -1,22 +1,16 @@
 <template>
-  <div>
-
-  </div>
+  <div></div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Header',
-  setup(props) {
-
-  }
-})
+  name: "Header",
+  setup() {},
+});
 </script>
 
 <style lang="scss" module>
-@import "@styles/scss/all";
-
-
+@import "@styles/all";
 </style>

@@ -1,6 +1,6 @@
 import "virtual:windi.css";
-import "./core/styles/css/all.css";
-import "./core/styles/scss/all.scss";
+
+import "./core/styles/all.scss";
 
 import Root from "./Root.vue";
 
@@ -15,9 +15,11 @@ import { registerSW } from "virtual:pwa-register";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const updateSW = registerSW({
   onNeedRefresh() {
+    // eslint-disable-next-line no-console
     console.log("Need Refresh");
   },
   onOfflineReady() {
+    // eslint-disable-next-line no-console
     console.log("Offline");
   },
 });

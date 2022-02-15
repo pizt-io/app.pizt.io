@@ -1,15 +1,16 @@
 import _cloneDeep from "lodash/cloneDeep";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
-import { state, State } from "./state";
+import { state, RootState } from "./state";
 import { mutations } from "./mutations";
 import { actions } from "./actions";
 import { getters } from "./getters";
 
 // define injection key
-export const key: InjectionKey<Store<State>> = Symbol();
+export const key: InjectionKey<Store<RootState>> = Symbol();
 
-export const store = createStore<State>({
+export const store = createStore<RootState>({
+  strict: true,
   state,
   mutations,
   actions,

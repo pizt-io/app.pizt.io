@@ -1,15 +1,36 @@
 <template>
-  <div :class="$style.layoutWrapper">
-
-  </div>
+  <AppTransition v-if="appMode === APP_MODE.MAIN" key="app-transition" />
+  <AppAnimation v-else-if="appMode === APP_MODE.SVG" key="app-animation" />
 </template>
 
-<style lang="scss" module>
-@import "@styles/scss/all";
+<script lang="ts">
+import { defineComponent } from "vue";
 
-.layoutWrapper {
-  background-color: color(gray, 900);
+import { useLazyStore } from "@/core/use/useLazyStore";
 
-  @include size(100vw, 100vh);
-}
-</style>
+import { appStoreModule } from "./store";
+
+import { APP_MODE } from "@core/constants/navigator";
+import { useAppMode } from "./use/useAppMode";
+
+import AppAnimation from "./app-animation.vue";
+import AppTransition from "./app-transition.vue";
+
+export default defineComponent({
+  name: "AppPage",
+  components: {
+    AppAnimation,
+    AppTransition,
+  },
+  setup() {
+    const { appMode } = useAppMode();
+
+    useLazyStore("app", appStoreModule);
+
+    return {
+      APP_MODE,
+      appMode,
+    };
+  },
+});
+</script>

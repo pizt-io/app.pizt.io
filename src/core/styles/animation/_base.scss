@@ -1,0 +1,50 @@
+@use "sass:math";
+
+.animated {
+  animation-duration: $--animate-duration;
+  animation-fill-mode: both;
+
+  .infinite {
+    animation-iteration-count: infinite;
+  }
+
+  @for $count from 1 to 5 {
+    .repeat-#{$count} {
+      animation-iteration-count: $--animate-repeat * $count;
+    }
+    .delay-#{$count} {
+      animation-delay: $--animate-delay * $count;
+    }
+    .duration-#{$count} {
+      animation-duration: $--animate-duration * $count * 0.5;
+    }
+  }
+
+
+
+  &.slow {
+    animation-duration: $--animate-duration * 2;
+  }
+
+  &.slower {
+    animation-duration: $--animate-duration * 3;
+  }
+
+  &.fast {
+    animation-duration: math.div($--animate-duration, 1.5);
+  }
+
+  &.faster {
+    animation-duration: math.div($--animate-duration, 2);
+  }
+
+  @media print, (prefers-reduced-motion: reduce) {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+
+    &[class*='Out'] {
+      opacity: 0;
+    }
+  }
+}

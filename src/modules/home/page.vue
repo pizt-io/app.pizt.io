@@ -1,7 +1,5 @@
 <template>
-  <div :class="$style.layoutWrapper">
-
-  </div>
+  <div :class="$style.layoutWrapper"></div>
 </template>
 
 <script lang="ts">
@@ -14,7 +12,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-@import "@styles/scss/all";
+@import "@styles/all";
 
 .layoutWrapper {
   min-height: 100vh;

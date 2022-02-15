@@ -1,0 +1,37 @@
+@import 'colors';
+@import 'effects';
+@import 'fonts';
+@import 'mixins';
+@import 'transitions';
+@import 'variables';
+@import 'element';
+@import 'windi';
+
+@import './animation/all.scss';
+
+* {
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: color(gray);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: color(gray, 600);
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: color(gray, 700);
+  }
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}

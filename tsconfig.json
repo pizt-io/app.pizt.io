@@ -11,19 +11,21 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["jest"],
+    "types": ["jest", "element-plus/global"],
     "paths": {
-      "@/*": [".src/*"],
+      "@/*": ["./src/*"],
       "@": [
-        ".src/index.js",
-        ".src/index.json",
-        ".src/index.vue",
-        ".src/index.scss",
-        ".src/index.css"
+        "./src/index.ts",
+        "./src/index.d.ts",
+        "./src/index.json",
+        "./src/index.vue",
+        "./src/index.scss",
+        "./src/index.css"
       ],
       "@core/*": ["./src/core/*"],
       "@core": [
-        "./src/core/index.js",
+        "./src/core/index.ts",
+        "./src/core/index.d.ts",
         "./src/core/index.json",
         "./src/core/index.vue",
         "./src/core/index.scss",
@@ -31,7 +33,8 @@
       ],
       "@components/*": ["./src/components/*"],
       "@components": [
-        "./src/components/index.js",
+        "./src/components/index.ts",
+        "./src/components/index.d.ts",
         "./src/components/index.json",
         "./src/components/index.vue",
         "./src/components/index.scss",
@@ -39,7 +42,8 @@
       ],
       "@constants/*": ["./src/constants/*"],
       "@constants": [
-        "./src/constants/index.js",
+        "./src/constants/index.ts",
+        "./src/constants/index.d.ts",
         "./src/constants/index.json",
         "./src/constants/index.vue",
         "./src/constants/index.scss",
@@ -47,7 +51,8 @@
       ],
       "@store/*": ["./src/store/*"],
       "@store": [
-        "./src/store/index.js",
+        "./src/store/index.ts",
+        "./src/store/index.d.ts",
         "./src/store/index.json",
         "./src/store/index.vue",
         "./src/store/index.scss",
@@ -55,7 +60,8 @@
       ],
       "@types/*": ["./src/types/*"],
       "@types": [
-        "./src/types/index.js",
+        "./src/types/index.ts",
+        "./src/types/index.d.ts",
         "./src/types/index.json",
         "./src/types/index.vue",
         "./src/types/index.scss",
@@ -63,7 +69,8 @@
       ],
       "@modules/*": ["./src/modules/*"],
       "@modules": [
-        "./src/modules/index.js",
+        "./src/modules/index.ts",
+        "./src/modules/index.d.ts",
         "./src/modules/index.json",
         "./src/modules/index.vue",
         "./src/modules/index.scss",
@@ -71,7 +78,8 @@
       ],
       "@styles/*": ["./src/core/styles/*"],
       "@styles": [
-        "./src/core/styles/index.js",
+        "./src/core/styles/index.ts",
+        "./src/core/styles/index.d.ts",
         "./src/core/styles/index.json",
         "./src/core/styles/index.vue",
         "./src/core/styles/index.scss",
@@ -79,7 +87,8 @@
       ],
       "@use/*": ["./src/core/use/*"],
       "@use": [
-        "./src/core/use/index.js",
+        "./src/core/use/index.ts",
+        "./src/core/use/index.d.ts",
         "./src/core/use/index.json",
         "./src/core/use/index.vue",
         "./src/core/use/index.scss",
@@ -87,7 +96,8 @@
       ],
       "@utils/*": ["./src/core/utils/*"],
       "@utils": [
-        "./src/core/utils/index.js",
+        "./src/core/utils/index.ts",
+        "./src/core/utils/index.d.ts",
         "./src/core/utils/index.json",
         "./src/core/utils/index.vue",
         "./src/core/utils/index.scss",
