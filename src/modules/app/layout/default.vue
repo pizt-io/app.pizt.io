@@ -174,7 +174,7 @@ export default defineComponent({
 .layoutBody {
   grid-area: body;
   display: grid;
-  grid-template-rows: 7rem auto 2.25rem;
+  grid-template-rows: 7rem auto 3rem;
 }
 .layoutFooter {
   position: relative;
