@@ -102,7 +102,7 @@ import Navigator from "@modules/app/components/navigator/navigator.vue";
 import TransitionToolbar from "@modules/app/components/transition/toolbar.vue";
 import TransitionCanvas from "@modules/app/components/transition/canvas.vue";
 import TransitionPanel from "@modules/app/components/transition/panel.vue";
-import TransitionTimeline from "@modules/app/components/transition/timeline.vue";
+import TransitionTimeline from "@/modules/app/components/transition/timeline/timeline.vue";
 import AnimationToolbar from "@modules/app/components/animation/toolbar.vue";
 import AnimationCanvas from "@modules/app/components/animation/canvas.vue";
 import AnimationTimeline from "@modules/app/components/animation/timeline.vue";

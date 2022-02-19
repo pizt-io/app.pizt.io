@@ -12,10 +12,6 @@ import { defineComponent, ref, onMounted } from "vue";
 import Interactive from "https://vectorjs.org/interactive.js";
 
 export default defineComponent({
-  model: {
-    prop: "modelValue",
-    event: "update:modelValue",
-  },
   props: {
     modelValue: {
       type: String,
@@ -97,6 +93,7 @@ export default defineComponent({
 
           emit("update:modelValue", _value);
         };
+        _emitInputEvent();
 
         handlebar1.update = function () {
           this.x2 = handle1.x;
