@@ -183,7 +183,7 @@ export default defineComponent({
 .layoutFooterResizeBar {
   border-width: 1px;
   border-color: rgb(41, 41, 41);
-  transition-duration: 300ms;
+  transition-duration: $duration-base;
   cursor: ns-resize;
 
   &:hover {
