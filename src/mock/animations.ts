@@ -1,4 +1,36 @@
+/* eslint-disable */
 import { SVG_ELEMENT_TYPE, SVG_PATH_CMD } from "@/core/constants/svg";
+
+type SVGElement = {
+  _id: string;
+  type: SVG_ELEMENT_TYPE;
+  name: string;
+  attrs: {
+    pos: { x: number; y: number };
+    size: { width: number; height: number };
+    transform: {
+      translate: { translateX: number; translateY: number };
+      scale: { scaleX: number; scaleY: number };
+      rotate: number;
+      skew: { skewX: number; skewY: number };
+      transformOrigin: string;
+    };
+    style: {
+      fill: string;
+      stroke: string;
+      strokeWidth: number;
+      opacity: number;
+      strokeDasharray: number;
+      strokeDashoffset: number;
+    };
+  };
+  animations: {
+    [propertyPath: string]: Array<{
+      time: number;
+      [propertyName: string]: any;
+    }>;
+  };
+};
 
 export const canvas = [
   {

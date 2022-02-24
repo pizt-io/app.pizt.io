@@ -3,13 +3,22 @@
     :class="[isMain && $style.mainLayoutWrapper, isSvg && $style.svgLayoutWrapper]"
     :style="{
       gridTemplateRows: isMain
-        ? '1.25rem auto'
+        ? '1.75rem auto'
         : isSvg
-        ? '1.25rem auto ' + svgLayoutFooterHeight + 'px'
+        ? '1.75rem auto ' + svgLayoutFooterHeight + 'px'
         : '',
     }"
   >
-    <div :class="$style.layoutHeader">Header</div>
+    <div :class="$style.layoutHeader">
+      <span v-if="!currentUser" class="cursor-pointer text-sm" @click="handleSigninGithub">
+        <img class="inline-block h-4 w-auto mr-1" src="/img/github.png" alt="Github" />
+        Signin with Github
+      </span>
+      <span v-else class="cursor-pointer text-sm" @click="handleSignoutGithub">
+        <img class="inline-block h-4 w-auto mr-1" src="/img/github.png" alt="Github" />
+        {{ currentUser.email }} (Logout)
+      </span>
+    </div>
     <div :class="$style.layoutLeft">
       <div class="h-28 bg-primary-500">
         <slot name="app-navigator" />
@@ -94,6 +103,9 @@ import { useRerenderer } from "@/core/use/useRerenderer";
 import { SVG_CANVAS_EVENT_THROTTLE } from "@/core/constants/svg";
 
 import _debounce from "lodash/debounce";
+import { supabase } from "@/core/plugins/supabase";
+import { useStore } from "vuex";
+import { RootState } from "@/store/state";
 
 export default defineComponent({
   name: "AppDefaultLayout",
@@ -113,6 +125,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const store = useStore<RootState>();
+
     const isMain = computed(() => props.mode === APP_MODE.MAIN);
     const isSvg = computed(() => props.mode === APP_MODE.SVG);
 
@@ -144,6 +158,23 @@ export default defineComponent({
       window.addEventListener("mousemove", handleMousemoveResizeBar);
     });
 
+    const handleSigninGithub = async () => {
+      const { session } = await supabase.auth.signIn({
+        // provider can be 'github', 'google', 'gitlab', and more
+        provider: "github",
+      });
+
+      store.commit("SET_USER_SESSION", session);
+    };
+
+    const handleSignoutGithub = async () => {
+      await supabase.auth.signOut();
+
+      store.commit("SET_USER_SESSION", {});
+    };
+
+    const currentUser = computed(() => store.state.userSession?.user);
+
     return {
       isMain,
       isSvg,
@@ -151,6 +182,9 @@ export default defineComponent({
       handleMousedownResizeBar,
       forceUpdate,
       forceUpdateFlag,
+      handleSigninGithub,
+      handleSignoutGithub,
+      currentUser,
     };
   },
 });
@@ -162,6 +196,10 @@ export default defineComponent({
 .layoutHeader {
   grid-area: header;
   background-color: color(gray, 900);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
 }
 .layoutRight {
   grid-area: right;

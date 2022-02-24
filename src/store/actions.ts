@@ -1,6 +1,6 @@
 import { ActionTree } from "vuex";
 import { RootState } from "./state";
-import { transitions } from "@/mock/transitions";
+import { supabase } from "@/core/plugins/supabase";
 
 export type Actions = ActionTree<RootState, RootState>;
 
@@ -10,11 +10,13 @@ export const actions: Actions = {
       commit("SET_VUE_CLIENT_READY", true);
     }
   },
-  getTransitions({ state, commit }) {
-    commit("SET_TRANSITIONS", transitions);
+  async getTransitions({ state, commit }) {
+    const res = await supabase.from("transitions").select();
+
+    commit("SET_TRANSITIONS", res.data);
 
     if (!state.selectedTransition.label) {
-      commit("SET_SELECTED_TRANSITION", transitions[0]);
+      commit("SET_SELECTED_TRANSITION", res.data?.[0]);
     }
   },
 };

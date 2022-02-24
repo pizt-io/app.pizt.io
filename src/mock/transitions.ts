@@ -1,3 +1,25 @@
+/* eslint-disable */
+
+type Transition = {
+  label: string;
+  thumbnail: string;
+  animationName: string;
+  animationKeyframes: {
+    [keyframe: string]: {
+      [property: string]: number | string;
+    };
+  };
+  animationDelay: number;
+  animationDirection: string;
+  animationDuration: string;
+  animationFillMode: string;
+  animationHasDelay: number;
+  animationIsInfinite: number;
+  animationIterationCount: number;
+  animationPlayState: string;
+  animationTimingFunction: string;
+};
+
 export const transitions = [
   {
     label: "Fade",
@@ -11,6 +33,15 @@ export const transitions = [
         opacity: 1,
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Slide",
@@ -18,12 +49,21 @@ export const transitions = [
     animationName: "Slide",
     animationKeyframes: {
       "0%": {
-        transform: [{ translateX: "-100%" }],
+        transform: [{ translate3d: "-100%, 0, 0" }],
       },
       "100%": {
-        transform: [{ translateX: "0" }],
+        transform: [{ translate3d: "0, 0, 0" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Fade slide",
@@ -31,14 +71,23 @@ export const transitions = [
     animationName: "FadeSlide",
     animationKeyframes: {
       "0%": {
-        transform: [{ translateX: "-100%" }],
+        transform: [{ translate3d: "-100%, 0, 0" }],
         opacity: 0,
       },
       "100%": {
-        transform: [{ translateX: "0" }],
+        transform: [{ translate3d: "0, 0, 0" }],
         opacity: 1,
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Bounce",
@@ -81,6 +130,15 @@ export const transitions = [
         "transform": [{ translate3d: "0, 0, 0" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
     animationStyles: {
       "transform-origin": "center bottom",
     },
@@ -110,6 +168,15 @@ export const transitions = [
         transform: [{ perspective: "400px" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
     animationStyles: {
       "backface-visibility": "visible",
     },
@@ -120,20 +187,29 @@ export const transitions = [
     animationName: "Dash",
     animationKeyframes: {
       "0%": {
-        transform: [{ translate3d: "-150%, 0, 0" }, { skewX: "30deg" }],
+        transform: [{ translate3d: "-150%, 0, 0" }, { skew: "30deg, 0" }],
         opacity: 0,
       },
       "60%": {
-        transform: [{ skewX: "-20deg" }],
+        transform: [{ skew: "-20deg, 0" }],
         opacity: 1,
       },
       "80%": {
-        transform: [{ skewX: "5deg" }],
+        transform: [{ skew: "5deg, 0" }],
       },
       "100%": {
         transform: [{ translate3d: "0, 0, 0" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Rotate",
@@ -141,13 +217,22 @@ export const transitions = [
     animationName: "Rotate",
     animationKeyframes: {
       "0%": {
-        transform: [{ scale: 0 }, { rotate: "0deg" }],
+        transform: [{ scale: 0 }, { rotate3d: "0, 0, 1, 0deg" }],
         opacity: 0,
       },
       "100%": {
-        transform: [{ scale: 1 }, { rotate: "360deg" }],
+        transform: [{ scale: 1 }, { rotate3d: "0, 0, 1, 360deg" }],
         opacity: 1,
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
 ];

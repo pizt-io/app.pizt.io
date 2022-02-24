@@ -3,6 +3,7 @@ export const state = () => ({
   vueClientReady: false,
   selectedTransition: {} as any,
   transitions: [],
+  userSession: {} as any,
 });
 
 export type RootState = ReturnType<typeof state>;
