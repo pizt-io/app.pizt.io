@@ -410,10 +410,7 @@ export default defineComponent({
 
         elements.value[elementIndex].animations[animation.value] = [newAnimation];
 
-        triggerRef(elements);
-        handleSelectElement(elements.value[elementIndex]);
-
-        _forceRerenderTimelineBody();
+        _triggerElementsRefAndRerenderBody();
       }
     };
 
