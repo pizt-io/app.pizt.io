@@ -7,7 +7,7 @@
       <AnimationToolbar @toolbar-item-click="handleToolbarAction" />
     </template>
     <template v-slot:panel-animation>
-      <AnimationPanel />
+      <AnimationPanel @change="handleChangeSelectedElement" />
     </template>
     <template v-slot:canvas-animation>
       <AnimationCanvas v-on="svgCanvasHandlers" :key="forceUpdateFlag" :time="currentTime" />
@@ -137,6 +137,10 @@ export default defineComponent({
       // store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.CROP]);
     };
 
+    const handleChangeSelectedElement = (element: any) => {
+      console.log(element);
+    };
+
     const toolbarActionFunctionMap = {
       [ToolbarAction.RECTANGLE]: handleToolbarAddRectangle,
       [ToolbarAction.SQUARE]: handleToolbarAddSquare,
@@ -162,6 +166,7 @@ export default defineComponent({
       APP_MODE,
       forceUpdateFlag,
       handleToolbarAction,
+      handleChangeSelectedElement,
     };
   },
 });
