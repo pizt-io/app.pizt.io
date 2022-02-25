@@ -1,57 +1,118 @@
+/* eslint-disable */
+
+type Transition = {
+  label: string;
+  thumbnail: string;
+  animationName: string;
+  animationKeyframes: {
+    [keyframe: string]: {
+      [property: string]: number | string;
+    };
+  };
+  animationDelay: number;
+  animationDirection: string;
+  animationDuration: string;
+  animationFillMode: string;
+  animationHasDelay: number;
+  animationIsInfinite: number;
+  animationIterationCount: number;
+  animationPlayState: string;
+  animationTimingFunction: string;
+};
+
 export const transitions = [
   {
     label: "Fade",
     thumbnail: "/img/svg/transition-fade.svg",
     animationName: "Fade",
     animationKeyframes: {
-      from: {
+      "0%": {
         opacity: 0,
       },
-      to: {
+      "100%": {
         opacity: 1,
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Slide",
     thumbnail: "/img/svg/transition-slide.svg",
     animationName: "Slide",
     animationKeyframes: {
-      from: {
-        transform: [{ translateX: "-100%" }],
+      "0%": {
+        transform: [{ translate3d: "-100%, 0, 0" }],
       },
-      to: {
-        transform: [{ translateX: "0" }],
+      "100%": {
+        transform: [{ translate3d: "0, 0, 0" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Fade slide",
     thumbnail: "/img/svg/transition-fade-slide.svg",
     animationName: "FadeSlide",
     animationKeyframes: {
-      from: {
-        transform: [{ translateX: "-100%" }],
+      "0%": {
+        transform: [{ translate3d: "-100%, 0, 0" }],
         opacity: 0,
       },
-      to: {
-        transform: [{ translateX: "0" }],
+      "100%": {
+        transform: [{ translate3d: "0, 0, 0" }],
         opacity: 1,
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Bounce",
     thumbnail: "/img/svg/transition-bounce.svg",
     animationName: "Bounce",
     animationKeyframes: {
-      "from, 20%, 53%, to": {
+      "0%": {
         "animation-timing-function": [{ "cubic-bezier": "0.215, 0.61, 0.355, 1" }],
         "transform": [{ translate3d: "0, 0, 0" }],
       },
-      "40%, 43%": {
+      "20%": {
+        "animation-timing-function": [{ "cubic-bezier": "0.215, 0.61, 0.355, 1" }],
+        "transform": [{ translate3d: "0, 0, 0" }],
+      },
+      "40%": {
         "animation-timing-function": [{ "cubic-bezier": "0.755, 0.05, 0.855, 0.06" }],
         "transform": [{ translate3d: "0, -60px, 0" }, { scaleY: "1.1" }],
+      },
+      "43%": {
+        "animation-timing-function": [{ "cubic-bezier": "0.755, 0.05, 0.855, 0.06" }],
+        "transform": [{ translate3d: "0, -60px, 0" }, { scaleY: "1.1" }],
+      },
+      "53%": {
+        "animation-timing-function": [{ "cubic-bezier": "0.215, 0.61, 0.355, 1" }],
+        "transform": [{ translate3d: "0, 0, 0" }],
       },
       "70%": {
         "animation-timing-function": [{ "cubic-bezier": "0.755, 0.05, 0.855, 0.06" }],
@@ -64,7 +125,20 @@ export const transitions = [
       "90%": {
         transform: [{ translate3d: "0, -8px, 0" }, { scaleY: "1.02" }],
       },
+      "100%": {
+        "animation-timing-function": [{ "cubic-bezier": "0.215, 0.61, 0.355, 1" }],
+        "transform": [{ translate3d: "0, 0, 0" }],
+      },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
     animationStyles: {
       "transform-origin": "center bottom",
     },
@@ -74,7 +148,7 @@ export const transitions = [
     thumbnail: "/img/svg/transition-flip.svg",
     animationName: "Flip",
     animationKeyframes: {
-      "from": {
+      "0%": {
         "transform": [{ perspective: "400px" }, { rotate3d: "0, 1, 0, 90deg" }],
         "animation-timing-function": "ease-in",
         "opacity": 0,
@@ -90,10 +164,19 @@ export const transitions = [
       "80%": {
         transform: [{ perspective: "400px" }, { rotate3d: "0, 1, 0, -5deg" }],
       },
-      "to": {
+      "100%": {
         transform: [{ perspective: "400px" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
     animationStyles: {
       "backface-visibility": "visible",
     },
@@ -103,35 +186,53 @@ export const transitions = [
     thumbnail: "/img/svg/transition-dash.svg",
     animationName: "Dash",
     animationKeyframes: {
-      "from": {
-        transform: [{ translate3d: "-150%, 0, 0" }, { skewX: "30deg" }],
+      "0%": {
+        transform: [{ translate3d: "-150%, 0, 0" }, { skew: "30deg, 0" }],
         opacity: 0,
       },
       "60%": {
-        transform: [{ skewX: "-20deg" }],
+        transform: [{ skew: "-20deg, 0" }],
         opacity: 1,
       },
       "80%": {
-        transform: [{ skewX: "5deg" }],
+        transform: [{ skew: "5deg, 0" }],
       },
-      "to": {
+      "100%": {
         transform: [{ translate3d: "0, 0, 0" }],
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
   {
     label: "Rotate",
     thumbnail: "/img/svg/transition-rotate.svg",
     animationName: "Rotate",
     animationKeyframes: {
-      from: {
-        transform: [{ scale: 0 }, { rotate: "0deg" }],
+      "0%": {
+        transform: [{ scale: 0 }, { rotate3d: "0, 0, 1, 0deg" }],
         opacity: 0,
       },
-      to: {
-        transform: [{ scale: 1 }, { rotate: "360deg" }],
+      "100%": {
+        transform: [{ scale: 1 }, { rotate3d: "0, 0, 1, 360deg" }],
         opacity: 1,
       },
     },
+    animationDelay: 0,
+    animationDirection: "alternate",
+    animationDuration: "1.5s",
+    animationFillMode: "forwards",
+    animationHasDelay: 0,
+    animationIsInfinite: 0,
+    animationIterationCount: 1,
+    animationPlayState: "",
+    animationTimingFunction: "cubic-bezier(0.42,0.69,0.69,0.42)",
   },
 ];

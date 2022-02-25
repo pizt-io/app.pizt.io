@@ -13,7 +13,7 @@
       <TransitionCanvas :time="currentTime" />
     </template>
     <template v-slot:timeline-transition>
-      <TransitionTimeline />
+      <TransitionTimeline :transition="selectedTransition" />
     </template>
     <template v-slot:code-generator>
       <CodeGenerator />
@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent, defineComponent, provide, ref } from "vue";
-
+import { computed, defineAsyncComponent, defineComponent, onBeforeMount, provide, ref } from "vue";
+import { useStore } from "vuex";
 import { APP_MODE } from "@core/constants/navigator";
 
 import AppDefaultLayout from "./layout/default.vue";
@@ -31,7 +31,7 @@ import AppDefaultLayout from "./layout/default.vue";
 import TransitionToolbar from "./components/transition/toolbar.vue";
 import TransitionCanvas from "./components/transition/canvas.vue";
 import TransitionPanel from "./components/transition/panel.vue";
-import TransitionTimeline from "./components/transition/timeline.vue";
+import TransitionTimeline from "./components/transition/timeline/timeline.vue";
 
 export default defineComponent({
   name: "AppTransition",
@@ -53,9 +53,18 @@ export default defineComponent({
 
     provide("currentTime", currentTime);
 
+    const store = useStore();
+
+    const selectedTransition = computed(() => store.state.selectedTransition);
+
+    onBeforeMount(() => {
+      store.dispatch("getTransitions");
+    });
+
     return {
       currentTime,
       APP_MODE,
+      selectedTransition,
     };
   },
 });

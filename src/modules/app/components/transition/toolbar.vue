@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full px-3 flex items-center">
+  <div class="h-full px-3 pt-3 flex">
     <div
       v-for="transition in transitions"
       :key="transition.animationName"
@@ -7,19 +7,8 @@
       @click="handleSelectTransition(transition)"
     >
       <div
-        class="
-          rounded-full
-          w-16
-          h-16
-          flex
-          items-center
-          justify-center
-          cursor-pointer
-          bg-primary
-          hover:bg-secondary
-          active:bg-secondary-600
-        "
         :class="[
+          $style.transitionItem,
           transition?.animationName === selectedTransition?.animationName &&
             'border-4 border-secondary-600',
         ]"
@@ -30,12 +19,16 @@
         {{ transition.label }}
       </div>
     </div>
+    <div class="text-center mx-2" @click="handleAddTransition">
+      <div :class="$style.transitionItem"> + </div>
+      <div class="text-sm text-white"> Add new </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { RootState } from "@store/state";
-import { computed, CSSProperties, defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -44,21 +37,26 @@ export default defineComponent({
     const store = useStore<RootState>();
 
     const selectedTransition = computed(() => {
-      return store.state.selectedTransition as CSSProperties;
+      return store.state.selectedTransition as any;
     });
 
     const transitions = computed(() => {
       return store.state.transitions as any[];
     });
 
-    const handleSelectTransition = (transition: CSSProperties) => {
-      store.commit("SET_ANIMATION_SETTINGS", transition);
+    const handleSelectTransition = (transition: any) => {
+      if (transition.label !== selectedTransition.value.label) {
+        store.commit("SET_ANIMATION_SETTINGS", transition);
+      }
     };
+
+    const handleAddTransition = () => {};
 
     return {
       selectedTransition,
       transitions,
       handleSelectTransition,
+      handleAddTransition,
     };
   },
 });
@@ -66,4 +64,22 @@ export default defineComponent({
 
 <style lang="scss" module>
 @import "@styles/all";
+
+.transitionItem {
+  border-radius: 9999px;
+  background-color: color();
+  cursor: pointer;
+  transition-duration: $duration-base;
+
+  @include size(4rem);
+  @include flexCenter();
+
+  &:hover {
+    background-color: color(secondary);
+  }
+
+  &:active {
+    background-color: color(secondary, 600);
+  }
+}
 </style>

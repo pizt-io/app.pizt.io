@@ -12,6 +12,18 @@ export const actions: Actions = {
 
     return elements;
   },
+  addElement: async ({ commit }, element: any) => {
+    commit("ADD_ELEMENTS", element);
+
+    // Update to database asynchoronously
+    // Get data back from database (in case of multiple modification from different browsers in the same time)
+  },
+  removeElement: async ({ commit }, element: any) => {
+    commit("REMOVE_ELEMENTS", element);
+
+    // Update to database asynchoronously
+    // Get data back from database (in case of multiple modification from different browsers in the same time)
+  },
   updateElements: async ({ commit }, payload: any) => {
     const { elements, path, type } = payload;
 

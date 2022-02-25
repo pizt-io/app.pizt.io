@@ -6,11 +6,9 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "TransitionTimeline",
-  setup() {},
+  name: "CubicBezier",
+  setup() {
+    return {};
+  },
 });
 </script>
-
-<style lang="scss" module>
-@import "@styles/all";
-</style>

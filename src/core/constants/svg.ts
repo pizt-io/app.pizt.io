@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export enum SVG_ELEMENT_TYPE {
   CIRCLE = "circle",
   RECT = "rect",
@@ -90,3 +92,166 @@ export enum SVG_UPDATE_TYPE {
 }
 
 export const HEX_COLOR_REGEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+export enum ToolbarAction {
+  RECTANGLE,
+  SQUARE,
+  CIRCLE,
+  ELLIPSE,
+  POLYLINE,
+  PATH,
+  CROP,
+}
+
+export const defaultElementMapping = {
+  [ToolbarAction.RECTANGLE]: {
+    _id: moment().format("x").toString(),
+    type: SVG_ELEMENT_TYPE.RECT,
+    name: "Rectangle New",
+    attrs: {
+      pos: { x: 0, y: 0 },
+      size: { width: 100, height: 70 },
+      transform: {
+        translate: { translateX: 0, translateY: 0 },
+        scale: { scaleX: 1, scaleY: 1 },
+        rotate: 0,
+        skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
+      },
+      style: {
+        fill: "#f04337",
+        stroke: "#5ad3db",
+        strokeWidth: 1,
+        opacity: 1,
+        strokeDasharray: 0,
+        strokeDashoffset: 0,
+      },
+    },
+    animations: {},
+  },
+  [ToolbarAction.SQUARE]: {
+    _id: moment().format("x").toString(),
+    type: SVG_ELEMENT_TYPE.RECT,
+    name: "Square New",
+    attrs: {
+      pos: { x: 0, y: 0 },
+      size: { width: 100, height: 100 },
+      transform: {
+        translate: { translateX: 0, translateY: 0 },
+        scale: { scaleX: 1, scaleY: 1 },
+        rotate: 0,
+        skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
+      },
+      style: {
+        fill: "#f04337",
+        stroke: "#5ad3db",
+        strokeWidth: 1,
+        opacity: 1,
+        strokeDasharray: 0,
+        strokeDashoffset: 0,
+      },
+    },
+    animations: {},
+  },
+  [ToolbarAction.CIRCLE]: {
+    _id: moment().format("x").toString(),
+    type: SVG_ELEMENT_TYPE.CIRCLE,
+    name: "Circle New",
+    attrs: {
+      pos: { x: 0, y: 0 },
+      size: { width: 100, height: 80 },
+      transform: {
+        translate: { translateX: 0, translateY: 0 },
+        scale: { scaleX: 1, scaleY: 1 },
+        rotate: 0,
+        skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
+      },
+      style: {
+        fill: "#f04337",
+        stroke: "#5ad3db",
+        strokeWidth: 1,
+        opacity: 1,
+        strokeDasharray: 0,
+        strokeDashoffset: 0,
+      },
+    },
+    animations: {},
+  },
+  [ToolbarAction.ELLIPSE]: {
+    _id: moment().format("x").toString(),
+    type: SVG_ELEMENT_TYPE.ELLIPSE,
+    name: "Ellipse New",
+    attrs: {
+      pos: { x: 0, y: 0 },
+      size: { width: 100, height: 80 },
+      transform: {
+        translate: { translateX: 0, translateY: 0 },
+        scale: { scaleX: 1, scaleY: 1 },
+        rotate: 0,
+        skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
+      },
+      style: {
+        fill: "#f04337",
+        stroke: "#5ad3db",
+        strokeWidth: 1,
+        opacity: 1,
+        strokeDasharray: 0,
+        strokeDashoffset: 0,
+      },
+    },
+    animations: {},
+  },
+  [ToolbarAction.POLYLINE]: {
+    _id: moment().format("x").toString(),
+    type: SVG_ELEMENT_TYPE.POLYLINE,
+    name: "Polyline New",
+    attrs: {
+      pos: { x: 0, y: 0 },
+      size: { width: 100, height: 80 },
+      transform: {
+        translate: { translateX: 0, translateY: 0 },
+        scale: { scaleX: 1, scaleY: 1 },
+        rotate: 0,
+        skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
+      },
+      style: {
+        fill: "#f04337",
+        stroke: "#5ad3db",
+        strokeWidth: 1,
+        opacity: 1,
+        strokeDasharray: 0,
+        strokeDashoffset: 0,
+      },
+    },
+    animations: {},
+  },
+  [ToolbarAction.PATH]: {
+    _id: moment().format("x").toString(),
+    type: SVG_ELEMENT_TYPE.PATH,
+    name: "Path New",
+    attrs: {
+      pos: { x: 0, y: 0 },
+      size: { width: 100, height: 80 },
+      transform: {
+        translate: { translateX: 0, translateY: 0 },
+        scale: { scaleX: 1, scaleY: 1 },
+        rotate: 0,
+        skew: { skewX: 0, skewY: 0 },
+        transformOrigin: "center center",
+      },
+      style: {
+        fill: "#f04337",
+        stroke: "#5ad3db",
+        strokeWidth: 1,
+        opacity: 1,
+        strokeDasharray: 0,
+        strokeDashoffset: 0,
+      },
+    },
+    animations: {},
+  },
+};

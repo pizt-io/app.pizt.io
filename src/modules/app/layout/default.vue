@@ -3,13 +3,33 @@
     :class="[isMain && $style.mainLayoutWrapper, isSvg && $style.svgLayoutWrapper]"
     :style="{
       gridTemplateRows: isMain
-        ? '1.25rem auto'
+        ? '1.75rem auto'
         : isSvg
-        ? '1.25rem auto ' + svgLayoutFooterHeight + 'px'
+        ? '1.75rem auto ' + svgLayoutFooterHeight + 'px'
         : '',
     }"
   >
-    <div :class="$style.layoutHeader">Header</div>
+    <div :class="$style.layoutHeader">
+      <span v-if="!currentUser" class="cursor-pointer text-sm" @click="handleSigninGithub">
+        <img class="inline-block h-4 w-auto mr-1" src="/img/github.png" alt="Github" />
+        Signin with Github
+      </span>
+      <span v-else class="cursor-pointer text-sm" @click="handleSignoutGithub">
+        <img class="inline-block h-4 w-auto mr-1" src="/img/github.png" alt="Github" />
+        {{ currentUser.email }} (Logout)
+      </span>
+      <el-dropdown v-if="isSvg" size="mini" trigger="click">
+        <span class="text-white cursor-pointer">
+          Project list<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <template v-slot:dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>Project 1</el-dropdown-item>
+            <el-dropdown-item>Project 2</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
     <div :class="$style.layoutLeft">
       <div class="h-28 bg-primary-500">
         <slot name="app-navigator" />
@@ -94,6 +114,9 @@ import { useRerenderer } from "@/core/use/useRerenderer";
 import { SVG_CANVAS_EVENT_THROTTLE } from "@/core/constants/svg";
 
 import _debounce from "lodash/debounce";
+import { supabase } from "@/core/plugins/supabase";
+import { useStore } from "vuex";
+import { RootState } from "@/store/state";
 
 export default defineComponent({
   name: "AppDefaultLayout",
@@ -113,6 +136,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const store = useStore<RootState>();
+
     const isMain = computed(() => props.mode === APP_MODE.MAIN);
     const isSvg = computed(() => props.mode === APP_MODE.SVG);
 
@@ -144,6 +169,23 @@ export default defineComponent({
       window.addEventListener("mousemove", handleMousemoveResizeBar);
     });
 
+    const handleSigninGithub = async () => {
+      const { session } = await supabase.auth.signIn({
+        // provider can be 'github', 'google', 'gitlab', and more
+        provider: "github",
+      });
+
+      store.commit("SET_USER_SESSION", session);
+    };
+
+    const handleSignoutGithub = async () => {
+      await supabase.auth.signOut();
+
+      store.commit("SET_USER_SESSION", {});
+    };
+
+    const currentUser = computed(() => store.state.userSession?.user);
+
     return {
       isMain,
       isSvg,
@@ -151,6 +193,9 @@ export default defineComponent({
       handleMousedownResizeBar,
       forceUpdate,
       forceUpdateFlag,
+      handleSigninGithub,
+      handleSignoutGithub,
+      currentUser,
     };
   },
 });
@@ -162,6 +207,11 @@ export default defineComponent({
 .layoutHeader {
   grid-area: header;
   background-color: color(gray, 900);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
 }
 .layoutRight {
   grid-area: right;
@@ -174,7 +224,7 @@ export default defineComponent({
 .layoutBody {
   grid-area: body;
   display: grid;
-  grid-template-rows: 7rem auto 2.25rem;
+  grid-template-rows: 7rem auto 3rem;
 }
 .layoutFooter {
   position: relative;
@@ -183,7 +233,7 @@ export default defineComponent({
 .layoutFooterResizeBar {
   border-width: 1px;
   border-color: rgb(41, 41, 41);
-  transition-duration: 300ms;
+  transition-duration: $duration-base;
   cursor: ns-resize;
 
   &:hover {
@@ -193,7 +243,7 @@ export default defineComponent({
 }
 .mainLayoutWrapper {
   display: grid;
-  grid-template-columns: 13rem auto 20rem;
+  grid-template-columns: 14rem auto 20rem;
   grid-template-areas:
     "header header header"
     "left body right";
@@ -205,7 +255,7 @@ export default defineComponent({
 
 .svgLayoutWrapper {
   display: grid;
-  grid-template-columns: 13rem auto 20rem;
+  grid-template-columns: 14rem auto 20rem;
   grid-template-areas:
     "header header header"
     "left body body"

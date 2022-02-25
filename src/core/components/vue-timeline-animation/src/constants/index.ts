@@ -15,7 +15,7 @@ export enum AttributesMap {
 }
 
 export const ANIMATED_ATTRIBUTES = [
-  // AttributesMap.POSITION,
+  AttributesMap.POSITION,
   AttributesMap.SIZE,
   AttributesMap.TRANSLATE,
   AttributesMap.SCALE,
@@ -54,8 +54,8 @@ export const DEFAULT_VALUE_MAPPPING = Object.freeze({
   [AttributesMap.ROTATE]: 0,
   [AttributesMap.SKEW]: { skewX: 0, skewY: 0 },
   [AttributesMap.ORIGIN]: "center",
-  [AttributesMap.FILL]: "#f04337",
-  [AttributesMap.STROKE]: "#5ad3db",
+  [AttributesMap.FILL]: "#000",
+  [AttributesMap.STROKE]: "#000",
   [AttributesMap.STROKE_WIDTH]: 1,
   [AttributesMap.STROKE_DASH_ARRAY]: 0,
   [AttributesMap.STROKE_DASH_OFFSET]: 0,

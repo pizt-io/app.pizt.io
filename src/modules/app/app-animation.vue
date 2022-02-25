@@ -4,7 +4,10 @@
       <Navigator />
     </template>
     <template v-slot:toolbar-animation>
-      <AnimationToolbar />
+      <AnimationToolbar @toolbar-item-click="handleToolbarAction" />
+    </template>
+    <template v-slot:panel-animation>
+      <AnimationPanel @change="handleChangeSelectedElement" />
     </template>
     <template v-slot:canvas-animation>
       <AnimationCanvas v-on="svgCanvasHandlers" :key="forceUpdateFlag" :time="currentTime" />
@@ -34,7 +37,9 @@ import AppDefaultLayout from "./layout/default.vue";
 import AnimationToolbar from "./components/animation/toolbar.vue";
 import AnimationCanvas from "./components/animation/canvas.vue";
 import AnimationTimeline from "./components/animation/timeline.vue";
+import AnimationPanel from "./components/animation/panel.vue";
 import { useRerenderer } from "@/core/use/useRerenderer";
+import { ToolbarAction, defaultElementMapping } from "@/core/constants/svg";
 
 export default defineComponent({
   name: "AppAnimation",
@@ -45,6 +50,7 @@ export default defineComponent({
     // eslint-disable-next-line vue/no-unused-components
     LayerTree: defineAsyncComponent(() => import("./components/tree/layer.vue")),
     Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
+    AnimationPanel,
     AnimationToolbar,
     AnimationCanvas,
     AnimationTimeline,
@@ -52,9 +58,15 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const canvasWidth = ref(700);
+    const canvasHeight = ref(450);
     const currentTime = ref(1000);
+    const duration = ref(5000);
 
     provide("currentTime", currentTime);
+    provide("duration", duration);
+    provide("canvasWidth", canvasWidth);
+    provide("canvasHeight", canvasHeight);
 
     const animationTimelineRef = ref(null);
 
@@ -102,6 +114,50 @@ export default defineComponent({
       [SVG_CANVAS_EVENT.UPDATE_TIME]: _updateCurrentTime,
     };
 
+    const handleToolbarAddRectangle = async () => {
+      return await store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.RECTANGLE]);
+    };
+    const handleToolbarAddSquare = async () => {
+      return await store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.SQUARE]);
+    };
+    const handleToolbarAddCircle = async () => {
+      return await store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.CIRCLE]);
+    };
+    const handleToolbarAddEllipse = async () => {
+      return await store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.ELLIPSE]);
+    };
+    const handleToolbarAddPolyline = async () => {
+      return await store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.POLYLINE]);
+    };
+    const handleToolbarAddPath = async () => {
+      return await store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.PATH]);
+    };
+    const handleToolbarCrop = () => {
+      console.log("Crop canvas");
+      // store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.CROP]);
+    };
+
+    const handleChangeSelectedElement = (element: any) => {
+      console.log(element);
+    };
+
+    const toolbarActionFunctionMap = {
+      [ToolbarAction.RECTANGLE]: handleToolbarAddRectangle,
+      [ToolbarAction.SQUARE]: handleToolbarAddSquare,
+      [ToolbarAction.CIRCLE]: handleToolbarAddCircle,
+      [ToolbarAction.ELLIPSE]: handleToolbarAddEllipse,
+      [ToolbarAction.POLYLINE]: handleToolbarAddPolyline,
+      [ToolbarAction.PATH]: handleToolbarAddPath,
+      [ToolbarAction.CROP]: handleToolbarCrop,
+    };
+
+    const handleToolbarAction = async (action: ToolbarAction) => {
+      await toolbarActionFunctionMap[action]();
+
+      _updateCanvasElements();
+      _updateTimelineElements();
+    };
+
     return {
       currentTime,
       svgCanvasHandlers,
@@ -109,6 +165,8 @@ export default defineComponent({
       animationTimelineRef,
       APP_MODE,
       forceUpdateFlag,
+      handleToolbarAction,
+      handleChangeSelectedElement,
     };
   },
 });

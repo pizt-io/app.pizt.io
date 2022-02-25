@@ -1,5 +1,5 @@
 export const findValueBetweenTime = (
-  currentTime: number,
+  t: number,
   t1: number,
   t2: number,
   valT1: any,
@@ -7,14 +7,15 @@ export const findValueBetweenTime = (
   nested?: boolean,
 ) => {
   const timeDistance = Math.abs(t2 - t1);
-  const movedTime = Math.abs(currentTime - t1);
 
-  const changeFraction = movedTime / timeDistance;
+  const deltaTime = Math.abs(t - t1);
+
+  const changeFraction = deltaTime / timeDistance;
 
   if (!nested) {
-    const valueDistance = valT2 - valT1;
+    const deltaValue = valT2 - valT1;
 
-    return valT1 + valueDistance * changeFraction;
+    return valT1 + deltaValue * changeFraction;
   } else {
     const result: any = {};
 
@@ -22,9 +23,9 @@ export const findValueBetweenTime = (
       const v1 = +valT1[key];
       const v2 = +valT2[key];
 
-      const valueDistance = v2 - v1;
+      const deltaValue = v2 - v1;
 
-      result[key] = v1 + valueDistance * changeFraction;
+      result[key] = v1 + deltaValue * changeFraction;
     });
 
     return result;
