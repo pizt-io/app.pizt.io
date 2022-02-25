@@ -231,7 +231,7 @@ export default defineComponent({
 }
 .mainLayoutWrapper {
   display: grid;
-  grid-template-columns: 13rem auto 20rem;
+  grid-template-columns: 14rem auto 20rem;
   grid-template-areas:
     "header header header"
     "left body right";
@@ -243,7 +243,7 @@ export default defineComponent({
 
 .svgLayoutWrapper {
   display: grid;
-  grid-template-columns: 13rem auto 20rem;
+  grid-template-columns: 14rem auto 20rem;
   grid-template-areas:
     "header header header"
     "left body body"
