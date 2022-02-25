@@ -45,6 +45,7 @@ export default defineComponent({
         let elementTransform = elementAttrs.transform;
         let elementStyle = elementAttrs.style;
 
+        // Apply animations into element
         Object.keys(element.animations).forEach((attr: string) => {
           const stages = element.animations[attr];
 
@@ -94,6 +95,7 @@ export default defineComponent({
                 onMousedown: () => handleElementSelection({ id: element._id, element }),
               },
               [
+                h("animate", {}),
                 // Animation tags
               ],
             ),

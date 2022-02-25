@@ -58,9 +58,15 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const canvasWidth = ref(700);
+    const canvasHeight = ref(450);
     const currentTime = ref(1000);
+    const duration = ref(5000);
 
     provide("currentTime", currentTime);
+    provide("duration", duration);
+    provide("canvasWidth", canvasWidth);
+    provide("canvasHeight", canvasHeight);
 
     const animationTimelineRef = ref(null);
 

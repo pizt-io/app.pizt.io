@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450">
+          <ellipse id="id-el-1" cx="150" cy="100" rx="50" ry="25"></ellipse>
+          <style>
+            #id-el-1 {
+              transform-origin: center center;fill: #f04337;stroke: #5ad3db;
+              --x: 0px;
+              --y: 0px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-1 5000ms linear forwards;
+            }
+            @keyframes id-el-1 { 0% { fill: #f04337; transform: translate(0px, 0px) rotate(45deg); } 40% { fill: #fcba03; rx: 100; ry: 100; transform: translate(350px, 200px) rotate(0deg); } 60% { fill: #5449cc; } 20% { rx: 50; ry: 25; } 80% { transform: translate(100px, 200px) rotate(0deg); } 100% { transform: translate(0px, 0px) rotate(90deg); }  }
+          </style>
+        
+          <line id="id-el-4" x1="600" y1="50" x2="550" y2="150"></line>
+          <style>
+            #id-el-4 {
+              stroke: #f04337;
+              --x: 0px;
+              --y: 0px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-4 5000ms linear forwards;
+            }
+            @keyframes id-el-4 { 0% { transform: translate(0px, 250px); } 80% { transform: translate(350px, 500px); }  }
+          </style>
+        
+          <path id="id-el-6" d="M 17.4408,50.9262 C 58.1858 96.2781, 15.5423 31.5313, 52.4902 5.57424 C 80.5298 -7.72511, 93.1865 11.1156, 96.0099 22.1984 C 87.6857 35.1283, 77.4922 60.8132, 103.312 60.1132 C 135.587 59.2383, 116.309 99.7779, 103.312 146.88 C 92.9139 184.561, 46.0158 137.984, 23.8666 109.986 C 8.143 75.1819, -15.1551 14.6446, 17.4408 50.9262 Z" boundingbox="[object SVGRect]"></path>
+          <style>
+            #id-el-6 {
+              fill: #f04337;
+              --x: 50px;
+              --y: 200px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-6 5000ms linear forwards;
+            }
+            @keyframes id-el-6 { 0% { fill: #f04337; } 40% { fill: #fcba03; } 60% { fill: #5449cc; }  }
+          </style>
+        
+          <ellipse id="id-el-9" cx="150" cy="100" rx="50" ry="25"></ellipse>
+          <style>
+            #id-el-9 {
+              transform-origin: center center;fill: #f04337;stroke: #5ad3db;
+              --x: 0px;
+              --y: 0px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-9 5000ms linear forwards;
+            }
+            @keyframes id-el-9 {  }
+          </style>
+        
+          <circle id="id-el-10" x="150" y="100" r="50"></circle>
+          <style>
+            #id-el-10 {
+              transform-origin: center center;fill: #03f0fc;stroke: #5ad3db;stroke-width: 5px;
+              --x: 350px;
+              --y: 100px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-10 5000ms linear forwards;
+            }
+            @keyframes id-el-10 {  }
+          </style>
+        
+          <rect id="id-el-2" x="250" y="300" width="100" height="50"></rect>
+          <style>
+            #id-el-2 {
+              transform-origin: center center;fill: #f04337;stroke: #c6fc03;stroke-width: 10px;
+              --x: 0px;
+              --y: -100px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-2 5000ms linear forwards;
+            }
+            @keyframes id-el-2 {  }
+          </style>
+        
+          <polygon id="id-el-7" points="0,100 50,25 50,75 100,0" xmin="0" ymin="0" xmax="100" ymax="100"></polygon>
+          <style>
+            #id-el-7 {
+              transform-origin: center center;fill: #f04337;stroke: #5ad3db;
+              --x: 450px;
+              --y: 300px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-7 5000ms linear forwards;
+            }
+            @keyframes id-el-7 {  }
+          </style>
+        
+          <polyline id="id-el-8" points="0,100 60,25 40,75 110,0" xmin="0" ymin="0" xmax="110" ymax="100"></polyline>
+          <style>
+            #id-el-8 {
+              transform-origin: center center;fill: none;stroke: #5ad3db;
+              --x: 500px;
+              --y: 100px;
+              --scaleX: 1;
+              --scaleY: 1;
+              --rotate: 0deg;
+              --skewX: 0deg;
+              --skewY: 0deg;
+              transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
+              animation: id-el-8 5000ms linear forwards;
+            }
+            @keyframes id-el-8 {  }
+          </style>
+        </svg>
