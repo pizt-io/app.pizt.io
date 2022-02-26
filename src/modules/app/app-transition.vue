@@ -1,19 +1,19 @@
 <template>
-  <AppDefaultLayout :mode="APP_MODE.MAIN">
+  <AppDefaultLayout v-if="selectedTransition.label" :mode="APP_MODE.MAIN">
     <template v-slot:app-navigator>
       <Navigator />
     </template>
     <template v-slot:panel-transition>
-      <TransitionPanel v-if="selectedTransition.label" :transition="selectedTransition" />
+      <TransitionPanel :transition="selectedTransition" />
     </template>
     <template v-slot:toolbar-transition>
-      <TransitionToolbar v-if="selectedTransition.label" :transition="selectedTransition" />
+      <TransitionToolbar :transition="selectedTransition" />
     </template>
     <template v-slot:canvas-transition>
       <TransitionCanvas :time="currentTime" />
     </template>
     <template v-slot:timeline-transition>
-      <TransitionTimeline v-if="selectedTransition.label" :transition="selectedTransition" />
+      <TransitionTimeline :transition="selectedTransition" />
     </template>
     <template v-slot:code-generator>
       <CodeGenerator />

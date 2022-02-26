@@ -142,6 +142,8 @@ import "element-plus/theme-chalk/el-message.css";
 
 import CubicBezier from "@/core/components/cubic-bezier";
 
+import _cloneDeep from "lodash/cloneDeep";
+
 export default defineComponent({
   name: "TransitionPanel",
   components: {
@@ -165,37 +167,23 @@ export default defineComponent({
     } as any);
 
     watch(
-      () => props.transition,
-      (newValue) => {
-        form.value = Object.assign({}, form.value, {
-          ...newValue,
-          animationName: newValue?.animationName,
-          animationDuration: +newValue?.animationDuration?.replace("s", "") || 1,
-          animationTimingFunction:
-            newValue?.animationTimingFunction?.replace("cubic-bezier(", "")?.replace(")", "") ||
-            "0.42,0.69,0.69,0.42",
-        });
-      },
-    );
-
-    watch(
       form,
       (newValue) => {
-        store.dispatch(
-          "updateSelectedTransition",
-          Object.assign({}, newValue, {
-            animationDuration: `${newValue.animationDuration}s`,
-            animationTimingFunction: `cubic-bezier(${
-              newValue.animationTimingFunction || "0.42,0.69,0.69,0.42"
-            })`,
-            animationDelay: newValue.animationHasDelay ? `${newValue.animationDelay}s` : 0,
-            animationIterationCount: newValue.animationIsInfinite
-              ? "infinite"
-              : newValue.animationIterationCount,
-          }),
-        );
+        let transition = _cloneDeep(newValue);
+
+        store.dispatch("updateSelectedTransition", {
+          ...transition,
+          animationDuration: `${transition.animationDuration}s`,
+          animationTimingFunction: `cubic-bezier(${
+            transition.animationTimingFunction || "0.42,0.69,0.69,0.42"
+          })`,
+          animationDelay: transition.animationHasDelay ? `${transition.animationDelay}s` : 0,
+          animationIterationCount: transition.animationIsInfinite
+            ? "infinite"
+            : transition.animationIterationCount,
+        });
       },
-      { immediate: true, deep: true },
+      { immediate: true },
     );
 
     const handleDeleteTransition = () => {
