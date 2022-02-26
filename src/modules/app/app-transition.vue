@@ -38,10 +38,6 @@ export default defineComponent({
   components: {
     AppDefaultLayout,
     CodeGenerator: defineAsyncComponent(() => import("./components/code/generator.vue")),
-    // eslint-disable-next-line vue/no-unused-components
-    Header: defineAsyncComponent(() => import("./components/header/header.vue")),
-    // eslint-disable-next-line vue/no-unused-components
-    LayerTree: defineAsyncComponent(() => import("./components/tree/layer.vue")),
     Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
     TransitionToolbar,
     TransitionCanvas,

@@ -1,5 +1,21 @@
 <template>
   <ul class="p-3">
+    <li class="mb-5 flex items-center justify-end">
+      <span
+        v-if="selectedTransition.userId"
+        class="text-sm text-white underline cursor-pointer hover:text-gray-200"
+        @click="handleDeleteTransition"
+      >
+        Remove
+      </span>
+      <el-button
+        type="success"
+        class="bg-success hover:bg-success-600 border-none h-6 min-h-6 px-5 py-1 ml-3"
+        @click="handleUpdateTransition"
+      >
+        Save
+      </el-button>
+    </li>
     <li class="mb-3">
       <label class="pz-label w-full justify-between">
         <span class="pz-label__inner">
@@ -119,6 +135,11 @@ import { RootState } from "@store/state";
 import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
+import { ElMessageBox, ElMessage } from "element-plus";
+
+import "element-plus/theme-chalk/el-message-box.css";
+import "element-plus/theme-chalk/el-message.css";
+
 import CubicBezier from "@/core/components/cubic-bezier";
 
 export default defineComponent({
@@ -137,9 +158,12 @@ export default defineComponent({
       animationName: selectedTransition.value.animationName,
       animationIsInfinite: 0,
       animationHasDelay: 0,
-      animationDuration: 1,
+      animationDuration: +selectedTransition.value.animationDuration?.replace("s", "") || 1,
       animationDelay: 0,
-      animationTimingFunction: "",
+      animationTimingFunction:
+        selectedTransition.value.animationTimingFunction
+          ?.replace("cubic-bezier(", "")
+          ?.replace(")", "") || "0.42,0.69,0.69,0.42",
       animationIterationCount: 1,
       animationFillMode: "forwards",
       animationDirection: "alternate",
@@ -151,7 +175,7 @@ export default defineComponent({
       () => {
         form.value.animationName = selectedTransition.value.animationName;
 
-        store.commit("SET_ANIMATION_SETTINGS", {
+        store.dispatch("updateSelectedTransition", {
           ...form.value,
           animationDuration: `${form.value.animationDuration}s`,
           animationTimingFunction: `cubic-bezier(${
@@ -166,8 +190,30 @@ export default defineComponent({
       { immediate: true, deep: true },
     );
 
+    const handleDeleteTransition = () => {
+      ElMessageBox.confirm("Are your sure you want to delete this transition?", "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      }).then(async () => {
+        await store.dispatch("deleteTransition", selectedTransition.value);
+
+        ElMessage({
+          type: "success",
+          message: "Deleted transition",
+        });
+      });
+    };
+
+    const handleUpdateTransition = () => {
+      store.dispatch("updateTransition", selectedTransition.value);
+    };
+
     return {
       form,
+      selectedTransition,
+      handleDeleteTransition,
+      handleUpdateTransition,
     };
   },
 });

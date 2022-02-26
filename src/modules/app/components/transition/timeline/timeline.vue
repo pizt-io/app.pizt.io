@@ -50,7 +50,7 @@ export default defineComponent({
         };
 
         store.commit(
-          "SET_ANIMATION_SETTINGS",
+          "UPDATE_SELECTED_TRANSITION",
           Object.assign({}, props.transition, {
             animationKeyframes: Object.assign({}, props.transition.animationKeyframes, {
               [keyframe.index + "%"]: Object.assign({}, selectedKeyframe.value.data),

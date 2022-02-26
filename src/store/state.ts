@@ -2,7 +2,7 @@
 export const state = () => ({
   vueClientReady: false,
   selectedTransition: {} as any,
-  transitions: [],
+  transitions: [] as any[],
   userSession: {} as any,
 });
 

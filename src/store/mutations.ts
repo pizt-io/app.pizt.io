@@ -13,13 +13,25 @@ export const mutations: Mutations = {
   SET_TRANSITIONS(state, transitions) {
     state.transitions = transitions;
   },
+  UPDATE_SELECTED_TRANSITION(state, selectedTransition) {
+    state.selectedTransition = Object.assign({}, state.selectedTransition, selectedTransition);
+  },
   SET_SELECTED_TRANSITION(state, selectedTransition) {
     state.selectedTransition = selectedTransition;
   },
-  SET_ANIMATION_SETTINGS(state, selectedTransition) {
-    state.selectedTransition = {
-      ...state.selectedTransition,
-      ...selectedTransition,
-    };
+  ADD_TRANSITION(state, payload) {
+    state.transitions.push(payload);
+  },
+  REMOVE_TRANSITION(state, payload) {
+    state.transitions = state.transitions.filter(
+      (transition: any) => transition._id !== payload._id,
+    );
+  },
+  UPDATE_TRANSITION(state, payload) {
+    const transitionIndex = state.transitions.findIndex(
+      (transition: any) => transition._id !== payload._id,
+    );
+
+    state.transitions[transitionIndex] = payload;
   },
 };
