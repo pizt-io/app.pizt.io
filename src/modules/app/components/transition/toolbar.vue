@@ -1,17 +1,7 @@
 <template>
   <div class="h-full pr-2 flex">
     <div
-      class="
-        flex
-        items-center
-        justify-center
-        h-full
-        w-6
-        bg-primary
-        font-bold
-        select-none
-        cursor-pointer
-      "
+      :class="$style.defaultTransitionWrapperTrigger"
       @click="defaultTransitionVisible = !defaultTransitionVisible"
     >
       <i :class="defaultTransitionVisible ? 'icon-arrow-left' : 'icon-arrow-right'"></i>
@@ -39,7 +29,7 @@
         >
           <img :src="transition.thumbnail" />
         </div>
-        <div class="text-xs text-white overflow-hidden overflow-ellipsis">
+        <div :class="$style.transitionItemLabel">
           {{ transition.label }}
         </div>
       </div>
@@ -62,7 +52,7 @@
       >
         <img :src="transition.thumbnail" />
       </div>
-      <div class="text-xs text-white overflow-hidden overflow-ellipsis">
+      <div :class="$style.transitionItemLabel">
         {{ transition.label }}
       </div>
     </div>
@@ -75,13 +65,16 @@
 
 <script lang="ts">
 import { RootState } from "@store/state";
-import { computed, defineComponent, ref } from "vue";
+import { ElMessage } from "element-plus";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
   name: "TransitionToolbar",
   setup() {
     const store = useStore<RootState>();
+    const userSession = computed(() => store.state.userSession);
+
     const selectedTransition = computed(() => {
       return store.state.selectedTransition as any;
     });
@@ -104,10 +97,19 @@ export default defineComponent({
     };
 
     const handleAddTransition = () => {
-      store.dispatch("createTransition");
+      if (userSession.value?.user) {
+        store.dispatch("createTransition");
+      } else {
+        ElMessage.warning("You need to login to create a new transition");
+      }
     };
 
-    const defaultTransitionVisible = ref(userTransitions.value.length === 0);
+    const defaultTransitionVisible = ref(true);
+    onMounted(() => {
+      setTimeout(() => {
+        defaultTransitionVisible.value = userTransitions.value.length === 0;
+      }, 1000);
+    });
 
     return {
       defaultTransitionVisible,
@@ -124,10 +126,23 @@ export default defineComponent({
 <style lang="scss" module>
 @import "@styles/all";
 
+.defaultTransitionWrapperTrigger {
+  background-color: color();
+  font-weight: bold;
+  user-select: none;
+  cursor: pointer;
+  border-left: 1px solid color(primary, 700);
+
+  @include size(1.5rem, 100%);
+  @include flexCenter();
+}
+
 .transitionItemWrapper {
   width: 4rem;
   text-align: center;
   margin: 0.5rem 0.5rem 0;
+
+  @include flexBox($direction: column, $align: center);
 }
 
 .transitionItem {
@@ -146,5 +161,14 @@ export default defineComponent({
   &:active {
     background-color: color(secondary, 600);
   }
+}
+.transitionItemLabel {
+  flex: 1;
+  color: white;
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @include flexCenter();
 }
 </style>

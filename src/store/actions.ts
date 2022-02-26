@@ -42,7 +42,10 @@ export const actions: Actions = {
   async updateTransition({ state, commit, dispatch }, payload) {
     if (state.userSession?.user?.id && payload.userId) {
       try {
-        const res = await supabase.from("transitions").update(payload).match({ _id: payload._id });
+        const res = await supabase
+          .from("transitions")
+          .update(payload)
+          .match({ _id: payload._id, userId: payload.userId });
 
         commit("UPDATE_TRANSITION", res.data?.[0]);
 

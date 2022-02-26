@@ -28,10 +28,10 @@ export const mutations: Mutations = {
     );
   },
   UPDATE_TRANSITION(state, payload) {
-    const transitionIndex = state.transitions.findIndex(
-      (transition: any) => transition._id !== payload._id,
-    );
+    let transition = state.transitions.find((transition: any) => transition._id !== payload._id);
 
-    state.transitions[transitionIndex] = payload;
+    if (transition) {
+      transition = payload;
+    }
   },
 };

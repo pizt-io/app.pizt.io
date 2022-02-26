@@ -2,7 +2,7 @@
   <ul class="p-3">
     <li class="mb-5 flex items-center justify-end">
       <span
-        v-if="selectedTransition.userId"
+        v-if="transition?.userId"
         class="text-sm text-white underline cursor-pointer hover:text-gray-200"
         @click="handleDeleteTransition"
       >
@@ -10,7 +10,7 @@
       </span>
       <el-button
         type="success"
-        class="bg-success hover:bg-success-600 border-none h-6 min-h-6 px-5 py-1 ml-3"
+        class="bg-success hover:bg-success-600 border-none h-6 min-h-6 px-5 py-1 ml-3 rounded-none"
         @click="handleUpdateTransition"
       >
         Save
@@ -147,45 +147,53 @@ export default defineComponent({
   components: {
     CubicBezier,
   },
-  setup() {
+  props: {
+    transition: Object,
+    default: () => ({}),
+  },
+  setup(props) {
     const store = useStore<RootState>();
-
-    const selectedTransition = computed(() => {
-      return store.state.selectedTransition;
-    });
+    const userSession = computed(() => store.state.userSession);
 
     const form = ref({
-      animationName: selectedTransition.value.animationName,
-      animationIsInfinite: 0,
-      animationHasDelay: 0,
-      animationDuration: +selectedTransition.value.animationDuration?.replace("s", "") || 1,
-      animationDelay: 0,
+      ...props.transition,
+      animationName: props.transition?.animationName,
+      animationDuration: +props.transition?.animationDuration?.replace("s", "") || 1,
       animationTimingFunction:
-        selectedTransition.value.animationTimingFunction
-          ?.replace("cubic-bezier(", "")
-          ?.replace(")", "") || "0.42,0.69,0.69,0.42",
-      animationIterationCount: 1,
-      animationFillMode: "forwards",
-      animationDirection: "alternate",
-      animationPlayState: "",
-    });
+        props.transition?.animationTimingFunction?.replace("cubic-bezier(", "")?.replace(")", "") ||
+        "0.42,0.69,0.69,0.42",
+    } as any);
 
     watch(
-      () => form.value,
-      () => {
-        form.value.animationName = selectedTransition.value.animationName;
-
-        store.dispatch("updateSelectedTransition", {
-          ...form.value,
-          animationDuration: `${form.value.animationDuration}s`,
-          animationTimingFunction: `cubic-bezier(${
-            form.value.animationTimingFunction || "0.42,0.69,0.69,0.42"
-          })`,
-          animationDelay: form.value.animationHasDelay ? `${form.value.animationDelay}s` : 0,
-          animationIterationCount: form.value.animationIsInfinite
-            ? "infinite"
-            : form.value.animationIterationCount,
+      () => props.transition,
+      (newValue) => {
+        form.value = Object.assign({}, form.value, {
+          ...newValue,
+          animationName: newValue?.animationName,
+          animationDuration: +newValue?.animationDuration?.replace("s", "") || 1,
+          animationTimingFunction:
+            newValue?.animationTimingFunction?.replace("cubic-bezier(", "")?.replace(")", "") ||
+            "0.42,0.69,0.69,0.42",
         });
+      },
+    );
+
+    watch(
+      form,
+      (newValue) => {
+        store.dispatch(
+          "updateSelectedTransition",
+          Object.assign({}, newValue, {
+            animationDuration: `${newValue.animationDuration}s`,
+            animationTimingFunction: `cubic-bezier(${
+              newValue.animationTimingFunction || "0.42,0.69,0.69,0.42"
+            })`,
+            animationDelay: newValue.animationHasDelay ? `${newValue.animationDelay}s` : 0,
+            animationIterationCount: newValue.animationIsInfinite
+              ? "infinite"
+              : newValue.animationIterationCount,
+          }),
+        );
       },
       { immediate: true, deep: true },
     );
@@ -196,7 +204,7 @@ export default defineComponent({
         cancelButtonText: "Cancel",
         type: "warning",
       }).then(async () => {
-        await store.dispatch("deleteTransition", selectedTransition.value);
+        await store.dispatch("deleteTransition", props.transition);
 
         ElMessage({
           type: "success",
@@ -205,13 +213,17 @@ export default defineComponent({
       });
     };
 
-    const handleUpdateTransition = () => {
-      store.dispatch("updateTransition", selectedTransition.value);
+    const handleUpdateTransition = async () => {
+      if (userSession.value?.user) {
+        await store.dispatch("updateTransition", props.transition);
+        ElMessage.success("Transition is saved successfully!");
+      } else {
+        ElMessage.warning("You need to login to save custom transition!");
+      }
     };
 
     return {
       form,
-      selectedTransition,
       handleDeleteTransition,
       handleUpdateTransition,
     };
