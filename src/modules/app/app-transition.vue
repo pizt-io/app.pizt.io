@@ -4,16 +4,16 @@
       <Navigator />
     </template>
     <template v-slot:panel-transition>
-      <TransitionPanel />
+      <TransitionPanel v-if="selectedTransition.label" :transition="selectedTransition" />
     </template>
     <template v-slot:toolbar-transition>
-      <TransitionToolbar />
+      <TransitionToolbar v-if="selectedTransition.label" :transition="selectedTransition" />
     </template>
     <template v-slot:canvas-transition>
       <TransitionCanvas :time="currentTime" />
     </template>
     <template v-slot:timeline-transition>
-      <TransitionTimeline :transition="selectedTransition" />
+      <TransitionTimeline v-if="selectedTransition.label" :transition="selectedTransition" />
     </template>
     <template v-slot:code-generator>
       <CodeGenerator />
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, onBeforeMount, provide, ref } from "vue";
+import { computed, defineAsyncComponent, defineComponent, provide, ref } from "vue";
 import { useStore } from "vuex";
 import { APP_MODE } from "@core/constants/navigator";
 
@@ -38,10 +38,6 @@ export default defineComponent({
   components: {
     AppDefaultLayout,
     CodeGenerator: defineAsyncComponent(() => import("./components/code/generator.vue")),
-    // eslint-disable-next-line vue/no-unused-components
-    Header: defineAsyncComponent(() => import("./components/header/header.vue")),
-    // eslint-disable-next-line vue/no-unused-components
-    LayerTree: defineAsyncComponent(() => import("./components/tree/layer.vue")),
     Navigator: defineAsyncComponent(() => import("./components/navigator/navigator.vue")),
     TransitionToolbar,
     TransitionCanvas,
@@ -57,9 +53,7 @@ export default defineComponent({
 
     const selectedTransition = computed(() => store.state.selectedTransition);
 
-    onBeforeMount(() => {
-      store.dispatch("getTransitions");
-    });
+    store.dispatch("getTransitions");
 
     return {
       currentTime,

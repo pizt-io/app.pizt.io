@@ -1,5 +1,21 @@
 <template>
   <ul class="p-3">
+    <li class="mb-5 flex items-center justify-end">
+      <span
+        v-if="transition?.userId"
+        class="text-sm text-white underline cursor-pointer hover:text-gray-200"
+        @click="handleDeleteTransition"
+      >
+        Remove
+      </span>
+      <el-button
+        type="success"
+        class="bg-success hover:bg-success-600 border-none h-6 min-h-6 px-5 py-1 ml-3 rounded-none"
+        @click="handleUpdateTransition"
+      >
+        Save
+      </el-button>
+    </li>
     <li class="mb-3">
       <label class="pz-label w-full justify-between">
         <span class="pz-label__inner">
@@ -119,6 +135,11 @@ import { RootState } from "@store/state";
 import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
+import { ElMessageBox, ElMessage } from "element-plus";
+
+import "element-plus/theme-chalk/el-message-box.css";
+import "element-plus/theme-chalk/el-message.css";
+
 import CubicBezier from "@/core/components/cubic-bezier";
 
 export default defineComponent({
@@ -126,48 +147,85 @@ export default defineComponent({
   components: {
     CubicBezier,
   },
-  setup() {
+  props: {
+    transition: Object,
+    default: () => ({}),
+  },
+  setup(props) {
     const store = useStore<RootState>();
-
-    const selectedTransition = computed(() => {
-      return store.state.selectedTransition;
-    });
+    const userSession = computed(() => store.state.userSession);
 
     const form = ref({
-      animationName: selectedTransition.value.animationName,
-      animationIsInfinite: 0,
-      animationHasDelay: 0,
-      animationDuration: 1,
-      animationDelay: 0,
-      animationTimingFunction: "",
-      animationIterationCount: 1,
-      animationFillMode: "forwards",
-      animationDirection: "alternate",
-      animationPlayState: "",
-    });
+      ...props.transition,
+      animationName: props.transition?.animationName,
+      animationDuration: +props.transition?.animationDuration?.replace("s", "") || 1,
+      animationTimingFunction:
+        props.transition?.animationTimingFunction?.replace("cubic-bezier(", "")?.replace(")", "") ||
+        "0.42,0.69,0.69,0.42",
+    } as any);
 
     watch(
-      () => form.value,
-      () => {
-        form.value.animationName = selectedTransition.value.animationName;
-
-        store.commit("SET_ANIMATION_SETTINGS", {
-          ...form.value,
-          animationDuration: `${form.value.animationDuration}s`,
-          animationTimingFunction: `cubic-bezier(${
-            form.value.animationTimingFunction || "0.42,0.69,0.69,0.42"
-          })`,
-          animationDelay: form.value.animationHasDelay ? `${form.value.animationDelay}s` : 0,
-          animationIterationCount: form.value.animationIsInfinite
-            ? "infinite"
-            : form.value.animationIterationCount,
+      () => props.transition,
+      (newValue) => {
+        form.value = Object.assign({}, form.value, {
+          ...newValue,
+          animationName: newValue?.animationName,
+          animationDuration: +newValue?.animationDuration?.replace("s", "") || 1,
+          animationTimingFunction:
+            newValue?.animationTimingFunction?.replace("cubic-bezier(", "")?.replace(")", "") ||
+            "0.42,0.69,0.69,0.42",
         });
+      },
+    );
+
+    watch(
+      form,
+      (newValue) => {
+        store.dispatch(
+          "updateSelectedTransition",
+          Object.assign({}, newValue, {
+            animationDuration: `${newValue.animationDuration}s`,
+            animationTimingFunction: `cubic-bezier(${
+              newValue.animationTimingFunction || "0.42,0.69,0.69,0.42"
+            })`,
+            animationDelay: newValue.animationHasDelay ? `${newValue.animationDelay}s` : 0,
+            animationIterationCount: newValue.animationIsInfinite
+              ? "infinite"
+              : newValue.animationIterationCount,
+          }),
+        );
       },
       { immediate: true, deep: true },
     );
 
+    const handleDeleteTransition = () => {
+      ElMessageBox.confirm("Are your sure you want to delete this transition?", "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      }).then(async () => {
+        await store.dispatch("deleteTransition", props.transition);
+
+        ElMessage({
+          type: "success",
+          message: "Deleted transition",
+        });
+      });
+    };
+
+    const handleUpdateTransition = async () => {
+      if (userSession.value?.user) {
+        await store.dispatch("updateTransition", props.transition);
+        ElMessage.success("Transition is saved successfully!");
+      } else {
+        ElMessage.warning("You need to login to save custom transition!");
+      }
+    };
+
     return {
       form,
+      handleDeleteTransition,
+      handleUpdateTransition,
     };
   },
 });

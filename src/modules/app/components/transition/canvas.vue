@@ -7,7 +7,7 @@
       <span>Replay</span>
     </div>
     <div v-html="parsedStyle" />
-    <div :key="forceUpdateFlag" :style="selectedTransition" class="w-32 h-32 bg-primary" />
+    <div :key="forceUpdateFlag" :style="selectedTransition" :class="$style.canvasBlock" />
   </div>
 </template>
 
@@ -77,5 +77,11 @@ export default defineComponent({
       background-color: color(primary, 700);
     }
   }
+}
+
+.canvasBlock {
+  background-color: color();
+
+  @include size(8rem);
 }
 </style>

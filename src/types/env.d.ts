@@ -9,4 +9,5 @@ interface ImportMeta {
 
 interface Window {
   parsePathDataString: (path: string) => { type: string; values: number[] }[];
+  supabase: SupabaseClient;
 }

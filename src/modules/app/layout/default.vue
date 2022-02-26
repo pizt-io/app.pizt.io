@@ -124,10 +124,6 @@ export default defineComponent({
     CanvasBackgroundToggle: defineAsyncComponent(
       () => import("../components/canvas-toggle-bg.vue"),
     ),
-    // eslint-disable-next-line vue/no-unused-components
-    Header: defineAsyncComponent(() => import("../components/header/header.vue")),
-    // eslint-disable-next-line vue/no-unused-components
-    LayerTree: defineAsyncComponent(() => import("../components/tree/layer.vue")),
   },
   props: {
     mode: {

@@ -10,3 +10,7 @@ export const supabase = createClient(
     detectSessionInUrl: true,
   },
 );
+
+if (window) {
+  window.supabase = supabase;
+}
