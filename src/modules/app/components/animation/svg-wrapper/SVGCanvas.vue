@@ -1,6 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, h, ref } from "vue";
-import { SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@/core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@/core/constants/svg";
 
 import SVGElementComponent from "@modules/app/components/animation/svg-wrapper/SVGElement.vue";
 import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
@@ -20,10 +20,11 @@ export default defineComponent({
       default: 0,
     },
   },
-  emits: ["update:modelElements"],
+  emits: ["update:modelElements", SVG_CANVAS_EVENT.SELECT, SVG_CANVAS_EVENT.DESELECT],
   setup(props) {
     const elements = ref(props.modelElements);
 
+    // TODO: Panzoom
     const {
       selectedElements,
       handleMousedownCanvas,

@@ -7,7 +7,7 @@
       <AnimationToolbar @toolbar-item-click="handleToolbarAction" />
     </template>
     <template v-slot:panel-animation>
-      <AnimationPanel @change="handleChangeSelectedElement" />
+      <AnimationPanel :element="selectElement" @change="handleChangeSelectedElement" />
     </template>
     <template v-slot:canvas-animation>
       <AnimationCanvas v-on="svgCanvasHandlers" :key="forceUpdateFlag" :time="currentTime" />
@@ -101,8 +101,16 @@ export default defineComponent({
       currentTime.value = time;
     };
 
+    const selectElement = ref<any>(null);
+
     const svgCanvasHandlers = {
       [SVG_CANVAS_EVENT.UPDATE]: _updateTimelineElements,
+      [SVG_CANVAS_EVENT.SELECT]: (elements: any) => {
+        selectElement.value = Object.values(elements)[0];
+      },
+      [SVG_CANVAS_EVENT.DESELECT]: () => {
+        selectElement.value = null;
+      },
     };
 
     const svgTimelineHandlers = {
@@ -163,6 +171,7 @@ export default defineComponent({
       forceUpdateFlag,
       handleToolbarAction,
       handleChangeSelectedElement,
+      selectElement,
     };
   },
 });

@@ -4,7 +4,13 @@
       :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
       class="bg-white dark:bg-gray-800"
     >
-      <SVGCanvas v-model:modelElements="canvasElements" ref="canvasRef" :time="time" />
+      <SVGCanvas
+        v-model:modelElements="canvasElements"
+        ref="canvasRef"
+        :time="time"
+        @select="$emit(SVG_CANVAS_EVENT.SELECT, $event)"
+        @deselect="$emit(SVG_CANVAS_EVENT.DESELECT, $event)"
+      />
     </div>
   </div>
 </template>
@@ -63,6 +69,7 @@ export default defineComponent({
     };
 
     return {
+      SVG_CANVAS_EVENT,
       canvasElements,
       canvasRef,
       canvasWidth,

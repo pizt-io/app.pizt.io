@@ -1,5 +1,3 @@
-import moment from "moment";
-
 export enum SVG_ELEMENT_TYPE {
   CIRCLE = "circle",
   RECT = "rect",
@@ -80,6 +78,8 @@ export const SVG_CANVAS_EVENT_THROTTLE = 100;
 export enum SVG_CANVAS_EVENT {
   UPDATE = "update",
   UPDATE_TIME = "update-time",
+  SELECT = "select",
+  DESELECT = "deselect",
 }
 
 export enum SVG_CANVAS_GLOBAL_EVENT {
@@ -105,7 +105,6 @@ export enum ToolbarAction {
 
 export const defaultElementMapping = {
   [ToolbarAction.RECTANGLE]: {
-    _id: moment().format("x").toString(),
     type: SVG_ELEMENT_TYPE.RECT,
     name: "Rectangle New",
     attrs: {
@@ -130,7 +129,6 @@ export const defaultElementMapping = {
     animations: {},
   },
   [ToolbarAction.SQUARE]: {
-    _id: moment().format("x").toString(),
     type: SVG_ELEMENT_TYPE.RECT,
     name: "Square New",
     attrs: {
@@ -155,7 +153,6 @@ export const defaultElementMapping = {
     animations: {},
   },
   [ToolbarAction.CIRCLE]: {
-    _id: moment().format("x").toString(),
     type: SVG_ELEMENT_TYPE.CIRCLE,
     name: "Circle New",
     attrs: {
@@ -180,7 +177,6 @@ export const defaultElementMapping = {
     animations: {},
   },
   [ToolbarAction.ELLIPSE]: {
-    _id: moment().format("x").toString(),
     type: SVG_ELEMENT_TYPE.ELLIPSE,
     name: "Ellipse New",
     attrs: {
@@ -205,7 +201,6 @@ export const defaultElementMapping = {
     animations: {},
   },
   [ToolbarAction.POLYLINE]: {
-    _id: moment().format("x").toString(),
     type: SVG_ELEMENT_TYPE.POLYLINE,
     name: "Polyline New",
     attrs: {
@@ -230,7 +225,6 @@ export const defaultElementMapping = {
     animations: {},
   },
   [ToolbarAction.PATH]: {
-    _id: moment().format("x").toString(),
     type: SVG_ELEMENT_TYPE.PATH,
     name: "Path New",
     attrs: {

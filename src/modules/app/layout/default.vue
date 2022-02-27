@@ -37,7 +37,7 @@
       <div class="h-28 bg-primary-500">
         <slot name="app-navigator" />
       </div>
-      <div class="bg-dark-600">
+      <div class="bg-dark-600 flex-1">
         <transition
           appear
           enter-active-class="animated slideInLeft"
@@ -64,7 +64,7 @@
           <CanvasBackgroundToggle />
           <slot name="canvas-transition" />
         </div>
-        <div v-else class="flex items-center justify-center relative bg-dark-500 overflow-auto p-5">
+        <div v-else class="flex items-center justify-center relative bg-dark-500 p-5">
           <CanvasBackgroundToggle />
           <slot name="canvas-animation" />
         </div>
@@ -219,6 +219,8 @@ export default defineComponent({
 .layoutLeft {
   grid-area: left;
   overflow-y: auto;
+
+  @include flexBox($direction: column);
 }
 .layoutBody {
   grid-area: body;
@@ -265,7 +267,7 @@ export default defineComponent({
 
   .layoutBody {
     grid-template-rows: 2.25rem auto;
-    overflow-y: auto;
+    overflow: hidden;
   }
 }
 </style>

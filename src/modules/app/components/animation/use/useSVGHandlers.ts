@@ -1,5 +1,5 @@
 import { computed, getCurrentInstance, inject, onMounted, Ref, ref } from "vue";
-import { SVG_CANVAS_EVENT_THROTTLE } from "@core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_CANVAS_EVENT_THROTTLE } from "@core/constants/svg";
 // import { findStageBetweenStages } from "@modules/app/utils/keyframes/findStageBetweenStages";
 import { useSVGCanvasEvents } from "./events/useSVGCanvasEvents";
 
@@ -42,6 +42,8 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
   const handleClearSelection = () => {
     selectedElements.value = {};
     _isSelectingMultiple.value = false;
+
+    vm?.$emit(SVG_CANVAS_EVENT.DESELECT);
   };
 
   const _handleMouseup = () => {
@@ -113,6 +115,8 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
     if (Object.keys(selectedElements.value).length > 1) {
       _isSelectingMultiple.value = true;
     }
+
+    vm?.$emit(SVG_CANVAS_EVENT.SELECT, selectedElements.value);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
