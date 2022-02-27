@@ -48,7 +48,12 @@
         </transition>
       </div>
     </div>
-    <div :class="$style.layoutBody">
+    <div
+      tabindex="0"
+      :class="$style.layoutBody"
+      @focusin="handleFocusLayoutBody"
+      @focusout="handleBlurLayoutBody"
+    >
       <div class="bg-dark-800">
         <transition
           appear
@@ -64,7 +69,7 @@
           <CanvasBackgroundToggle />
           <slot name="canvas-transition" />
         </div>
-        <div v-else class="flex items-center justify-center relative bg-dark-500 p-5">
+        <div v-else class="flex items-center justify-center relative bg-dark-500 overflow-hidden">
           <CanvasBackgroundToggle />
           <slot name="canvas-animation" />
         </div>
@@ -110,7 +115,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, onMounted, ref } from "vue";
+import { computed, defineAsyncComponent, defineComponent, onMounted, provide, ref } from "vue";
 
 import { APP_MODE } from "@core/constants/navigator";
 import { useRerenderer } from "@/core/use/useRerenderer";
@@ -185,6 +190,16 @@ export default defineComponent({
 
     const currentUser = computed(() => store.state.userSession?.user);
 
+    const isLayoutBodyFocus = ref(false);
+    provide("isLayoutBodyFocus", isLayoutBodyFocus);
+
+    const handleFocusLayoutBody = () => {
+      isLayoutBodyFocus.value = true;
+    };
+    const handleBlurLayoutBody = () => {
+      isLayoutBodyFocus.value = false;
+    };
+
     return {
       isMain,
       isSvg,
@@ -195,6 +210,9 @@ export default defineComponent({
       handleSigninGithub,
       handleSignoutGithub,
       currentUser,
+      isLayoutBodyFocus,
+      handleFocusLayoutBody,
+      handleBlurLayoutBody,
     };
   },
 });
@@ -226,6 +244,11 @@ export default defineComponent({
   grid-area: body;
   display: grid;
   grid-template-rows: 7rem auto 3rem;
+
+  &:focus {
+    outline: none;
+    border: 1px dashed color(gray);
+  }
 }
 .layoutFooter {
   position: relative;

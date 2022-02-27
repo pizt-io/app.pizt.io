@@ -351,7 +351,7 @@ export default defineComponent({
       let stageIndex = stages.findIndex((e: any) => e.time === time);
 
       if (stageIndex >= 0) {
-        if (value) {
+        if (value !== undefined) {
           _set(stages[stageIndex], attr, value);
         }
       } else {

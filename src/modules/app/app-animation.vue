@@ -10,7 +10,13 @@
       <AnimationPanel :element="selectElement" @change="handleChangeSelectedElement" />
     </template>
     <template v-slot:canvas-animation>
-      <AnimationCanvas v-on="svgCanvasHandlers" :key="forceUpdateFlag" :time="currentTime" />
+      <AnimationCanvas
+        v-on="svgCanvasHandlers"
+        :key="forceUpdateFlag"
+        :time="currentTime"
+        :transform="canvasTransform"
+        @panzoom="handlePanzoomCanvas"
+      />
     </template>
     <template v-slot:timeline-animation>
       <AnimationTimeline
@@ -162,6 +168,16 @@ export default defineComponent({
       _updateTimelineElements();
     };
 
+    const canvasTransform = ref({
+      translateX: 0,
+      translateY: 0,
+      scale: 1,
+    });
+
+    const handlePanzoomCanvas = (payload: any) => {
+      canvasTransform.value = payload;
+    };
+
     return {
       currentTime,
       svgCanvasHandlers,
@@ -172,6 +188,8 @@ export default defineComponent({
       handleToolbarAction,
       handleChangeSelectedElement,
       selectElement,
+      canvasTransform,
+      handlePanzoomCanvas,
     };
   },
 });

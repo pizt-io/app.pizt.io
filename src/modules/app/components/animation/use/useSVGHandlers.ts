@@ -12,6 +12,7 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
   const vm = getCurrentInstance()?.proxy;
 
   const currentTime = inject("currentTime") as Ref<number>;
+  const isLayoutBodyFocus = inject("isLayoutBodyFocus") as Ref<boolean>;
 
   const selectedElements = ref<{ [x: string]: any }>({});
   const isMousedown = ref(false);
@@ -27,11 +28,15 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
 
   const { isHoldingShift } = useSVGCanvasEvents({
     onKeydownControlA: (e: KeyboardEvent) => {
-      e.preventDefault();
-      elements.value.forEach((el: any) => {
-        selectedElements.value[el._id] = el;
-      });
-      _isSelectingMultiple.value = true;
+      if (isLayoutBodyFocus.value) {
+        e.preventDefault();
+        elements.value.forEach((el: any) => {
+          selectedElements.value[el._id] = el;
+        });
+        _isSelectingMultiple.value = true;
+      } else {
+        return;
+      }
     },
   });
 
@@ -58,38 +63,42 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
    */
   const _handleMousemove = (e: MouseEvent) => {
     if (!_isTransforming.value && isMousedown.value) {
-      Object.keys(selectedElements.value).forEach((elementId: string) => {
-        const element = selectedElements.value[elementId];
-        const stages = element.animations[AttributesMap.TRANSLATE];
+      const selectedElementsKeys = Object.keys(selectedElements.value);
 
-        if (stages) {
-          const currentStageIndex = stages.findIndex(
-            (stage: any) => stage.time === currentTime.value,
-          );
+      if (selectedElementsKeys.length > 0) {
+        selectedElementsKeys.forEach((elementId: string) => {
+          const element = selectedElements.value[elementId];
+          const stages = element.animations[AttributesMap.TRANSLATE];
 
-          if (currentStageIndex >= 0) {
-            stages[currentStageIndex].transform.translate.translateX += e.movementX;
-            stages[currentStageIndex].transform.translate.translateY += e.movementY;
-          } else {
-            // Create new keyframe
-            const currentStage = findStageBetweenStages(
-              stages,
-              currentTime.value,
-              AttributesMap.TRANSLATE,
+          if (stages) {
+            const currentStageIndex = stages.findIndex(
+              (stage: any) => stage.time === currentTime.value,
             );
 
-            stages.push(currentStage);
-          }
-        } else {
-          element.attrs.transform.translate.translateX += e.movementX;
-          element.attrs.transform.translate.translateY += e.movementY;
-        }
-      });
+            if (currentStageIndex >= 0) {
+              stages[currentStageIndex].transform.translate.translateX += e.movementX;
+              stages[currentStageIndex].transform.translate.translateY += e.movementY;
+            } else {
+              // Create new keyframe
+              const currentStage = findStageBetweenStages(
+                stages,
+                currentTime.value,
+                AttributesMap.TRANSLATE,
+              );
 
-      _onUpdateElementPositions({
-        elements: selectedElements.value,
-        path: AttributesMap.TRANSLATE,
-      });
+              stages.push(currentStage);
+            }
+          } else {
+            element.attrs.transform.translate.translateX += e.movementX;
+            element.attrs.transform.translate.translateY += e.movementY;
+          }
+        });
+
+        _onUpdateElementPositions({
+          elements: selectedElements.value,
+          path: AttributesMap.TRANSLATE,
+        });
+      }
     }
   };
 

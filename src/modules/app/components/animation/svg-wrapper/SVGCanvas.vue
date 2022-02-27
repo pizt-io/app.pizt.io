@@ -24,7 +24,6 @@ export default defineComponent({
   setup(props) {
     const elements = ref(props.modelElements);
 
-    // TODO: Panzoom
     const {
       selectedElements,
       handleMousedownCanvas,

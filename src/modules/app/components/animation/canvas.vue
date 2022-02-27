@@ -1,7 +1,18 @@
 <template>
-  <div class="flex justify-center items-center" :key="forceUpdateFlag">
+  <div
+    class="flex justify-center items-center w-full h-full"
+    :key="forceUpdateFlag"
+    :style="{
+      cursor: isHoldingSpace ? 'all-scroll' : 'default',
+    }"
+    @mousedown="handleMousedownCanvas"
+  >
     <div
-      :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }"
+      :style="{
+        width: canvasWidth + 'px',
+        height: canvasHeight + 'px',
+        transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
+      }"
       class="bg-white dark:bg-gray-800"
     >
       <SVGCanvas
@@ -25,11 +36,13 @@ import {
   defineAsyncComponent,
   defineComponent,
   getCurrentInstance,
+  onMounted,
   ref,
 } from "vue";
 import { useStore } from "vuex";
 import { SVG_CANVAS_EVENT, SVG_UPDATE_TYPE } from "@/core/constants/svg";
 import { useRerenderer } from "@/core/use/useRerenderer";
+import { useSVGCanvasEvents } from "./use/events/useSVGCanvasEvents";
 
 export default defineComponent({
   name: "AnimationCanvas",
@@ -43,7 +56,16 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
+    transform: {
+      type: Object,
+      default: () => ({
+        translateX: 0,
+        translateY: 0,
+        scale: 1,
+      }),
+    },
   },
+  emits: [SVG_CANVAS_EVENT.UPDATE, SVG_CANVAS_EVENT.SELECT, SVG_CANVAS_EVENT.DESELECT, "panzoom"],
   setup(props, { emit }) {
     const vm = getCurrentInstance()?.proxy;
 
@@ -63,10 +85,47 @@ export default defineComponent({
     });
 
     const { forceUpdate, forceUpdateFlag } = useRerenderer();
-
     const updateElements = () => {
       vm?.$nextTick(forceUpdate);
     };
+
+    const isMousedownLayoutBody = ref(false);
+    const { isHoldingSpace, isHoldingAlt } = useSVGCanvasEvents({
+      onKeydownSpace: (e) => {
+        e.preventDefault();
+      },
+      onKeydownAlt: (e) => {
+        e.preventDefault();
+      },
+    });
+
+    const handleMousedownCanvas = () => {
+      isMousedownLayoutBody.value = true;
+    };
+
+    onMounted(() => {
+      window.addEventListener("mouseup", () => {
+        isMousedownLayoutBody.value = false;
+      });
+      window.addEventListener("mousemove", (e: MouseEvent) => {
+        if (isMousedownLayoutBody.value && isHoldingSpace.value) {
+          emit("panzoom", {
+            translateX: props.transform.translateX + e.movementX,
+            translateY: props.transform.translateY + e.movementY,
+            scale: props.transform.scale,
+          });
+        }
+      });
+      document.addEventListener("wheel", (e: WheelEvent) => {
+        if (isHoldingAlt.value) {
+          emit("panzoom", {
+            translateX: props.transform.translateX,
+            translateY: props.transform.translateY,
+            scale: props.transform.scale + e.deltaY / 1000,
+          });
+        }
+      });
+    });
 
     return {
       SVG_CANVAS_EVENT,
@@ -77,6 +136,8 @@ export default defineComponent({
       hasUnsyncedDataFromOtherUser,
       updateElements,
       forceUpdateFlag,
+      handleMousedownCanvas,
+      isHoldingSpace,
     };
   },
 });
