@@ -87,18 +87,11 @@ export default defineComponent({
             onMouseout: handleElementMouseout,
           },
           [
-            h(
-              element.type,
-              {
-                ...elementAttrs.svg,
-                style: elementStyle,
-                onMousedown: () => handleElementSelection({ id: element._id, element }),
-              },
-              [
-                h("animate", {}),
-                // Animation tags
-              ],
-            ),
+            h(element.type, {
+              ...elementAttrs.svg,
+              style: elementStyle,
+              onMousedown: () => handleElementSelection({ id: element._id, element }),
+            }),
             [
               selectedElements.value[element._id]
                 ? h(

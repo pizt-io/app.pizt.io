@@ -48,8 +48,6 @@ export const actions: Actions = {
           .match({ _id: payload._id, userId: payload.userId });
 
         commit("UPDATE_TRANSITION", res.data?.[0]);
-
-        console.log("updateTransition", res.data);
       } catch (err) {
         console.error("catched", err);
       }

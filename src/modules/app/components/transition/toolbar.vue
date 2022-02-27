@@ -71,7 +71,7 @@ import { useStore } from "vuex";
 
 export default defineComponent({
   name: "TransitionToolbar",
-  setup() {
+  setup(props, { emit }) {
     const store = useStore<RootState>();
     const userSession = computed(() => store.state.userSession);
 
@@ -93,6 +93,8 @@ export default defineComponent({
     const handleSelectTransition = (transition: any) => {
       if (transition._id !== selectedTransition.value._id) {
         store.dispatch("updateSelectedTransition", transition);
+
+        emit("select", transition);
       }
     };
 

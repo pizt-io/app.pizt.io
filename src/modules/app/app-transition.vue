@@ -4,10 +4,10 @@
       <Navigator />
     </template>
     <template v-slot:panel-transition>
-      <TransitionPanel :transition="selectedTransition" />
+      <TransitionPanel :transition="selectedTransition" ref="transitionPanelRef" />
     </template>
     <template v-slot:toolbar-transition>
-      <TransitionToolbar :transition="selectedTransition" />
+      <TransitionToolbar :transition="selectedTransition" @select="handleSelectTransition" />
     </template>
     <template v-slot:canvas-transition>
       <TransitionCanvas :time="currentTime" />
@@ -22,7 +22,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, provide, ref } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  getCurrentInstance,
+  provide,
+  ref,
+} from "vue";
 import { useStore } from "vuex";
 import { APP_MODE } from "@core/constants/navigator";
 
@@ -45,6 +52,7 @@ export default defineComponent({
     TransitionTimeline,
   },
   setup() {
+    const vm = getCurrentInstance()?.proxy;
     const currentTime = ref(1000);
 
     provide("currentTime", currentTime);
@@ -55,10 +63,21 @@ export default defineComponent({
 
     store.dispatch("getTransitions");
 
+    const transitionPanelRef = ref(null);
+    const handleSelectTransition = () => {
+      const transitionPanelElement = transitionPanelRef.value as any;
+
+      if (transitionPanelElement) {
+        vm?.$nextTick(transitionPanelElement.buildForm);
+      }
+    };
+
     return {
       currentTime,
       APP_MODE,
       selectedTransition,
+      handleSelectTransition,
+      transitionPanelRef,
     };
   },
 });

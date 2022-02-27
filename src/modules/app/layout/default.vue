@@ -18,17 +18,20 @@
         <img class="inline-block h-4 w-auto mr-1" src="/img/github.png" alt="Github" />
         {{ currentUser.email }} (Logout)
       </span>
-      <el-dropdown v-if="isSvg" size="mini" trigger="click">
-        <span class="text-white cursor-pointer">
-          Project list<i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <template v-slot:dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item>Project 1</el-dropdown-item>
-            <el-dropdown-item>Project 2</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <div>
+        <span class="text-white text-sm cursor-pointer mr-3"> <span>+</span> New project </span>
+        <el-dropdown v-if="isSvg" size="mini" trigger="click">
+          <span class="text-white cursor-pointer">
+            Project list<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <template v-slot:dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>Project 1</el-dropdown-item>
+              <el-dropdown-item>Project 2</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
     </div>
     <div :class="$style.layoutLeft">
       <div class="h-28 bg-primary-500">

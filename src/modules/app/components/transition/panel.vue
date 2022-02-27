@@ -150,21 +150,29 @@ export default defineComponent({
     CubicBezier,
   },
   props: {
-    transition: Object,
-    default: () => ({}),
+    transition: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup(props) {
     const store = useStore<RootState>();
     const userSession = computed(() => store.state.userSession);
 
-    const form = ref({
-      ...props.transition,
-      animationName: props.transition?.animationName,
-      animationDuration: +props.transition?.animationDuration?.replace("s", "") || 1,
-      animationTimingFunction:
-        props.transition?.animationTimingFunction?.replace("cubic-bezier(", "")?.replace(")", "") ||
-        "0.42,0.69,0.69,0.42",
-    } as any);
+    const form = ref({} as any);
+
+    const buildForm = () => {
+      form.value = {
+        ...props.transition,
+        animationName: props.transition?.animationName,
+        animationDuration: +props.transition?.animationDuration?.replace("s", "") || 1,
+        animationTimingFunction:
+          props.transition?.animationTimingFunction
+            ?.replace("cubic-bezier(", "")
+            ?.replace(")", "") || "0.42,0.69,0.69,0.42",
+      };
+    };
+    buildForm();
 
     watch(
       form,
@@ -183,7 +191,7 @@ export default defineComponent({
             : transition.animationIterationCount,
         });
       },
-      { immediate: true },
+      { immediate: true, deep: true },
     );
 
     const handleDeleteTransition = () => {
@@ -214,6 +222,7 @@ export default defineComponent({
       form,
       handleDeleteTransition,
       handleUpdateTransition,
+      buildForm,
     };
   },
 });
