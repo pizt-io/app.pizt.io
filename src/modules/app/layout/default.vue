@@ -19,18 +19,20 @@
         {{ currentUser.email }} (Logout)
       </span>
       <div>
-        <span class="text-white text-sm cursor-pointer mr-3"> <span>+</span> New project </span>
-        <el-dropdown v-if="isSvg" size="mini" trigger="click">
-          <span class="text-white cursor-pointer">
-            Project list<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <template v-slot:dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>Project 1</el-dropdown-item>
-              <el-dropdown-item>Project 2</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <template v-if="isSvg">
+          <span class="text-white text-sm cursor-pointer mr-3"> <span>+</span> New project </span>
+          <el-dropdown size="mini" trigger="click">
+            <span class="text-white cursor-pointer">
+              Project list<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <template v-slot:dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>Project 1</el-dropdown-item>
+                <el-dropdown-item>Project 2</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </template>
       </div>
     </div>
     <div :class="$style.layoutLeft">

@@ -8,6 +8,12 @@ import { SVG_UPDATE_TYPE } from "@/core/constants/svg";
 export type Mutations = MutationTree<AppState>;
 
 export const mutations: Mutations = {
+  SET_PROJECTS(state, projects) {
+    state.projects = projects;
+  },
+  SET_SELECTED_PROJECT(state, selectedProject) {
+    state.selectedProject = selectedProject;
+  },
   ADD_ELEMENTS(state, payload: any) {
     state.elements.push(payload);
   },
