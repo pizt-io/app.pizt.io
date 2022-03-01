@@ -15,7 +15,12 @@ import { defaultProject } from "@/core/constants/template";
 export type Actions = ActionTree<AppState, RootState>;
 
 const updateElementsOnDatabase = _debounce(function (elements: any[]) {
-  supabase.from("animations").upsert(Object.values(elements), { onConflict: "_id" });
+  Promise.all(
+    elements.map(
+      async (element) =>
+        await supabase.from("animations").update(element).match({ _id: element._id }),
+    ),
+  );
 }, SVG_CANVAS_EVENT_THROTTLE);
 
 export const actions: Actions = {
@@ -31,11 +36,12 @@ export const actions: Actions = {
         .select()
         .eq("userId", rootState.userSession?.user?.id);
 
-      if (res.data?.length) {
-        commit("SET_PROJECTS", res.data);
-      } else {
+      if (!res.data?.length) {
         res = await dispatch("createProject", defaultProject);
       }
+
+      commit("SET_PROJECTS", res.data);
+
       if (!state.selectedProject.name) {
         commit("SET_SELECTED_PROJECT", res.data?.[0]);
       }
@@ -53,20 +59,31 @@ export const actions: Actions = {
 
     return res.data;
   },
-  addElement: async ({ commit }, element: any) => {
-    const res = await supabase.from("animations").insert(element);
+  addElement: async ({ state, commit }, element: any) => {
+    const res = await supabase
+      .from("animations")
+      .insert(Object.assign({}, element, { projectId: state.selectedProject._id }));
+
     commit("ADD_ELEMENTS", res.data?.[0]);
   },
-  removeElement: async ({ commit }, element: any) => {
-    const res = await supabase.from("animations").delete().match({ _id: element._id });
+  removeElements: async ({ commit }, elements: any[]) => {
+    return await Promise.all(
+      elements.map(async (element) => {
+        commit("REMOVE_ELEMENTS", element);
 
-    commit("REMOVE_ELEMENTS", res.data?.[0]);
+        return await supabase.from("animations").delete().match({ _id: element._id });
+      }),
+    );
   },
-  updateElements: async ({ commit }, payload: any) => {
+  updateElements: async ({ state, commit }, payload: any) => {
     const { elements, path, type } = payload;
 
     commit("SET_ELEMENTS", { elements, path, type });
 
-    updateElementsOnDatabase(elements);
+    updateElementsOnDatabase(
+      Object.values(elements).map((e: any) =>
+        Object.assign({}, e, { projectId: state.selectedProject._id }),
+      ),
+    );
   },
 };

@@ -32,13 +32,16 @@ export const mutations: Mutations = {
 
           changedElementIds.forEach((id) => {
             const el = state.elements.find((el: any) => el._id === id) as unknown as any;
-            const animations = el.animations;
 
-            if (animations[path]) {
-              el.animations[path] = elements[id].animations[path];
-            } else {
-              el.animations = elements[id].animations;
-              el.attrs = elements[id].attrs;
+            if (el) {
+              const animations = el.animations;
+
+              if (animations[path]) {
+                el.animations[path] = elements[id].animations[path];
+              } else {
+                el.animations = elements[id].animations;
+                el.attrs = elements[id].attrs;
+              }
             }
           });
           break;

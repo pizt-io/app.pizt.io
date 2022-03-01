@@ -100,10 +100,10 @@
           <TimelineItem
             v-model="elements[index]"
             :ref="'timelineItemRef' + index"
-            :key="`t-${elements[index]._id}-`"
-            :expanded="expandedElements.includes(elements[index]._id)"
+            :key="`t-${elements[index]?._id}-`"
+            :expanded="expandedElements.includes(elements[index]?._id)"
             :duration="timelineDuration"
-            :selected="selectedElement._id === elements[index]._id"
+            :selected="selectedElement?._id === elements[index]?._id"
             @expand="handleExpandItem(index)"
             @change="handleChangeItem(index, $event)"
             @changeKeyframe="handleChangeItemKeyframe(index, $event)"
@@ -393,7 +393,7 @@ export default defineComponent({
 
     const handleAddAnimation = (animation: { label: string; value: AttributesMap }) => {
       const elementIndex = elements.value.findIndex(
-        (e: any) => e._id === selectedElement.value._id,
+        (e: any) => e._id === selectedElement.value?._id,
       );
 
       if (elementIndex >= 0) {

@@ -65,7 +65,13 @@ export default defineComponent({
       }),
     },
   },
-  emits: [SVG_CANVAS_EVENT.UPDATE, SVG_CANVAS_EVENT.SELECT, SVG_CANVAS_EVENT.DESELECT, "panzoom"],
+  emits: [
+    SVG_CANVAS_EVENT.UPDATE,
+    SVG_CANVAS_EVENT.SELECT,
+    SVG_CANVAS_EVENT.DESELECT,
+    SVG_CANVAS_EVENT.DELETE,
+    "panzoom",
+  ],
   setup(props, { emit }) {
     const vm = getCurrentInstance()?.proxy;
 
@@ -96,6 +102,11 @@ export default defineComponent({
       },
       onKeydownAlt: (e) => {
         e.preventDefault();
+      },
+      onKeydownDelete: (e) => {
+        e.preventDefault();
+
+        emit(SVG_CANVAS_EVENT.DELETE);
       },
     });
 

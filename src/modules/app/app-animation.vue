@@ -7,7 +7,7 @@
       <AnimationToolbar @toolbar-item-click="handleToolbarAction" />
     </template>
     <template v-slot:panel-animation>
-      <AnimationPanel :element="selectElement" @change="handleChangeSelectedElement" />
+      <AnimationPanel :element="selectElements?.[0]" @change="handleChangeSelectedElement" />
     </template>
     <template v-slot:canvas-animation>
       <AnimationCanvas
@@ -96,6 +96,8 @@ export default defineComponent({
 
     // Fetch data from backend
     const _getCanvasDataOnce = async () => {
+      await store.dispatch("app/getProjects");
+
       await store.dispatch("app/getElements");
 
       _updateCanvasElements();
@@ -107,15 +109,22 @@ export default defineComponent({
       currentTime.value = time;
     };
 
-    const selectElement = ref<any>(null);
+    const selectElements = ref<any>(null);
 
     const svgCanvasHandlers = {
       [SVG_CANVAS_EVENT.UPDATE]: _updateTimelineElements,
       [SVG_CANVAS_EVENT.SELECT]: (elements: any) => {
-        selectElement.value = Object.values(elements)[0];
+        selectElements.value = Object.values(elements);
       },
       [SVG_CANVAS_EVENT.DESELECT]: () => {
-        selectElement.value = null;
+        selectElements.value = null;
+      },
+      [SVG_CANVAS_EVENT.DELETE]: async () => {
+        await store.dispatch("app/removeElements", selectElements.value);
+
+        _updateCanvasElements();
+
+        selectElements.value = null;
       },
     };
 
@@ -187,7 +196,7 @@ export default defineComponent({
       forceUpdateFlag,
       handleToolbarAction,
       handleChangeSelectedElement,
-      selectElement,
+      selectElements,
       canvasTransform,
       handlePanzoomCanvas,
     };

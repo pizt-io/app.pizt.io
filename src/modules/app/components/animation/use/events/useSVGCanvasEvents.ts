@@ -7,6 +7,7 @@ export const useSVGCanvasEvents = (listeners: { [x: string]: (...args: any[]) =>
     onKeydownAlt = () => {},
     onKeydownShift = () => {},
     onKeydownSpace = () => {},
+    onKeydownDelete = () => {},
     onKeydownControlA = () => {},
     onKeydownControlB = () => {},
     onKeydownControlC = () => {},
@@ -52,11 +53,18 @@ export const useSVGCanvasEvents = (listeners: { [x: string]: (...args: any[]) =>
     } else if (e.altKey) {
       onKeydownAlt(e);
       isHoldingAlt.value = true;
-    } else if (e.key === " ") {
-      onKeydownSpace(e);
-      isHoldingSpace.value = true;
     } else {
-      onKeydown(e);
+      switch (e.key) {
+        case " ":
+          onKeydownSpace(e);
+          isHoldingSpace.value = true;
+          break;
+        case "Delete":
+          onKeydownDelete(e);
+          break;
+        default:
+          onKeydown(e);
+      }
     }
   };
 

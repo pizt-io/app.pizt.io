@@ -20,15 +20,23 @@
       </span>
       <div>
         <template v-if="isSvg">
-          <span class="text-white text-sm cursor-pointer mr-3"> <span>+</span> New project </span>
-          <el-dropdown size="mini" trigger="click">
+          <span class="text-white text-sm cursor-pointer mr-3" @click="handleCreateNewProject">
+            <span>+</span> New project
+          </span>
+          <el-dropdown size="mini" trigger="click" @command="handleSelectProject">
             <span class="text-white cursor-pointer">
-              Project list<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ selectedProject?.name || "Project list" }}
+              <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <template v-slot:dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>Project 1</el-dropdown-item>
-                <el-dropdown-item>Project 2</el-dropdown-item>
+                <el-dropdown-item
+                  v-for="project in projectList"
+                  :key="project._id"
+                  :command="project"
+                >
+                  {{ project.name }}
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -192,6 +200,22 @@ export default defineComponent({
 
     const currentUser = computed(() => store.state.userSession?.user);
 
+    const projectList = computed(() => store.getters["app/getProjects"]);
+    const selectedProject = computed(() => store.getters["app/getSelectedProject"]);
+
+    const handleCreateNewProject = async () => {
+      const res = await store.dispatch("app/createProject");
+
+      store.commit("app/SET_SELECTED_PROJECT", res.data?.[0]);
+
+      await store.dispatch("app/getElements");
+    };
+    const handleSelectProject = async (project: any) => {
+      store.commit("app/SET_SELECTED_PROJECT", project);
+
+      await store.dispatch("app/getElements");
+    };
+
     const isLayoutBodyFocus = ref(false);
     provide("isLayoutBodyFocus", isLayoutBodyFocus);
 
@@ -215,6 +239,10 @@ export default defineComponent({
       isLayoutBodyFocus,
       handleFocusLayoutBody,
       handleBlurLayoutBody,
+      projectList,
+      selectedProject,
+      handleCreateNewProject,
+      handleSelectProject,
     };
   },
 });

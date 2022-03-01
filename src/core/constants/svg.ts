@@ -78,6 +78,7 @@ export const SVG_CANVAS_EVENT_THROTTLE = 100;
 export enum SVG_CANVAS_EVENT {
   UPDATE = "update",
   UPDATE_TIME = "update-time",
+  DELETE = "delete",
   SELECT = "select",
   DESELECT = "deselect",
 }
