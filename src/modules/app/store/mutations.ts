@@ -11,6 +11,13 @@ export const mutations: Mutations = {
   SET_PROJECTS(state, projects) {
     state.projects = projects;
   },
+  SET_PROJECT(state, payload) {
+    const projectIndex = state.projects.findIndex((p) => p._id === payload._id);
+
+    if (projectIndex >= 0) {
+      state.projects[projectIndex] = payload;
+    }
+  },
   SET_SELECTED_PROJECT(state, selectedProject) {
     state.selectedProject = selectedProject;
   },
@@ -19,6 +26,9 @@ export const mutations: Mutations = {
   },
   REMOVE_ELEMENTS(state, payload) {
     state.elements = state.elements.filter((element) => element._id !== payload._id);
+  },
+  SET_PROJECT_ELEMENTS(state, payload) {
+    state.elements = payload;
   },
   SET_ELEMENTS(state, payload = {}) {
     const { elements, path, type } = payload;
@@ -31,7 +41,7 @@ export const mutations: Mutations = {
           const changedElementIds = Object.keys(elements);
 
           changedElementIds.forEach((id) => {
-            const el = state.elements.find((el: any) => el._id === id) as unknown as any;
+            const el = state.elements.find((el: any) => +el._id === +id) as unknown as any;
 
             if (el) {
               const animations = el.animations;

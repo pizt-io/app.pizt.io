@@ -1,5 +1,5 @@
 <template>
-  <AppDefaultLayout :mode="APP_MODE.SVG">
+  <AppDefaultLayout :mode="APP_MODE.SVG" @select="handleSelectProject">
     <template v-slot:app-navigator>
       <Navigator />
     </template>
@@ -62,7 +62,7 @@ export default defineComponent({
 
     const canvasWidth = ref(700);
     const canvasHeight = ref(450);
-    const currentTime = ref(1000);
+    const currentTime = ref(0);
     const duration = ref(5000);
 
     provide("currentTime", currentTime);
@@ -123,6 +123,7 @@ export default defineComponent({
         await store.dispatch("app/removeElements", selectElements.value);
 
         _updateCanvasElements();
+        _updateTimelineElements();
 
         selectElements.value = null;
       },
@@ -187,6 +188,13 @@ export default defineComponent({
       canvasTransform.value = payload;
     };
 
+    const handleSelectProject = async () => {
+      _updateCanvasElements();
+      _updateTimelineElements();
+
+      selectElements.value = null;
+    };
+
     return {
       currentTime,
       svgCanvasHandlers,
@@ -199,6 +207,7 @@ export default defineComponent({
       selectElements,
       canvasTransform,
       handlePanzoomCanvas,
+      handleSelectProject,
     };
   },
 });

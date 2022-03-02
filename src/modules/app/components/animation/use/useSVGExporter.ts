@@ -119,31 +119,25 @@ export const useSVGExporter = () => {
                 AttributesMap.SKEW,
               ].includes(path as AttributesMap);
 
+              const keyframe = Math.round((animation.time * 100) / duration.value) + "%";
+
               if (isTransformProperty) {
                 _set(
                   animationTransform,
-                  (animation.time * 100) / duration.value + "%",
-                  Object.assign(
-                    {},
-                    _get(animationTransform, (animation.time * 100) / duration.value + "%"),
-                    {
-                      [path]: cssValue,
-                    },
-                  ),
+                  keyframe,
+                  Object.assign({}, _get(animationTransform, keyframe), {
+                    [path]: cssValue,
+                  }),
                 );
 
                 usedTransformKeys.add(path);
               } else if (animationValue && ANIMATABLE_CSS_PROPERTY_MAPPING[path]) {
                 _set(
                   elementAnimations,
-                  (animation.time * 100) / duration.value + "%",
-                  Object.assign(
-                    {},
-                    _get(elementAnimations, (animation.time * 100) / duration.value + "%"),
-                    {
-                      [path]: cssValue,
-                    },
-                  ),
+                  keyframe,
+                  Object.assign({}, _get(elementAnimations, keyframe), {
+                    [path]: cssValue,
+                  }),
                 );
               }
             });
@@ -170,10 +164,12 @@ export const useSVGExporter = () => {
             ).join(" ")} } `;
           });
 
+          console.log(animationTransform, elementAnimations);
+
           return `
-          <${element.type} id="${element._id}" ${elementSVGString}></${element.type}>
+          <${element.type} id="pz-${element._id}" ${elementSVGString}></${element.type}>
           <style>
-            #${element._id} {
+            #pz-${element._id} {
               ${elementAttrsString}
               --x: ${elementAttrs.transform.translate.translateX}px;
               --y: ${elementAttrs.transform.translate.translateY}px;
@@ -183,9 +179,9 @@ export const useSVGExporter = () => {
               --skewX: ${elementAttrs.transform.skew.skewX}deg;
               --skewY: ${elementAttrs.transform.skew.skewY}deg;
               transform: translate(var(--x), var(--y)) scale(var(--scaleX), var(--scaleY)) rotate(var(--rotate)) skew(var(--skewX), var(--skewY));
-              animation: ${element._id} ${duration.value}ms linear forwards;
+              animation: pz-${element._id} ${duration.value}ms linear forwards;
             }
-            @keyframes ${element._id} { ${elementAnimationsString} }
+            @keyframes pz-${element._id} { ${elementAnimationsString} }
           </style>
         `;
         })

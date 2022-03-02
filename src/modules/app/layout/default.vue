@@ -21,7 +21,13 @@
       <div>
         <template v-if="isSvg">
           <span class="text-white text-sm cursor-pointer mr-3" @click="handleCreateNewProject">
-            <span>+</span> New project
+            <i class="icon-heart"></i> New project
+          </span>
+          <span class="text-white text-sm cursor-pointer mr-3" @click="handleEditProject">
+            <i class="icon-paint-brush"></i> Edit project
+          </span>
+          <span class="text-white text-sm cursor-pointer mr-3" @click="handleDeleteProject">
+            <i class="icon-remove"></i> Delete project
           </span>
           <el-dropdown size="mini" trigger="click" @command="handleSelectProject">
             <span class="text-white cursor-pointer">
@@ -136,6 +142,8 @@ import { supabase } from "@/core/plugins/supabase";
 import { useStore } from "vuex";
 import { RootState } from "@/store/state";
 
+import { ElMessage, ElMessageBox } from "element-plus";
+
 export default defineComponent({
   name: "AppDefaultLayout",
   components: {
@@ -149,7 +157,8 @@ export default defineComponent({
       default: APP_MODE.MAIN,
     },
   },
-  setup(props) {
+  emits: ["select"],
+  setup(props, { emit }) {
     const store = useStore<RootState>();
 
     const isMain = computed(() => props.mode === APP_MODE.MAIN);
@@ -203,6 +212,16 @@ export default defineComponent({
     const projectList = computed(() => store.getters["app/getProjects"]);
     const selectedProject = computed(() => store.getters["app/getSelectedProject"]);
 
+    const handleDeleteProject = async () => {
+      if (projectList.value.length === 1) {
+        ElMessage({
+          type: "warning",
+          message: "You cannot delete the only project.",
+        });
+      } else {
+        await store.dispatch("app/removeProject");
+      }
+    };
     const handleCreateNewProject = async () => {
       const res = await store.dispatch("app/createProject");
 
@@ -214,6 +233,25 @@ export default defineComponent({
       store.commit("app/SET_SELECTED_PROJECT", project);
 
       await store.dispatch("app/getElements");
+
+      emit("select", project);
+    };
+    const handleEditProject = async () => {
+      ElMessageBox.prompt("Please input new project's name", "Edit project", {
+        confirmButtonText: "Submit",
+        cancelButtonText: "Cancel",
+      }).then(async ({ value }: any) => {
+        if (value) {
+          await store.dispatch("app/updateProject", {
+            name: value,
+          });
+
+          ElMessage({
+            type: "success",
+            message: "Updated project successfully",
+          });
+        }
+      });
     };
 
     const isLayoutBodyFocus = ref(false);
@@ -243,6 +281,8 @@ export default defineComponent({
       selectedProject,
       handleCreateNewProject,
       handleSelectProject,
+      handleEditProject,
+      handleDeleteProject,
     };
   },
 });

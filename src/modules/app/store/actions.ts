@@ -24,6 +24,19 @@ const updateElementsOnDatabase = _debounce(function (elements: any[]) {
 }, SVG_CANVAS_EVENT_THROTTLE);
 
 export const actions: Actions = {
+  async removeProject({ state, dispatch }) {
+    await supabase.from("projects").delete().match({ _id: state.selectedProject._id });
+    await dispatch("getProjects");
+  },
+  async updateProject({ state, commit }, payload) {
+    const res = await supabase
+      .from("projects")
+      .update(Object.assign({}, state.selectedProject, payload))
+      .match({ _id: state.selectedProject._id });
+
+    commit("SET_SELECTED_PROJECT", res.data?.[0]);
+    commit("SET_PROJECT", res.data?.[0]);
+  },
   async createProject({ rootState }, project = defaultProject) {
     return await supabase
       .from("projects")
@@ -55,7 +68,7 @@ export const actions: Actions = {
       .select()
       .eq("projectId", state.selectedProject._id);
 
-    commit("SET_ELEMENTS", { elements: res.data });
+    commit("SET_PROJECT_ELEMENTS", res.data);
 
     return res.data;
   },

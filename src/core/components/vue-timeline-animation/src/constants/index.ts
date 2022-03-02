@@ -15,7 +15,7 @@ export enum AttributesMap {
 }
 
 export const ANIMATED_ATTRIBUTES = [
-  AttributesMap.POSITION,
+  // AttributesMap.POSITION,
   AttributesMap.SIZE,
   AttributesMap.TRANSLATE,
   AttributesMap.SCALE,

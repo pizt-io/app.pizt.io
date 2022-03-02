@@ -39,13 +39,13 @@ export default defineComponent({
       {
         label: "Rectangle",
         action: ToolbarAction.RECTANGLE,
-        icon: "icon-square1",
+        icon: "icon-square",
         iconClass: "scale-y-70 scale-x-110",
       },
       {
         label: "Square",
         action: ToolbarAction.SQUARE,
-        icon: "icon-square1",
+        icon: "icon-square",
         iconClass: "",
       },
       {
@@ -60,24 +60,12 @@ export default defineComponent({
         icon: "icon-circle",
         iconClass: "scale-y-70 scale-x-110",
       },
-      {
-        label: "Polyline",
-        action: ToolbarAction.POLYLINE,
-        icon: "icon-linegraph",
-        iconClass: "scale-70",
-      },
-      {
-        label: "Path",
-        action: ToolbarAction.PATH,
-        icon: "icon-favorite_outline",
-        iconClass: "",
-      },
-      {
-        label: "Crop",
-        action: ToolbarAction.CROP,
-        icon: "icon-crop",
-        iconClass: "",
-      },
+      // {
+      //   label: "Crop",
+      //   action: ToolbarAction.CROP,
+      //   icon: "icon-crop",
+      //   iconClass: "",
+      // },
     ];
 
     const handleToolbarItemClick = (action: ToolbarAction) => {
