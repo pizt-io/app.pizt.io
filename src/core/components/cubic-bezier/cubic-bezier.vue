@@ -1,17 +1,86 @@
 <template>
   <div :class="$style.cubicBezierContainer">
     <span :class="$style.cubicBezierYAxis">PROGRESSION</span>
-    <div ref="canvasRef" id="canvasCubicBezier" :class="$style.cubicBezierInner" />
+    <div :class="$style.cubicBezierInner">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        :width="width"
+        :height="height"
+        :viewBox="[0, 0, width, height].join(' ')"
+      >
+        <g id="bg">
+          <line
+            v-for="i in 10"
+            :key="'l-' + i"
+            x1="0"
+            :x2="width"
+            :y1="(height * i) / 10"
+            :y2="(height * i) / 10"
+            style="stroke: var(--color-gray-400); stroke-width: 1"
+          />
+          <line
+            x1="0"
+            :y1="height"
+            :x2="width"
+            y2="0"
+            style="stroke: var(--color-gray-400); stroke-width: 1"
+          />
+          <!-- Cubic bezier curve -->
+          <path
+            :d="`M 0 ${height} C ${model.x1 * width} ${(1 - model.y1) * height} ${
+              model.x2 * width
+            } ${(1 - model.y2) * height} ${width} 0`"
+            style="fill: transparent; stroke: var(--color-gray-800); stroke-width: 3"
+          />
+          <!-- Handle 1 -->
+          <line
+            x1="0"
+            :y1="height"
+            :x2="model.x1 * width"
+            :y2="(1 - model.y1) * height"
+            style="stroke: var(--color-gray-600); stroke-width: 3"
+          />
+          <!-- Handle 2 -->
+          <line
+            :x1="width"
+            y1="0"
+            :x2="model.x2 * width"
+            :y2="(1 - model.y2) * height"
+            style="stroke: var(--color-gray-600); stroke-width: 3"
+          />
+          <g :transform="`translate(${model.x1 * width}, ${(1 - model.y1) * height})`">
+            <circle
+              cx="0"
+              cy="0"
+              r="4"
+              style="fill: var(--color-gray-200); cursor: pointer"
+              @mousedown="handleMouseDownHandle1"
+            />
+          </g>
+          <g :transform="`translate(${model.x2 * width}, ${(1 - model.y2) * height})`">
+            <circle
+              cx="0"
+              cy="0"
+              r="4"
+              style="fill: var(--color-gray-200); cursor: pointer"
+              @mousedown="handleMouseDownHandle2"
+            />
+          </g>
+        </g>
+      </svg>
+    </div>
     <span :class="$style.cubicBezierXAxis">TIME</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, onBeforeMount, onMounted, ref } from "vue";
 
-import Interactive from "https://vectorjs.org/interactive.js";
+import _debounce from "lodash/debounce";
+import { minMax } from "../vue-timeline-animation/src/utils/minMax";
 
 export default defineComponent({
+  name: "CubicBezier",
   props: {
     modelValue: {
       type: String,
@@ -20,105 +89,77 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    const canvasRef = ref<HTMLCanvasElement | null>(null);
+    const width = 160;
+    const height = 160;
+
+    const model = ref({
+      x1: 0.42,
+      y1: 0.69,
+      x2: 0.69,
+      y2: 0.42,
+    });
+    onBeforeMount(() => {
+      const [x1, y1, x2, y2] = props.modelValue.split(",");
+      model.value = {
+        x1: parseFloat(x1),
+        y1: parseFloat(y1),
+        x2: parseFloat(x2),
+        y2: parseFloat(y2),
+      };
+    });
+
+    const _updateModel = _debounce(function () {
+      model.value.x1 = Math.round(model.value.x1 * 100) / 100;
+      model.value.y1 = Math.round(model.value.y1 * 100) / 100;
+      model.value.x2 = Math.round(model.value.x2 * 100) / 100;
+      model.value.y2 = Math.round(model.value.y2 * 100) / 100;
+
+      emit(
+        "update:modelValue",
+        [model.value.x1, model.value.y1, model.value.x2, model.value.y2].join(","),
+      );
+    }, 100);
+
+    const isMouseDownHandle1 = ref(false);
+    const isMouseDownHandle2 = ref(false);
+
+    const handleMouseDownHandle1 = () => {
+      isMouseDownHandle1.value = true;
+    };
+    const handleMouseDownHandle2 = () => {
+      isMouseDownHandle2.value = true;
+    };
+
+    const handleMouseUp = () => {
+      isMouseDownHandle1.value = false;
+      isMouseDownHandle2.value = false;
+    };
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isMouseDownHandle1.value) {
+        model.value.x1 += e.movementX / width;
+        model.value.y1 -= e.movementY / height;
+        model.value.x1 = minMax(0, 1, model.value.x1);
+        model.value.y1 = minMax(0, 1, model.value.y1);
+      } else if (isMouseDownHandle2.value) {
+        model.value.x2 += e.movementX / width;
+        model.value.y2 -= e.movementY / height;
+        model.value.x2 = minMax(0, 1, model.value.x2);
+        model.value.y2 = minMax(0, 1, model.value.y2);
+      }
+      _updateModel();
+    };
 
     onMounted(() => {
-      const canvas = canvasRef.value;
-
-      if (canvas) {
-        // Construct an interactive within the HTML element with the id "my-interactive"
-        let interactive = new Interactive("canvasCubicBezier");
-
-        interactive.width = 160;
-        interactive.height = 160;
-
-        let baseLine = interactive.line(0, interactive.height, interactive.width, 0);
-        baseLine.style.stroke = "var(--color-gray-400)";
-        baseLine.style.strokeWidth = 1;
-
-        for (let index = 0; index < 10; index++) {
-          const _temp = interactive.line(
-            0,
-            index * (interactive.height / (10 - 1)),
-            interactive.width,
-            index * (interactive.height / (10 - 1)),
-          );
-          _temp.style.stroke = "var(--color-gray-400)";
-          _temp.style.strokeWidth = 1;
-        }
-
-        const _prev = (props.modelValue || "0.42,0.69,0.69,0.42").split(",");
-        const previousValue = [
-          {
-            x: +_prev[0] * interactive.width,
-            y: (1 - +_prev[1]) * interactive.height,
-          },
-          {
-            x: +_prev[2] * interactive.width,
-            y: (1 - +_prev[3]) * interactive.height,
-          },
-        ];
-
-        let handle1 = interactive.control(previousValue[0].x, previousValue[0].y);
-        let handlebar1 = interactive.line(0, interactive.height, handle1.x, handle1.y);
-        handlebar1.style.stroke = "var(--color-gray-600)";
-        handlebar1.style.strokeWidth = 3;
-
-        let handle2 = interactive.control(previousValue[1].x, previousValue[1].y);
-        let handlebar2 = interactive.line(interactive.width, 0, handle2.x, handle2.y);
-        handlebar2.style.stroke = "var(--color-gray-600)";
-        handlebar2.style.strokeWidth = 3;
-
-        let path = interactive.path("");
-        path.style.fill = "transparent";
-        path.style.stroke = "var(--color-gray-800)";
-        path.style.strokeWidth = 3;
-
-        path.update = function () {
-          path.d = `M 0 ${interactive.height} C ${handle1.x} ${handle1.y} ${handle2.x} ${handle2.y} ${interactive.width} 0`;
-        };
-        path.update();
-        path.addDependency(handle1);
-        path.addDependency(handle2);
-
-        const _emitInputEvent = () => {
-          const _value = [
-            handle1.x / interactive.width,
-            1 - handle1.y / interactive.height,
-            handle2.x / interactive.width,
-            1 - handle2.y / interactive.height,
-          ]
-            .map((item) => item.toFixed(2))
-            .join(",");
-
-          emit("update:modelValue", _value);
-        };
-        _emitInputEvent();
-
-        handlebar1.update = function () {
-          this.x2 = handle1.x;
-          this.y2 = handle1.y;
-          _emitInputEvent();
-        };
-        handlebar1.addDependency(handle1);
-        handlebar2.update = function () {
-          this.x2 = handle2.x;
-          this.y2 = handle2.y;
-          _emitInputEvent();
-        };
-        handlebar2.addDependency(handle2);
-
-        handle1.style.fill = "var(--color-gray-200)";
-        handle2.style.fill = "var(--color-gray-200)";
-        handle2.point.r = 4;
-        handle2.handle.r = 4;
-        handle1.point.r = 4;
-        handle1.handle.r = 4;
-      }
+      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
     });
 
     return {
-      canvasRef,
+      width,
+      height,
+      model,
+      handleMouseDownHandle1,
+      handleMouseDownHandle2,
     };
   },
 });
