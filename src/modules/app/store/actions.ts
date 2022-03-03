@@ -66,7 +66,7 @@ export const actions: Actions = {
     const res = await supabase
       .from("animations")
       .select()
-      .eq("projectId", state.selectedProject._id);
+      .eq("projectId", state.selectedProject?._id);
 
     commit("SET_PROJECT_ELEMENTS", res.data);
 

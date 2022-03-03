@@ -19,7 +19,7 @@
         {{ currentUser.email }} (Logout)
       </span>
       <div>
-        <template v-if="isSvg">
+        <template v-if="isSvg && currentUser">
           <span class="text-white text-sm cursor-pointer mr-3" @click="handleCreateNewProject">
             <i class="icon-heart"></i> New project
           </span>

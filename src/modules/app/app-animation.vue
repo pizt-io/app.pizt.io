@@ -4,7 +4,7 @@
       <Navigator />
     </template>
     <template v-slot:toolbar-animation>
-      <AnimationToolbar @toolbar-item-click="handleToolbarAction" />
+      <AnimationToolbar v-if="currentUser" @toolbar-item-click="handleToolbarAction" />
     </template>
     <template v-slot:panel-animation>
       <AnimationPanel :element="selectElements?.[0]" @change="handleChangeSelectedElement" />
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { defineAsyncComponent, defineComponent, onMounted, provide, ref } from "vue";
+import { defineAsyncComponent, defineComponent, onMounted, provide, ref, computed } from "vue";
 
 import { SVG_CANVAS_EVENT } from "@core/constants/svg";
 
@@ -94,6 +94,8 @@ export default defineComponent({
       forceUpdate();
     };
 
+    const currentUser = computed(() => store.state.userSession?.user);
+
     // Fetch data from backend
     const _getCanvasDataOnce = async () => {
       await store.dispatch("app/getProjects");
@@ -103,7 +105,11 @@ export default defineComponent({
       _updateCanvasElements();
       _updateTimelineElements();
     };
-    onMounted(_getCanvasDataOnce);
+    onMounted(() => {
+      if (currentUser.value) {
+        _getCanvasDataOnce();
+      }
+    });
 
     const _updateCurrentTime = (time: number) => {
       currentTime.value = time;
@@ -196,6 +202,7 @@ export default defineComponent({
     };
 
     return {
+      currentUser,
       currentTime,
       svgCanvasHandlers,
       svgTimelineHandlers,
