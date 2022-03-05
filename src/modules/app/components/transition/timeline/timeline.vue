@@ -147,6 +147,7 @@ export default defineComponent({
 
 .timelineKeyframeEditorDrawer {
   background-color: color(gray, 800) !important;
+  overflow-y: auto;
 
   :global {
     .el-drawer__header {

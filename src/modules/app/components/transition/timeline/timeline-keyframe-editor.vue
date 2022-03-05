@@ -14,16 +14,19 @@ import "element-plus/theme-chalk/el-dropdown.css";
 import "element-plus/theme-chalk/el-dropdown-menu.css";
 import "element-plus/theme-chalk/el-dropdown-item.css";
 
+import TimelineTransformInputItem from "./timeline-property-input-item/timeline-transform-input-item.vue";
+import CubicBezier from "@/core/components/cubic-bezier";
+
 const INPUT_COMPONENT_MAPPING = Object.freeze({
   [SupportProperties.OPACITY]: ElInputNumber,
   [SupportProperties.COLOR]: ElColorPicker,
   [SupportProperties.BACKGROUND_COLOR]: ElColorPicker,
   [SupportProperties.WIDTH]: ElInputNumber,
   [SupportProperties.HEIGHT]: ElInputNumber,
-  [SupportProperties.MARGIN]: ElInputNumber,
-  [SupportProperties.PADDING]: ElInputNumber,
-  [SupportProperties.TRANSFORM]: ElInputNumber,
-  [SupportProperties.TRANSFORM_ORIGIN]: ElInputNumber,
+  // [SupportProperties.MARGIN]: ElInputNumber,
+  // [SupportProperties.PADDING]: ElInputNumber,
+  [SupportProperties.TRANSFORM]: TimelineTransformInputItem,
+  // [SupportProperties.TRANSFORM_ORIGIN]: ElInputNumber,
   // [SupportProperties.TRANSLATE]: ElInputNumber,
   // [SupportProperties.SCALE]: ElInputNumber,
   // [SupportProperties.ROTATE]: ElInputNumber,
@@ -35,12 +38,12 @@ const INPUT_COMPONENT_MAPPING = Object.freeze({
   // [SupportProperties.RIGHT]: ElInputNumber,
   // [SupportProperties.BOTTOM]: ElInputNumber,
   // [SupportProperties.OUTLINE]: ElInputNumber,
-  [SupportProperties.ANIMATION_TIMING_FUNCTION]: ElInputNumber,
+  [SupportProperties.ANIMATION_TIMING_FUNCTION]: CubicBezier,
 } as any);
 
 const inputNumberBaseConfig = {
   min: 0,
-  max: 1,
+  // max: 1,
   step: 0.1,
   controlsPosition: "right",
 };
@@ -66,7 +69,9 @@ const INPUT_PROPS_MAPPING = Object.freeze({
   // [SupportProperties.RIGHT]: inputNumberBaseConfig,
   // [SupportProperties.BOTTOM]: inputNumberBaseConfig,
   // [SupportProperties.OUTLINE]: inputNumberBaseConfig,
-  [SupportProperties.ANIMATION_TIMING_FUNCTION]: inputNumberBaseConfig,
+  [SupportProperties.ANIMATION_TIMING_FUNCTION]: {
+    valueKey: "cubic-bezier",
+  },
 } as any);
 
 export default defineComponent({
@@ -98,7 +103,7 @@ export default defineComponent({
                   h(
                     "div",
                     {
-                      class: "w-full flex items-center justify-between mt-2",
+                      class: "w-full flex flex-wrap items-center justify-between mt-2",
                     },
                     [
                       h(

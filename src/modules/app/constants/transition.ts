@@ -40,5 +40,5 @@ export const cssPropertiesLabelMapping = Object.freeze({
   // [SupportProperties.RIGHT]: "Right",
   // [SupportProperties.BOTTOM]: "Bottom",
   // [SupportProperties.OUTLINE]: "Outline",
-  [SupportProperties.ANIMATION_TIMING_FUNCTION]: "Animation Timing Function",
+  [SupportProperties.ANIMATION_TIMING_FUNCTION]: "Timing",
 });

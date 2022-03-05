@@ -69,7 +69,9 @@
         </g>
       </svg>
     </div>
-    <span :class="$style.cubicBezierXAxis">TIME</span>
+    <span :class="$style.cubicBezierXAxis">
+      TIME ({{ model.x1 }}, {{ model.y1 }}, {{ model.x2 }}, {{ model.y2 }})
+    </span>
   </div>
 </template>
 
@@ -77,13 +79,18 @@
 import { defineComponent, onBeforeMount, onMounted, ref } from "vue";
 
 import _debounce from "lodash/debounce";
+import _isArray from "lodash/isArray";
+
 import { minMax } from "../vue-timeline-animation/src/utils/minMax";
 
 export default defineComponent({
   name: "CubicBezier",
   props: {
-    modelValue: {
+    valueKey: {
       type: String,
+    },
+    modelValue: {
+      type: [String, Object],
       default: "0.42,0.69,0.69,0.42",
     },
   },
@@ -99,13 +106,21 @@ export default defineComponent({
       y2: 0.42,
     });
     onBeforeMount(() => {
-      const [x1, y1, x2, y2] = props.modelValue.split(",");
-      model.value = {
-        x1: parseFloat(x1),
-        y1: parseFloat(y1),
-        x2: parseFloat(x2),
-        y2: parseFloat(y2),
-      };
+      const value = !props.valueKey
+        ? props.modelValue
+        : _isArray(props.modelValue)
+        ? (props.modelValue as any)[0][props.valueKey]
+        : (props.modelValue as any)[props.valueKey];
+
+      if (value) {
+        const [x1, y1, x2, y2] = value.replace(/(cubic-bezier)|[()]/g).split(",");
+        model.value = {
+          x1: parseFloat(x1),
+          y1: parseFloat(y1),
+          x2: parseFloat(x2),
+          y2: parseFloat(y2),
+        };
+      }
     });
 
     const _updateModel = _debounce(function () {
@@ -114,10 +129,10 @@ export default defineComponent({
       model.value.x2 = Math.round(model.value.x2 * 100) / 100;
       model.value.y2 = Math.round(model.value.y2 * 100) / 100;
 
-      emit(
-        "update:modelValue",
-        [model.value.x1, model.value.y1, model.value.x2, model.value.y2].join(","),
+      const cubicBezier = [model.value.x1, model.value.y1, model.value.x2, model.value.y2].join(
+        ",",
       );
+      emit("update:modelValue", props.valueKey ? { [props.valueKey]: cubicBezier } : cubicBezier);
     }, 100);
 
     const isMouseDownHandle1 = ref(false);
