@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref, VNode } from "vue";
 import { SVG_CANVAS_EVENT, SVG_ELEMENT_PREFIX, SVG_ELEMENT_TYPE } from "@/core/constants/svg";
 
 import SVGElementComponent from "@modules/app/components/animation/svg-wrapper/SVGElement.vue";
@@ -29,10 +29,7 @@ export default defineComponent({
       handleMousedownCanvas,
       handleClearSelection,
       handleElementSelection,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      handleElementResize,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      handleElementRotate,
+      handleHandlerSelection,
       mouseOverElements,
       handleElementMouseover,
       handleElementMouseout,
@@ -100,7 +97,19 @@ export default defineComponent({
                       id: [SVG_ELEMENT_PREFIX, "bbox", index].join("-"),
                       key: [SVG_ELEMENT_PREFIX, "bbox", index].join("-"),
                     },
-                    [borderVNode, handleVNodes],
+                    [
+                      borderVNode,
+                      h(
+                        SVG_ELEMENT_TYPE.G,
+                        {},
+                        handleVNodes.map((vNode: VNode, index: number) =>
+                          h(vNode, {
+                            onMousedown: () =>
+                              handleHandlerSelection({ id: element._id, handlerIndex: index }),
+                          }),
+                        ),
+                      ),
+                    ],
                   )
                 : mouseOverElements.value[element._id]
                 ? h(

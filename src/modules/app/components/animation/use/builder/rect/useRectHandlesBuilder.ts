@@ -34,7 +34,7 @@ export const useRectHandlesBuilder = (handlerOptions: any) => {
       ],
     ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"));
 
-    return h(SVG_ELEMENT_TYPE.G, {}, handlers);
+    return handlers;
   };
 
   return { build };

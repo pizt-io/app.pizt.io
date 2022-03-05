@@ -14,7 +14,7 @@ export const usePolylineHandlesBuilder = (handlerOptions: any) => {
       [attrs.svg.xMin - handlerOptions.width / 2, attrs.svg.yMax - handlerOptions.height / 2],
     ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"));
 
-    return h(SVG_ELEMENT_TYPE.G, {}, handlers);
+    return handlers;
   };
 
   return { build };

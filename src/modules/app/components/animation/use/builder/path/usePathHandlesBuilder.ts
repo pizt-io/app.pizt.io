@@ -25,7 +25,7 @@ export const usePathHandlesBuilder = (handlerOptions: any) => {
         ].map(([x, y], index: number) => rect(x, y, index % 2 ? "nesw-resize" : "nwse-resize"))
       : [];
 
-    return attrs.svg.boundingBox && h(SVG_ELEMENT_TYPE.G, {}, handlers);
+    return attrs.svg.boundingBox && handlers;
   };
 
   return { build };

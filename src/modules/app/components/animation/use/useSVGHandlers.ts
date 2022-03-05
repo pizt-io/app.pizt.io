@@ -8,6 +8,13 @@ import _cloneDeep from "lodash/cloneDeep";
 import { findStageBetweenStages } from "@/modules/app/utils/keyframes/findStageBetweenStages";
 import { AttributesMap } from "@/core/components/vue-timeline-animation/src/constants";
 
+enum ElementHandlerIndex {
+  TOP_LEFT,
+  TOP_RIGHT,
+  BOTTOM_RIGHT,
+  BOTTOM_LEFT,
+}
+
 export const useSVGHandlers = (elements: Ref<any[]>) => {
   const vm = getCurrentInstance()?.proxy;
 
@@ -15,7 +22,7 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
   const isLayoutBodyFocus = inject("isLayoutBodyFocus") as Ref<boolean>;
 
   const selectedElements = ref<{ [x: string]: any }>({});
-  const isMousedown = ref(false);
+  const isMousedownElement = ref(false);
 
   const _isTransforming = ref(false);
 
@@ -41,7 +48,7 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
   });
 
   const handleMousedownCanvas = () => {
-    isMousedown.value = true;
+    isMousedownElement.value = true;
   };
 
   const handleClearSelection = () => {
@@ -52,7 +59,10 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
   };
 
   const _handleMouseup = () => {
-    isMousedown.value = false;
+    isMousedownElement.value = false;
+    _isTransforming.value = false;
+
+    selectedHandlers.value = {};
   };
 
   /**
@@ -62,43 +72,10 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
    *
    */
   const _handleMousemove = (e: MouseEvent) => {
-    if (!_isTransforming.value && isMousedown.value) {
-      const selectedElementsKeys = Object.keys(selectedElements.value);
-
-      if (selectedElementsKeys.length > 0) {
-        selectedElementsKeys.forEach((elementId: string) => {
-          const element = selectedElements.value[elementId];
-          const stages = element.animations[AttributesMap.TRANSLATE];
-
-          if (stages) {
-            const currentStageIndex = stages.findIndex(
-              (stage: any) => stage.time === currentTime.value,
-            );
-
-            if (currentStageIndex >= 0) {
-              stages[currentStageIndex].transform.translate.translateX += e.movementX;
-              stages[currentStageIndex].transform.translate.translateY += e.movementY;
-            } else {
-              // Create new keyframe
-              const currentStage = findStageBetweenStages(
-                stages,
-                currentTime.value,
-                AttributesMap.TRANSLATE,
-              );
-
-              stages.push(currentStage);
-            }
-          } else {
-            element.attrs.transform.translate.translateX += e.movementX;
-            element.attrs.transform.translate.translateY += e.movementY;
-          }
-        });
-
-        _onUpdateElementPositions({
-          elements: selectedElements.value,
-          path: AttributesMap.TRANSLATE,
-        });
-      }
+    if (!_isTransforming.value && isMousedownElement.value) {
+      _handleElementMove(e);
+    } else if (_isTransforming.value) {
+      _handleElementResize(e);
     }
   };
 
@@ -128,11 +105,109 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
     vm?.$emit(SVG_CANVAS_EVENT.SELECT, selectedElements.value);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleElementResize = () => {};
+  const _handleElementResize = (e: MouseEvent) => {
+    const selectedHandlerKeys = Object.keys(selectedHandlers.value);
+
+    if (selectedHandlerKeys.length > 0) {
+      selectedHandlerKeys.forEach((elementId: string) => {
+        const element = selectedElements.value[elementId];
+        const stages = element.animations[AttributesMap.SIZE];
+        const handlerIndex = selectedHandlers.value[elementId];
+
+        if (stages) {
+          const currentStageIndex = stages.findIndex(
+            (stage: any) => stage.time === currentTime.value,
+          );
+
+          if (currentStageIndex >= 0) {
+            switch (handlerIndex) {
+              // case ElementHandlerIndex.TOP_LEFT:
+              // case ElementHandlerIndex.TOP_RIGHT:
+              case ElementHandlerIndex.BOTTOM_RIGHT:
+                stages[currentStageIndex].size.width += e.movementX;
+                stages[currentStageIndex].size.height += e.movementY;
+                break;
+              // case ElementHandlerIndex.BOTTOM_LEFT:
+            }
+          } else {
+            // Create new keyframe
+            const currentStage = findStageBetweenStages(
+              stages,
+              currentTime.value,
+              AttributesMap.SIZE,
+            );
+
+            stages.push(currentStage);
+          }
+        } else {
+          switch (handlerIndex) {
+            // case ElementHandlerIndex.TOP_LEFT:
+            // case ElementHandlerIndex.TOP_RIGHT:
+            case ElementHandlerIndex.BOTTOM_RIGHT:
+              element.attrs.size.width += e.movementX;
+              element.attrs.size.height += e.movementY;
+              break;
+            // case ElementHandlerIndex.BOTTOM_LEFT:
+          }
+        }
+      });
+
+      _onUpdateElementPositions({
+        elements: selectedElements.value,
+        path: AttributesMap.SIZE,
+      });
+    }
+  };
+
+  const _handleElementMove = (e: MouseEvent) => {
+    const selectedElementsKeys = Object.keys(selectedElements.value);
+
+    if (selectedElementsKeys.length > 0) {
+      selectedElementsKeys.forEach((elementId: string) => {
+        const element = selectedElements.value[elementId];
+        const stages = element.animations[AttributesMap.TRANSLATE];
+
+        if (stages) {
+          const currentStageIndex = stages.findIndex(
+            (stage: any) => stage.time === currentTime.value,
+          );
+
+          if (currentStageIndex >= 0) {
+            stages[currentStageIndex].transform.translate.translateX += e.movementX;
+            stages[currentStageIndex].transform.translate.translateY += e.movementY;
+          } else {
+            // Create new keyframe
+            const currentStage = findStageBetweenStages(
+              stages,
+              currentTime.value,
+              AttributesMap.TRANSLATE,
+            );
+
+            stages.push(currentStage);
+          }
+        } else {
+          element.attrs.transform.translate.translateX += e.movementX;
+          element.attrs.transform.translate.translateY += e.movementY;
+        }
+      });
+
+      _onUpdateElementPositions({
+        elements: selectedElements.value,
+        path: AttributesMap.TRANSLATE,
+      });
+    }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleElementRotate = () => {};
+
+  const selectedHandlers = ref<any>({});
+  const handleHandlerSelection = ({ id, handlerIndex }: { id: any; handlerIndex: number }) => {
+    selectedHandlers.value = {};
+    selectedHandlers.value[id] = handlerIndex;
+
+    _isTransforming.value = true;
+  };
 
   const _onUpdateElementPositions = _throttle(function ({ elements, path }: any) {
     vm?.$emit("update:modelElements", { elements: _cloneDeep(elements), path });
@@ -151,13 +226,13 @@ export const useSVGHandlers = (elements: Ref<any[]>) => {
     currentTime,
     elements,
     selectedElements,
-    isMousedown,
+    isMousedownElement,
     isHoldingShift,
     handleMousedownCanvas,
     handleClearSelection,
     handleElementSelection,
-    handleElementResize,
     handleElementRotate,
+    handleHandlerSelection,
     mouseOverElements,
     handleElementMouseover,
     handleElementMouseout,

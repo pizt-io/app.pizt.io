@@ -14,7 +14,7 @@ export const useLineHandlesBuilder = (handlerOptions: any) => {
       .filter((e) => e as number[])
       .map(([x, y]) => rect(x, y, "move"));
 
-    return h(SVG_ELEMENT_TYPE.G, {}, handlers);
+    return handlers;
   };
 
   return { build };
