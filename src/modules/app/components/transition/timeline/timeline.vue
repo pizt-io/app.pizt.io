@@ -15,7 +15,8 @@ export default defineComponent({
   props: {
     transition: Object,
   },
-  setup(props) {
+  emits: ["change"],
+  setup(props, { emit }) {
     const style = useCssModule();
     const store = useStore();
 
@@ -34,46 +35,45 @@ export default defineComponent({
       selectedKeyframe.value = null;
     };
 
-    const handleChangeKeyframe = ({
-      keyframe,
-      property,
-      value,
-    }: {
-      keyframe: any;
-      property: string;
-      value: any;
-    }) => {
-      if (props.transition) {
-        if (value === undefined) {
-          const keyframeData = _cloneDeep(selectedKeyframe.value.data);
-          delete keyframeData[property];
+    const handleChangeKeyframe =
+      (mode: string) =>
+      ({ keyframe, property, value }: { keyframe: any; property: string; value: any }) => {
+        if (props.transition) {
+          if (mode === "remove") {
+            const keyframeData = _cloneDeep(selectedKeyframe.value.data);
 
-          selectedKeyframe.value = {
-            index: keyframe.index,
-            data: keyframeData,
-          };
-        } else {
-          selectedKeyframe.value = {
-            index: keyframe.index,
-            data: Object.assign({}, props.transition.animationKeyframes[keyframe.index + "%"], {
-              [property]: value || 0,
+            if (keyframeData) {
+              delete keyframeData[property];
+
+              selectedKeyframe.value = {
+                index: keyframe.index,
+                data: keyframeData,
+              };
+            }
+          } else {
+            selectedKeyframe.value = {
+              index: keyframe.index,
+              data: Object.assign({}, props.transition.animationKeyframes[keyframe.index + "%"], {
+                [property]: value || 0,
+              }),
+            };
+          }
+
+          const updatedTransition = Object.assign({}, props.transition, {
+            animationKeyframes: Object.assign({}, props.transition.animationKeyframes, {
+              [keyframe.index + "%"]: Object.assign({}, selectedKeyframe.value.data),
             }),
-          };
+          });
+
+          if (!Object.keys(updatedTransition.animationKeyframes[keyframe.index + "%"]).length) {
+            delete updatedTransition.animationKeyframes[keyframe.index + "%"];
+          }
+
+          store.commit("UPDATE_SELECTED_TRANSITION", updatedTransition);
+
+          emit("change", updatedTransition);
         }
-
-        const updatedTransition = Object.assign({}, props.transition, {
-          animationKeyframes: Object.assign({}, props.transition.animationKeyframes, {
-            [keyframe.index + "%"]: Object.assign({}, selectedKeyframe.value.data),
-          }),
-        });
-
-        if (!Object.keys(updatedTransition.animationKeyframes[keyframe.index + "%"]).length) {
-          delete updatedTransition.animationKeyframes[keyframe.index + "%"];
-        }
-
-        store.commit("UPDATE_SELECTED_TRANSITION", updatedTransition);
-      }
-    };
+      };
 
     return () =>
       h(
@@ -96,9 +96,9 @@ export default defineComponent({
             },
             h(TimelineKeyframeEditor, {
               keyframe: selectedKeyframe.value,
-              onChange: handleChangeKeyframe,
-              onRemove: handleChangeKeyframe,
-              onAdd: handleChangeKeyframe,
+              onChange: handleChangeKeyframe("change"),
+              onRemove: handleChangeKeyframe("remove"),
+              onAdd: handleChangeKeyframe("change"),
             }),
           ),
           new Array(101).fill(0).map((_, index) => {

@@ -7,13 +7,13 @@
       <TransitionPanel :transition="selectedTransition" ref="transitionPanelRef" />
     </template>
     <template v-slot:toolbar-transition>
-      <TransitionToolbar :transition="selectedTransition" @select="handleSelectTransition" />
+      <TransitionToolbar :transition="selectedTransition" @select="handleChangeTransition" />
     </template>
     <template v-slot:canvas-transition>
       <TransitionCanvas :time="currentTime" />
     </template>
     <template v-slot:timeline-transition>
-      <TransitionTimeline :transition="selectedTransition" />
+      <TransitionTimeline :transition="selectedTransition" @change="handleChangeTransition" />
     </template>
     <template v-slot:code-generator>
       <CodeGenerator />
@@ -64,7 +64,7 @@ export default defineComponent({
     store.dispatch("getTransitions");
 
     const transitionPanelRef = ref(null);
-    const handleSelectTransition = () => {
+    const handleChangeTransition = () => {
       const transitionPanelElement = transitionPanelRef.value as any;
 
       if (transitionPanelElement) {
@@ -76,7 +76,7 @@ export default defineComponent({
       currentTime,
       APP_MODE,
       selectedTransition,
-      handleSelectTransition,
+      handleChangeTransition,
       transitionPanelRef,
     };
   },
