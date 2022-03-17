@@ -8,6 +8,8 @@ import "element-plus/theme-chalk/el-overlay.css";
 import TimelineKeyframeEditor from "./timeline-keyframe-editor.vue";
 import { useStore } from "vuex";
 
+import _cloneDeep from "lodash/cloneDeep";
+
 export default defineComponent({
   name: "TransitionTimeline",
   props: {
@@ -42,21 +44,34 @@ export default defineComponent({
       value: any;
     }) => {
       if (props.transition) {
-        selectedKeyframe.value = {
-          index: keyframe.index,
-          data: Object.assign({}, props.transition.animationKeyframes[keyframe.index + "%"], {
-            [property]: value || 0,
-          }),
-        };
+        if (value === undefined) {
+          const keyframeData = _cloneDeep(selectedKeyframe.value.data);
+          delete keyframeData[property];
 
-        store.commit(
-          "UPDATE_SELECTED_TRANSITION",
-          Object.assign({}, props.transition, {
-            animationKeyframes: Object.assign({}, props.transition.animationKeyframes, {
-              [keyframe.index + "%"]: Object.assign({}, selectedKeyframe.value.data),
+          selectedKeyframe.value = {
+            index: keyframe.index,
+            data: keyframeData,
+          };
+        } else {
+          selectedKeyframe.value = {
+            index: keyframe.index,
+            data: Object.assign({}, props.transition.animationKeyframes[keyframe.index + "%"], {
+              [property]: value || 0,
             }),
+          };
+        }
+
+        const updatedTransition = Object.assign({}, props.transition, {
+          animationKeyframes: Object.assign({}, props.transition.animationKeyframes, {
+            [keyframe.index + "%"]: Object.assign({}, selectedKeyframe.value.data),
           }),
-        );
+        });
+
+        if (!Object.keys(updatedTransition.animationKeyframes[keyframe.index + "%"]).length) {
+          delete updatedTransition.animationKeyframes[keyframe.index + "%"];
+        }
+
+        store.commit("UPDATE_SELECTED_TRANSITION", updatedTransition);
       }
     };
 
@@ -82,6 +97,7 @@ export default defineComponent({
             h(TimelineKeyframeEditor, {
               keyframe: selectedKeyframe.value,
               onChange: handleChangeKeyframe,
+              onRemove: handleChangeKeyframe,
               onAdd: handleChangeKeyframe,
             }),
           ),

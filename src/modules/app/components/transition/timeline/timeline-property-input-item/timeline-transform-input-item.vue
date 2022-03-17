@@ -79,37 +79,39 @@ export default defineComponent({
       [TransformProperties.SKEW]: { x: 0, y: 0, z: 0 },
     });
 
-    props.modelValue.forEach((val: any) => {
-      if (val?.translate3d) {
-        const translate = val.translate3d.replace(/[()%]/g, "").split(",");
-        transform.value[TransformProperties.TRANSLATE] = {
-          x: +translate[0],
-          y: +translate[1],
-          z: +translate[2],
-        };
-      } else if (val?.scale3d) {
-        const scale = val.scale3d.replace(/[()%]/g, "").split(",");
-        transform.value[TransformProperties.SCALE] = {
-          x: +scale[0],
-          y: +scale[1],
-          z: +scale[2],
-        };
-      } else if (val?.rotate3d) {
-        const rotate = val.rotate3d.replace(/[()%]/g, "").split(",");
-        transform.value[TransformProperties.ROTATE] = {
-          x: +rotate[0],
-          y: +rotate[1],
-          z: +rotate[2],
-        };
-      } else if (val?.skew3d) {
-        const skew = val.skew3d.replace(/[()%]/g, "").split(",");
-        transform.value[TransformProperties.SKEW] = {
-          x: +skew[0],
-          y: +skew[1],
-          z: +skew[2],
-        };
-      }
-    });
+    if (props.modelValue) {
+      props.modelValue.forEach((val: any) => {
+        if (val?.translate3d) {
+          const translate = val.translate3d.replace(/[()%]/g, "").split(",");
+          transform.value[TransformProperties.TRANSLATE] = {
+            x: +translate[0],
+            y: +translate[1],
+            z: +translate[2],
+          };
+        } else if (val?.scale3d) {
+          const scale = val.scale3d.replace(/[()%]/g, "").split(",");
+          transform.value[TransformProperties.SCALE] = {
+            x: +scale[0],
+            y: +scale[1],
+            z: +scale[2],
+          };
+        } else if (val?.rotate3d) {
+          const rotate = val.rotate3d.replace(/[()%]/g, "").split(",");
+          transform.value[TransformProperties.ROTATE] = {
+            x: +rotate[0],
+            y: +rotate[1],
+            z: +rotate[2],
+          };
+        } else if (val?.skew3d) {
+          const skew = val.skew3d.replace(/[()%]/g, "").split(",");
+          transform.value[TransformProperties.SKEW] = {
+            x: +skew[0],
+            y: +skew[1],
+            z: +skew[2],
+          };
+        }
+      });
+    }
 
     watch(
       transform,

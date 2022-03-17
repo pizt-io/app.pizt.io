@@ -174,6 +174,10 @@ export default defineComponent({
     };
     buildForm();
 
+    watch(() => props.transition, buildForm, {
+      deep: true,
+    });
+
     watch(
       form,
       (newValue) => {

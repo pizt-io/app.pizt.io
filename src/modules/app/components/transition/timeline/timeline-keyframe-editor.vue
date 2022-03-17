@@ -78,12 +78,16 @@ export default defineComponent({
   props: {
     keyframe: Object,
   },
-  emits: ["change", "add"],
+  emits: ["change", "add", "remove"],
   setup(props, { emit }) {
     const style = useCssModule();
 
     const handlePropertyChange = (property: string, value?: any) => {
       emit("change", { keyframe: props.keyframe, property, value });
+    };
+
+    const handlePropertyRemove = (property: string) => {
+      emit("remove", { keyframe: props.keyframe, property });
     };
 
     return () =>
@@ -111,7 +115,13 @@ export default defineComponent({
                         {
                           class: "text-sm",
                         },
-                        cssPropertiesLabelMapping[property],
+                        [
+                          h("i", {
+                            class: "icon-remove inline-block w-5",
+                            onClick: () => handlePropertyRemove(property),
+                          }),
+                          cssPropertiesLabelMapping[property],
+                        ],
                       ),
                       h(INPUT_COMPONENT_MAPPING[property], {
                         size: "mini",
