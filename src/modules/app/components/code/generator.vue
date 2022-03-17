@@ -89,6 +89,9 @@ export default defineComponent({
           keyframes.stringify({
             [selectedTransition.value.animationName]: selectedTransition.value.animationKeyframes,
           });
+
+        console.log(parsedKeyframes, selectedTransition.value.animationKeyframes);
+
         const result = `
           ${parsedKeyframes}
 

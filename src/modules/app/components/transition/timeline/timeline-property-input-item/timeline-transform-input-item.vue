@@ -63,13 +63,14 @@ const transformDefaultValue = Object.freeze({
 });
 
 export default defineComponent({
+  name: "TimelineTransformInputItem",
   props: {
     modelValue: {
       type: Array,
       default: () => [],
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["change"],
   setup(props, { emit }) {
     const decimal = 1;
     const transform = ref({
@@ -122,7 +123,7 @@ export default defineComponent({
         const skew = transform.value[TransformProperties.SKEW];
 
         emit(
-          "update:modelValue",
+          "change",
           [
             !_isEqual(translate, transformDefaultValue[TransformProperties.TRANSLATE]) && {
               translate3d: `(${translate.x}%,${translate.y}%,${translate.z}%)`,

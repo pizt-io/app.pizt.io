@@ -9,6 +9,7 @@ import TimelineKeyframeEditor from "./timeline-keyframe-editor.vue";
 import { useStore } from "vuex";
 
 import _cloneDeep from "lodash/cloneDeep";
+import { defaultPropertyValueMapping } from "@/modules/app/constants/transition";
 
 export default defineComponent({
   name: "TransitionTimeline",
@@ -54,7 +55,7 @@ export default defineComponent({
             selectedKeyframe.value = {
               index: keyframe.index,
               data: Object.assign({}, props.transition.animationKeyframes[keyframe.index + "%"], {
-                [property]: value || 0,
+                [property]: value || defaultPropertyValueMapping[property],
               }),
             };
           }

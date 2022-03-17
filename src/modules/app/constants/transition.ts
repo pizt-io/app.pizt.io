@@ -42,3 +42,19 @@ export const cssPropertiesLabelMapping = Object.freeze({
   // [SupportProperties.OUTLINE]: "Outline",
   [SupportProperties.ANIMATION_TIMING_FUNCTION]: "Timing",
 });
+
+export const defaultPropertyValueMapping = Object.freeze({
+  [SupportProperties.OPACITY]: 1,
+  [SupportProperties.COLOR]: "#000",
+  [SupportProperties.BACKGROUND_COLOR]: "#000",
+  [SupportProperties.WIDTH]: 100,
+  [SupportProperties.HEIGHT]: 100,
+  [SupportProperties.MARGIN]: 10,
+  [SupportProperties.PADDING]: 10,
+  [SupportProperties.TRANSFORM]: [],
+  [SupportProperties.TRANSFORM_ORIGIN]: "center center",
+  [SupportProperties.BORDER_RADIUS]: 5,
+  [SupportProperties.BORDER_WIDTH]: 1,
+  [SupportProperties.BORDER_COLOR]: "#000",
+  [SupportProperties.ANIMATION_TIMING_FUNCTION]: "0.42,0.69,0.69,0.42",
+} as any);
