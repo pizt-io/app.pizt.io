@@ -60,12 +60,12 @@ export default defineComponent({
         icon: "icon-circle",
         iconClass: "scale-y-70 scale-x-110",
       },
-      // {
-      //   label: "Crop",
-      //   action: ToolbarAction.CROP,
-      //   icon: "icon-crop",
-      //   iconClass: "",
-      // },
+      {
+        label: "Import",
+        action: ToolbarAction.IMPORT,
+        icon: "icon-arrow-up",
+        iconClass: "",
+      },
     ];
 
     const handleToolbarItemClick = (action: ToolbarAction) => {

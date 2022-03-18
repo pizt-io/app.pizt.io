@@ -77,7 +77,16 @@ export const actions: Actions = {
       .from("animations")
       .insert(Object.assign({}, element, { projectId: state.selectedProject._id }));
 
-    commit("ADD_ELEMENTS", res.data?.[0]);
+    commit("ADD_ELEMENTS", res.data);
+  },
+  addElements: async ({ state, commit }, elements: any[]) => {
+    const res = await supabase
+      .from("animations")
+      .insert(
+        elements.map((el) => Object.assign({}, el, { projectId: state.selectedProject._id })),
+      );
+
+    commit("ADD_ELEMENTS", res.data);
   },
   removeElements: async ({ commit }, elements: any[]) => {
     return await Promise.all(

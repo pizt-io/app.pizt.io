@@ -102,6 +102,7 @@ export enum ToolbarAction {
   POLYLINE,
   PATH,
   CROP,
+  IMPORT,
 }
 
 export const defaultElementMapping = {

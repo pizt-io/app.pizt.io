@@ -32,7 +32,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { defineAsyncComponent, defineComponent, onMounted, provide, ref, computed } from "vue";
 
-import { SVG_CANVAS_EVENT } from "@core/constants/svg";
+import { SVG_CANVAS_EVENT, SVG_ELEMENT_TYPE } from "@core/constants/svg";
 
 import { APP_MODE } from "@core/constants/navigator";
 
@@ -46,6 +46,10 @@ import AnimationTimeline from "./components/animation/timeline.vue";
 import AnimationPanel from "./components/animation/panel.vue";
 import { useRerenderer } from "@/core/use/useRerenderer";
 import { ToolbarAction, defaultElementMapping } from "@/core/constants/svg";
+
+import { parse } from "svgson";
+
+// import _reverse from "lodash/reverse";
 
 export default defineComponent({
   name: "AppAnimation",
@@ -162,9 +166,81 @@ export default defineComponent({
       console.log("Crop canvas");
       // store.dispatch("app/addElement", defaultElementMapping[ToolbarAction.CROP]);
     };
+    const handleToolbarImport = () => {
+      if (document) {
+        const inputFile = document.createElement("input");
+        inputFile.type = "file";
 
-    const handleChangeSelectedElement = (element: any) => {
-      console.log(element);
+        inputFile.addEventListener("change", async (e: any) => {
+          const file = e.target.files[0];
+
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = async (e: any) => {
+              const svg = e.target.result;
+
+              if (svg) {
+                parse(svg).then(async (result) => {
+                  const elements = result.children.map((el) =>
+                    JSON.parse(
+                      JSON.stringify({
+                        type: el.name,
+                        name: el.name + " new",
+                        attrs: {
+                          pos:
+                            el.name === SVG_ELEMENT_TYPE.PATH
+                              ? undefined
+                              : { x: +el.attributes.x, y: +el.attributes.y },
+                          size:
+                            el.name === SVG_ELEMENT_TYPE.PATH
+                              ? undefined
+                              : { width: +el.attributes.width, height: +el.attributes.height },
+                          commands:
+                            el.name !== SVG_ELEMENT_TYPE.PATH
+                              ? undefined
+                              : window.parsePathDataString(el.attributes.d).map((i) => {
+                                  return {
+                                    type: i.type,
+                                    path: i.values,
+                                  };
+                                }) || [],
+                          transform: {
+                            translate: { translateX: 0, translateY: 0 },
+                            scale: { scaleX: 1, scaleY: 1 },
+                            rotate: 0,
+                            skew: { skewX: 0, skewY: 0 },
+                            transformOrigin: "center center",
+                          },
+                          style: {
+                            fill: el.attributes.fill,
+                            stroke: el.attributes.stroke,
+                            strokeWidth: el.attributes.strokeWidth,
+                            opacity: el.attributes.opacity,
+                            strokeDasharray: el.attributes.strokeDasharray,
+                            strokeDashoffset: el.attributes.strokeDashoffset,
+                          },
+                        },
+                        animations: {},
+                      }),
+                    ),
+                  );
+
+                  await store.dispatch("app/addElements", elements);
+
+                  _updateCanvasElements();
+                  _updateTimelineElements();
+                });
+              }
+            };
+            reader.readAsText(file);
+          }
+        });
+        inputFile.click();
+      }
+    };
+
+    const handleChangeSelectedElement = (_element: any) => {
+      // console.log(element);
     };
 
     const toolbarActionFunctionMap = {
@@ -175,6 +251,7 @@ export default defineComponent({
       [ToolbarAction.POLYLINE]: handleToolbarAddPolyline,
       [ToolbarAction.PATH]: handleToolbarAddPath,
       [ToolbarAction.CROP]: handleToolbarCrop,
+      [ToolbarAction.IMPORT]: handleToolbarImport,
     };
 
     const handleToolbarAction = async (action: ToolbarAction) => {

@@ -21,8 +21,8 @@ export const mutations: Mutations = {
   SET_SELECTED_PROJECT(state, selectedProject) {
     state.selectedProject = selectedProject;
   },
-  ADD_ELEMENTS(state, payload: any) {
-    state.elements.push(payload);
+  ADD_ELEMENTS(state, payload: any[]) {
+    state.elements.push(...payload);
   },
   REMOVE_ELEMENTS(state, payload) {
     state.elements = state.elements.filter((element) => element._id !== payload._id);

@@ -21,7 +21,7 @@
           <span class="pz-label__inner">
             <i class="icon-arrows" />
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.pos" :class="$style.animationInputItem">
             <div class="mx-2 w-2 text-xs">X</div>
             <el-input-number
               v-model="form.attrs.pos.x"
@@ -50,7 +50,7 @@
           <span class="pz-label__inner">
             <i class="icon-format_shapes" />
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.size" :class="$style.animationInputItem">
             <div class="mx-2 w-2 text-xs">W</div>
             <el-input-number
               v-model="form.attrs.size.width"
@@ -80,7 +80,7 @@
               <span class="pz-label__inner">
                 <i class="icon-arrows" />
               </span>
-              <div :class="$style.animationInputItem">
+              <div v-if="form.attrs.transform" :class="$style.animationInputItem">
                 <el-input-number
                   v-model="form.attrs.transform.translate.translateX"
                   :min="0"
@@ -105,7 +105,7 @@
               <span class="pz-label__inner">
                 <i class="icon-crop_free" />
               </span>
-              <div :class="$style.animationInputItem">
+              <div v-if="form.attrs.transform" :class="$style.animationInputItem">
                 <el-input-number
                   v-model="form.attrs.transform.scale.scaleX"
                   :min="0"
@@ -130,7 +130,7 @@
               <span class="pz-label__inner">
                 <i class="icon-rotate-right" />
               </span>
-              <div :class="$style.animationInputItem">
+              <div v-if="form.attrs.transform" :class="$style.animationInputItem">
                 <el-input-number
                   v-model="form.attrs.transform.rotate"
                   :min="0"
@@ -147,7 +147,7 @@
               <span class="pz-label__inner">
                 <i class="icon-exchange" />
               </span>
-              <div :class="$style.animationInputItem">
+              <div v-if="form.attrs.transform" :class="$style.animationInputItem">
                 <el-input-number
                   v-model="form.attrs.transform.skew.skewX"
                   :min="0"
@@ -174,7 +174,7 @@
           <span class="pz-label__inner">
             <span class="text-xs">Fill:</span>
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.style" :class="$style.animationInputItem">
             <el-color-picker v-model="form.attrs.style.fill" size="mini" />
           </div>
         </label>
@@ -184,7 +184,7 @@
           <span class="pz-label__inner">
             <span class="text-xs">Stroke:</span>
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.style" :class="$style.animationInputItem">
             <el-color-picker v-model="form.attrs.style.stroke" size="mini" />
           </div>
         </label>
@@ -194,7 +194,7 @@
           <span class="pz-label__inner">
             <span class="text-xs">Stroke width:</span>
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.style" :class="$style.animationInputItem">
             <el-input-number
               v-model="form.attrs.style.strokeWidth"
               :min="0"
@@ -211,7 +211,7 @@
           <span class="pz-label__inner">
             <span class="text-xs">Stroke dash array:</span>
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.style" :class="$style.animationInputItem">
             <el-input-number
               v-model="form.attrs.style.strokeDasharray"
               :min="0"
@@ -228,7 +228,7 @@
           <span class="pz-label__inner">
             <span class="text-xs">Stroke dash offset:</span>
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.style" :class="$style.animationInputItem">
             <el-input-number
               v-model="form.attrs.style.strokeDashoffset"
               :min="0"
@@ -245,7 +245,7 @@
           <span class="pz-label__inner">
             <span class="text-xs">Opacity:</span>
           </span>
-          <div :class="$style.animationInputItem">
+          <div v-if="form.attrs.style" :class="$style.animationInputItem">
             <el-input-number
               v-model="form.attrs.style.opacity"
               :min="0"
