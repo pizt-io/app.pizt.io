@@ -55,7 +55,7 @@ export default defineComponent({
             selectedKeyframe.value = {
               index: keyframe.index,
               data: Object.assign({}, props.transition.animationKeyframes[keyframe.index + "%"], {
-                [property]: value || defaultPropertyValueMapping[property],
+                [property]: value !== undefined ? value : defaultPropertyValueMapping[property],
               }),
             };
           }
